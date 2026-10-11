@@ -1,2 +1,48 @@
-# agentic-ai-apps-winter-bootcamp
-Interactive website and deck for the Agentic AI Apps Winter Bootcamp
+# Agentic AI Apps Winter Bootcamp
+
+Interactive public website and DECKIO presentation for a six-session winter bootcamp serving the broader agent builder community.
+
+The experience is intentionally a skeleton: dates, topics, speakers and headshots remain explicit placeholders until the programme is confirmed.
+
+| Route | Experience |
+| --- | --- |
+| `#/` | Public event website, Foundry-inspired interactive labs and registration |
+| `#/deck` | Presentation deck driven by the same event content |
+
+## Develop
+
+```bash
+npm install
+npm run dev
+npm test
+npm run build
+```
+
+The production architecture uses one Azure Static Web App for the website, deck, GitHub authentication and protected registration API.
+
+## Registration architecture
+
+1. Azure Static Web Apps supplies the verified GitHub identity through `/.auth/me`.
+2. The browser submits only event choices and contact fields to `/api/register`.
+3. The API independently verifies `x-ms-client-principal`, validates the request and injects the immutable event ID.
+4. Power Automate deterministically upserts a row in the private `AI Apps Winter Bootcamp Registrations` Microsoft List.
+
+See [docs/registration-backend.md](docs/registration-backend.md) for the dedicated SharePoint site, List schema, Power Automate flow, settings and verification checklist.
+
+## Deployment
+
+Pushing to `main` runs `.github/workflows/deploy.yml`.
+
+| Setting | Value |
+| --- | --- |
+| App location | `/` |
+| API location | `api` |
+| Output location | `dist` |
+| Build command | `npm run build:swa` |
+| Deployment secret | `AZURE_STATIC_WEB_APPS_API_TOKEN_AI_APPS_WINTER` |
+
+The workflow contains no credentials. Create a dedicated Azure Static Web Apps resource and add its deployment token as the repository secret above. Configure the event-specific application settings documented in `docs/registration-backend.md`.
+
+## Programme placeholders
+
+Update `src/content.js` when dates, topics and speakers are confirmed. The website and deck consume the same six session records, so changes remain synchronized.

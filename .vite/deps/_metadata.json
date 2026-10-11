@@ -1,0 +1,86 @@
+{
+  "hash": "014a2ba2",
+  "configHash": "4a50bd97",
+  "lockfileHash": "ed16bf48",
+  "browserHash": "05b70c68",
+  "optimized": {
+    "@deckio/deck-engine": {
+      "src": "../../node_modules/@deckio/deck-engine/index.js",
+      "file": "@deckio_deck-engine.js",
+      "fileHash": "e827fee0",
+      "needsInterop": false
+    },
+    "react-dom": {
+      "src": "../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "70341a98",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "40d53d50",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "b21649ef",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "603bada1",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "8bbcd1fe",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "EditableList-BHAKbQmq": {
+      "file": "EditableList-BHAKbQmq.js",
+      "isDynamicEntry": false
+    },
+    "EditableListSortable-CwprxICj": {
+      "file": "EditableListSortable-CwprxICj.js",
+      "isDynamicEntry": true
+    },
+    "GitHubStarPrompt-C0aTi6BS": {
+      "file": "GitHubStarPrompt-C0aTi6BS.js",
+      "isDynamicEntry": true
+    },
+    "dist-3EiKcmRC": {
+      "file": "dist-3EiKcmRC.js",
+      "isDynamicEntry": true
+    },
+    "html2canvas-BJabpPP1": {
+      "file": "html2canvas-BJabpPP1.js",
+      "isDynamicEntry": true
+    },
+    "index.es-QK-PSMnf": {
+      "file": "index.es-QK-PSMnf.js",
+      "isDynamicEntry": true
+    },
+    "jspdf.es.min-D_ZWd10q": {
+      "file": "jspdf.es.min-D_ZWd10q.js",
+      "isDynamicEntry": true
+    },
+    "pptxgen.es-CKLMYUWV": {
+      "file": "pptxgen.es-CKLMYUWV.js",
+      "isDynamicEntry": true
+    },
+    "purify.es-D2ckzg14": {
+      "file": "purify.es-D2ckzg14.js",
+      "isDynamicEntry": true
+    },
+    "rolldown-runtime-B-lAHAz2": {
+      "file": "rolldown-runtime-B-lAHAz2.js",
+      "isDynamicEntry": false
+    }
+  }
+}

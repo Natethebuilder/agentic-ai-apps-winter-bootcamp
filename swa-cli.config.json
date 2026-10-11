@@ -1,0 +1,10 @@
+{
+  "configurations": {
+    "agentic-ai-apps-winter-bootcamp": {
+      "appLocation": ".",
+      "apiLocation": "api",
+      "outputLocation": "dist",
+      "appDevserverUrl": "http://localhost:5210"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+import {
+  AgentLabSlide,
+  AudienceSlide,
+  BuildLoopSlide,
+  ClosingSlide,
+  EvaluationSlide,
+  FormatSlide,
+  ModelLabSlide,
+  RegisterSlide,
+  SessionsSlide,
+  TitleSlide,
+} from './src/slides/Slides.jsx'
+
+export default {
+  id: 'agentic-ai-apps-winter-bootcamp',
+  title: 'Agentic AI Apps Winter Bootcamp',
+  subtitle: 'Build dependable agents with models, tools, orchestration and evaluation.',
+  description: 'A practical six-session winter bootcamp for the broader agent builder community.',
+  icon: '✦',
+  accent: '#89f7df',
+  theme: 'dark',
+  appearance: 'dark',
+  order: 1,
+  slides: [
+    TitleSlide,
+    AudienceSlide,
+    FormatSlide,
+    BuildLoopSlide,
+    AgentLabSlide,
+    ModelLabSlide,
+    EvaluationSlide,
+    SessionsSlide,
+    RegisterSlide,
+    ClosingSlide,
+  ],
+}
