@@ -24,8 +24,8 @@ The production architecture uses one Azure Static Web App for the website, deck,
 
 1. Azure Static Web Apps supplies the verified GitHub identity through `/.auth/me`.
 2. The browser submits only event choices and contact fields to `/api/register`.
-3. The API independently verifies `x-ms-client-principal`, validates the request and injects the immutable event ID.
-4. Power Automate deterministically upserts a row in the private `AI Apps Winter Bootcamp Registrations` Microsoft List.
+3. The API independently verifies `x-ms-client-principal`, validates the request and hashes the application-scoped user ID.
+4. Power Automate deterministically upserts a row in the private `Agentic AI Apps Bootcamp Registrations` Microsoft List.
 
 See [docs/registration-backend.md](docs/registration-backend.md) for the dedicated SharePoint site, List schema, Power Automate flow, settings and verification checklist.
 
@@ -41,7 +41,7 @@ Pushing to `main` runs `.github/workflows/deploy.yml`.
 | Build command | `npm run build:swa` |
 | Deployment secret | `AZURE_STATIC_WEB_APPS_API_TOKEN_AI_APPS_WINTER` |
 
-The workflow contains no credentials. Create a dedicated Azure Static Web Apps resource and add its deployment token as the repository secret above. Configure the event-specific application settings documented in `docs/registration-backend.md`.
+The workflow contains no credentials. The deployment token is stored as the repository secret above. Configure `REGISTRATION_FLOW_URL` and `REGISTRATION_FLOW_SHARED_SECRET` only after the dedicated Power Automate flow exists.
 
 ## Programme placeholders
 

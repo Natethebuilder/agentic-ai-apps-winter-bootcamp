@@ -1,6 +1,5 @@
 import { Slide, useSlides } from '@deckio/deck-engine'
 import { EVENT, SESSIONS, VALUE } from '../content.js'
-import RegistrationForm from '../registration/RegistrationForm.jsx'
 import { AgentWorkbench, BuildLoop, EvaluationConsole, ModelWorkbench } from '../viz/FoundryLab.jsx'
 
 function SlideShell({ index, eyebrow, title, children, className = '' }) {
@@ -123,10 +122,15 @@ export function SessionsSlide({ index }) {
   )
 }
 
-export function RegisterSlide({ index }) {
+export function RegisterSlide({ index, onOpenRegistration }) {
   return (
     <SlideShell index={index} eyebrow="Registration" title="Register once. Update the same record later." className="register-slide">
-      <RegistrationForm postLoginRedirect="/?register=1" />
+      <div className="deck-register-card">
+        <span>GitHub-authenticated registration</span>
+        <h3>Choose your sessions now. Update the same record later.</h3>
+        <p>Your verified GitHub identity becomes the deterministic key for the six-session series.</p>
+        <button className="button button-primary" type="button" onClick={onOpenRegistration}>Open registration</button>
+      </div>
     </SlideShell>
   )
 }

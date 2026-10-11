@@ -1,43 +1,43 @@
 {
-  "hash": "014a2ba2",
+  "hash": "0b4247a8",
   "configHash": "4a50bd97",
-  "lockfileHash": "ed16bf48",
-  "browserHash": "05b70c68",
+  "lockfileHash": "ce08131d",
+  "browserHash": "53eff9ad",
   "optimized": {
     "@deckio/deck-engine": {
       "src": "../../node_modules/@deckio/deck-engine/index.js",
       "file": "@deckio_deck-engine.js",
-      "fileHash": "e827fee0",
+      "fileHash": "ab8b4ac6",
       "needsInterop": false
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "70341a98",
+      "fileHash": "74bb09f0",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "40d53d50",
+      "fileHash": "6877d22f",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "b21649ef",
+      "fileHash": "aff3d529",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "603bada1",
+      "fileHash": "3d43f8bd",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "8bbcd1fe",
+      "fileHash": "1f9d745f",
       "needsInterop": true
     }
   },

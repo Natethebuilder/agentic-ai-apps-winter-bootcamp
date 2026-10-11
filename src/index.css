@@ -1167,10 +1167,35 @@ input:focus-visible {
     repeating-linear-gradient(135deg, transparent 0 14px, rgba(255, 255, 255, 0.018) 14px 15px);
 }
 
-.headshot-placeholder > span {
-  color: rgba(200, 238, 255, 0.28);
-  font-size: 4rem;
-  font-weight: 800;
+.silhouette-face {
+  position: absolute;
+  top: 28px;
+  width: 52px;
+  height: 60px;
+  border-radius: 48% 48% 44% 44%;
+  background: #f7fbff;
+  box-shadow: 0 0 24px rgba(200, 238, 255, 0.16);
+}
+
+.silhouette-shoulders {
+  position: absolute;
+  bottom: 13px;
+  width: 128px;
+  height: 66px;
+  border-radius: 70px 70px 18px 18px;
+  background: linear-gradient(150deg, #7b8dff, #3e70bf);
+}
+
+.silhouette-face::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -24px;
+  width: 22px;
+  height: 28px;
+  border-radius: 8px;
+  background: #f7fbff;
+  transform: translateX(-50%);
 }
 
 .headshot-placeholder small {
@@ -1206,11 +1231,6 @@ input:focus-visible {
   font-size: 0.75rem;
 }
 
-.speaker-placeholder span {
-  color: var(--muted);
-  font-size: 0.63rem;
-}
-
 .session-card footer {
   margin-top: 17px;
   padding-top: 13px;
@@ -1224,46 +1244,64 @@ input:focus-visible {
   align-items: center;
 }
 
-.audience-terminal {
-  overflow: hidden;
+.community-map {
+  padding: 22px;
   border: 1px solid var(--line);
   border-radius: 18px;
-  background: rgba(5, 14, 25, 0.82);
+  background:
+    radial-gradient(circle at 82% 10%, rgba(123, 141, 255, 0.16), transparent 35%),
+    rgba(9, 24, 40, 0.84);
   box-shadow: var(--shadow);
 }
 
-.audience-terminal > div {
-  height: 42px;
-  padding: 0 14px;
+.community-map > header {
   display: flex;
   align-items: center;
-  gap: 7px;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--line);
 }
 
-.audience-terminal > div i {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #ff8d9c;
-}
-
-.audience-terminal > div i:nth-child(2) { background: var(--warn); }
-.audience-terminal > div i:nth-child(3) { background: var(--brand); }
-
-.audience-terminal > div span {
-  margin-left: 7px;
-  color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.58rem;
-}
-
-.audience-terminal pre {
-  margin: 0;
-  padding: 28px;
-  overflow-x: auto;
+.community-map > header span {
   color: var(--brand);
-  font: 0.75rem/1.8 var(--mono);
+  font: 0.6rem var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.community-map > header strong {
+  font-size: 0.78rem;
+}
+
+.community-map > div {
+  padding-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.community-map article {
+  min-width: 0;
+  min-height: 92px;
+  padding: 13px;
+  display: grid;
+  align-content: end;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(7, 17, 31, 0.5);
+}
+
+.community-map small {
+  color: var(--muted);
+  font: 0.54rem var(--mono);
+  text-transform: uppercase;
+}
+
+.community-map article strong {
+  margin-top: 5px;
+  color: var(--ice);
+  font-size: 0.72rem;
 }
 
 .faq-list {
@@ -1684,6 +1722,25 @@ input:focus-visible {
 
 .deck-chrome > * {
   pointer-events: auto;
+}
+
+.deck-chrome > div {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 70px;
+}
+
+.deck-chrome > div > button {
+  min-height: 34px;
+  padding: 0 12px;
+  color: var(--night);
+  border: 0;
+  border-radius: 8px;
+  background: var(--brand);
+  font-size: 0.65rem;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .deck-chrome > a {
@@ -2271,63 +2328,92 @@ input:focus-visible {
   font-size: clamp(1.8rem, 3.8vw, 3.8rem);
 }
 
-.register-slide .registration-form {
+.deck-register-card {
   height: 100%;
-  padding: 1.2vw;
+  padding: clamp(24px, 4vw, 60px);
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  grid-auto-flow: row;
-  gap: 1vh 1.4vw;
-  align-content: start;
-  overflow: auto;
+  align-content: center;
+  justify-items: start;
+  border: 1px solid var(--line);
+  border-radius: 1.8vw;
+  background: rgba(8, 20, 34, 0.76);
 }
 
-.register-slide .verified-identity,
-.register-slide .submit-row,
-.register-slide .form-message {
-  grid-column: 1 / -1;
+.deck-register-card > span {
+  color: var(--brand);
+  font: 0.62rem var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.register-slide .registration-fields {
-  margin: 0;
-  grid-template-columns: 1fr;
-  gap: 1vh;
+.deck-register-card h3 {
+  max-width: 780px;
+  margin: 2vh 0 1.5vh;
+  font-size: clamp(1.6rem, 3.8vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.05em;
 }
 
-.register-slide .registration-fields input {
-  height: 34px;
+.deck-register-card p {
+  max-width: 650px;
+  margin: 0 0 3vh;
+  color: var(--muted);
+  font-size: clamp(0.72rem, 1.15vw, 1.1rem);
+  line-height: 1.6;
 }
 
-.register-slide .registration-form fieldset {
-  margin: 0;
-}
-
-.register-slide .registration-session-grid {
-  gap: 5px;
-}
-
-.register-slide .registration-session-grid label {
-  padding: 7px;
-}
-
-.register-slide .environment-options {
+.deck-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  padding: 5vh 4vw;
   display: grid;
+  place-items: center;
+  overflow-y: auto;
+  background: rgba(2, 8, 16, 0.82);
+  backdrop-filter: blur(16px);
 }
 
-.register-slide .environment-options label {
-  min-height: 30px;
+.deck-registration-modal {
+  width: min(960px, 100%);
+  max-height: 90vh;
+  padding: clamp(18px, 3vw, 30px);
+  overflow-y: auto;
+  border: 1px solid var(--line-bright);
+  border-radius: 24px;
+  background: var(--panel-solid);
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.6);
 }
 
-.register-slide .consent-field {
-  align-self: end;
+.deck-registration-modal > header {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
-.register-slide .submit-row {
-  margin-top: 0;
+.deck-registration-modal > header span {
+  color: var(--brand);
+  font: 0.58rem var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.register-slide .button {
-  min-height: 38px;
+.deck-registration-modal > header h2 {
+  margin: 5px 0 0;
+  font-size: clamp(1.8rem, 4vw, 3.6rem);
+  letter-spacing: -0.05em;
+}
+
+.deck-registration-modal > header button {
+  min-height: 36px;
+  padding: 0 11px;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
 }
 
 .closing-slide {
@@ -2462,6 +2548,19 @@ input:focus-visible {
     width: calc(100% - 20px);
     margin-top: 8px;
     padding-left: 12px;
+  }
+
+  .deck-chrome {
+    left: 10px;
+    right: 10px;
+  }
+
+  .deck-chrome > div {
+    margin-right: 46px;
+  }
+
+  .deck-chrome .motion-toggle {
+    display: none;
   }
 
   .hero {
@@ -2771,12 +2870,16 @@ input:focus-visible {
     grid-template-rows: repeat(6, minmax(0, 1fr));
   }
 
-  .register-slide .registration-form {
-    grid-template-columns: 1fr;
+  .deck-modal-backdrop {
+    padding: 0;
   }
 
-  .register-slide .registration-form > * {
-    grid-column: 1;
+  .deck-registration-modal {
+    width: 100%;
+    max-height: 100vh;
+    min-height: 100vh;
+    border: 0;
+    border-radius: 0;
   }
 
   .closing-lockup h2 {

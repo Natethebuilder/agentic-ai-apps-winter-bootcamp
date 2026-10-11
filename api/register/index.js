@@ -1,8 +1,7 @@
 const { createHash } = require('node:crypto')
 
-const EVENT_ID = 'agentic-ai-apps-winter-bootcamp-2026'
 const SESSION_IDS = new Set(['session-1', 'session-2', 'session-3', 'session-4', 'session-5', 'session-6'])
-const ENVIRONMENTS = new Set(['local', 'codespaces', 'cloud'])
+const ENVIRONMENTS = new Set(['local', 'cloud'])
 
 function response(status, body) {
   return {
@@ -55,13 +54,13 @@ module.exports = async function register(context, req) {
     return
   }
 
-  const organisation = typeof body.organisation === 'string' ? body.organisation.trim() : ''
+  const company = typeof body.company === 'string' ? body.company.trim() : ''
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
   const requestedSessions = Array.isArray(body.sessions) ? body.sessions : []
   const sessions = [...new Set(requestedSessions.filter((id) => SESSION_IDS.has(id)))]
   const environment = ENVIRONMENTS.has(body.environment) ? body.environment : ''
 
-  if (!organisation || organisation.length > 160) {
+  if (!company || company.length > 160) {
     context.res = response(400, { error: 'Enter a valid company or organisation.' })
     return
   }
@@ -78,24 +77,23 @@ module.exports = async function register(context, req) {
     return
   }
 
-  const flowUrl = process.env.AI_APPS_REGISTRATION_FLOW_URL
-  const sharedSecret = process.env.AI_APPS_REGISTRATION_FLOW_SHARED_SECRET
+  const flowUrl = process.env.REGISTRATION_FLOW_URL
+  const sharedSecret = process.env.REGISTRATION_FLOW_SHARED_SECRET
 
   if (!flowUrl || !sharedSecret) {
     context.res = response(503, { error: 'Registration storage is not configured yet.' })
     return
   }
 
-  const registrationKey = createHash('sha256')
-    .update(`${EVENT_ID}:${principal.userId}`)
+  const registrationId = createHash('sha256')
+    .update(principal.userId)
     .digest('hex')
 
   const payload = {
-    eventId: EVENT_ID,
-    registrationKey,
+    registrationId,
     githubUserId: principal.userId,
     githubUsername: principal.userDetails,
-    organisation,
+    company,
     email,
     sessions,
     environment,
@@ -109,7 +107,7 @@ module.exports = async function register(context, req) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-ai-apps-registration-secret': sharedSecret,
+        'x-registration-secret': sharedSecret,
       },
       body: JSON.stringify(payload),
     })
@@ -123,5 +121,5 @@ module.exports = async function register(context, req) {
     return
   }
 
-  context.res = response(202, { ok: true, eventId: EVENT_ID })
+  context.res = response(202, { ok: true })
 }

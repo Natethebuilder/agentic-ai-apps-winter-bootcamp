@@ -20,17 +20,17 @@ function request(body, auth = principal) {
 
 function validBody() {
   return {
-    organisation: 'Example Org',
+    company: 'Example Org',
     email: 'Builder@Example.com',
     sessions: ['session-1', 'session-6'],
-    environment: 'codespaces',
+    environment: 'cloud',
     consent: true,
   }
 }
 
 function configuredEnvironment() {
-  process.env.AI_APPS_REGISTRATION_FLOW_URL = 'https://flow.example.test/register'
-  process.env.AI_APPS_REGISTRATION_FLOW_SHARED_SECRET = 'test-only-secret'
+  process.env.REGISTRATION_FLOW_URL = 'https://flow.example.test/register'
+  process.env.REGISTRATION_FLOW_SHARED_SECRET = 'test-only-secret'
 }
 
 test('rejects an unauthenticated request', async () => {
@@ -49,8 +49,8 @@ test('rejects unknown or duplicate session identifiers', async () => {
 })
 
 test('requires event-specific backend settings', async () => {
-  delete process.env.AI_APPS_REGISTRATION_FLOW_URL
-  delete process.env.AI_APPS_REGISTRATION_FLOW_SHARED_SECRET
+  delete process.env.REGISTRATION_FLOW_URL
+  delete process.env.REGISTRATION_FLOW_SHARED_SECRET
   const context = {}
   await register(context, request(validBody()))
   assert.equal(context.res.status, 503)
@@ -69,9 +69,8 @@ test('forwards a validated event-scoped deterministic upsert payload', async () 
 
   assert.equal(context.res.status, 202)
   assert.equal(received.url, 'https://flow.example.test/register')
-  assert.equal(received.options.headers['x-ai-apps-registration-secret'], 'test-only-secret')
-  assert.equal(received.body.eventId, 'agentic-ai-apps-winter-bootcamp-2026')
+  assert.equal(received.options.headers['x-registration-secret'], 'test-only-secret')
   assert.equal(received.body.email, 'builder@example.com')
   assert.equal(received.body.githubUsername, 'octocat')
-  assert.match(received.body.registrationKey, /^[a-f0-9]{64}$/)
+  assert.match(received.body.registrationId, /^[a-f0-9]{64}$/)
 })

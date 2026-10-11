@@ -33,7 +33,6 @@ export const SESSIONS = Array.from({ length: 6 }, (_, index) => ({
   date: 'Date TBC',
   time: 'Time TBC',
   speaker: 'Speaker TBC',
-  role: 'Role and organisation TBC',
   headshot: 'Headshot placeholder',
   description: 'Session details will be published when the programme and speaker are confirmed.',
 }))
@@ -123,8 +122,7 @@ export const FAQ = [
 export const REGISTRATION = {
   choices: [
     { id: 'local', label: 'Local development environment' },
-    { id: 'codespaces', label: 'GitHub Codespaces' },
-    { id: 'cloud', label: 'Cloud-hosted development environment' },
+    { id: 'cloud', label: 'Cloud development environment' },
   ],
   consent: 'I agree that my registration details may be used to administer this bootcamp and its six sessions.',
 }

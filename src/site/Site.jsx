@@ -20,14 +20,14 @@ function SessionCard({ session }) {
         <time>{session.date}</time>
       </div>
       <div className="headshot-placeholder" aria-label={session.headshot}>
-        <span>?</span>
+        <span className="silhouette-face" />
+        <span className="silhouette-shoulders" />
         <small>{session.headshot}</small>
       </div>
       <h3>{session.topic}</h3>
       <p>{session.description}</p>
       <div className="speaker-placeholder">
         <strong>{session.speaker}</strong>
-        <span>{session.role}</span>
       </div>
       <footer><span>{session.time}</span><span>Details TBC</span></footer>
     </article>
@@ -61,8 +61,8 @@ export default function Site({ motion, onToggleMotion }) {
           <a href="#programme" onClick={closeMenu}>Programme</a>
           <a href="#labs" onClick={closeMenu}>Interactive labs</a>
           <a href="#faq" onClick={closeMenu}>FAQ</a>
-          <a href="#/deck" onClick={closeMenu}>View deck</a>
           <a className="nav-register" href="#register" onClick={closeMenu}>Register</a>
+          <a href="#/deck" onClick={closeMenu}>Present the deck</a>
         </nav>
       </header>
 
@@ -167,14 +167,14 @@ export default function Site({ motion, onToggleMotion }) {
             <h2>Bring your stack. Bring your questions.</h2>
             <p>{EVENT.audience}. The programme will connect Microsoft Foundry agent concepts to transferable orchestration, tool-use and delivery practices.</p>
           </div>
-          <div className="audience-terminal">
-            <div><i /><i /><i /><span>community.profile</span></div>
-            <pre><code>{`{
-  "platform": "your choice",
-  "framework": "open",
-  "experience": "all levels",
-  "goal": "ship dependable agents"
-}`}</code></pre>
+          <div className="community-map">
+            <header><span>Community profile</span><strong>Open by design</strong></header>
+            <div>
+              <article><small>Platform</small><strong>Your choice</strong></article>
+              <article><small>Framework</small><strong>Open</strong></article>
+              <article><small>Experience</small><strong>All levels</strong></article>
+              <article><small>Goal</small><strong>Dependable agents</strong></article>
+            </div>
           </div>
         </section>
 
@@ -210,7 +210,7 @@ export default function Site({ motion, onToggleMotion }) {
       <footer className="site-footer">
         <a className="brand" href="#top"><Mark /><span><strong>AI Apps</strong><small>Winter Bootcamp</small></span></a>
         <p>Programme details remain subject to confirmation.</p>
-        <div><MotionToggle enabled={motion} onToggle={onToggleMotion} /><a href="#/deck">Open presentation →</a></div>
+        <div><MotionToggle enabled={motion} onToggle={onToggleMotion} /><a href="#/deck">Present the deck →</a></div>
       </footer>
     </div>
   )

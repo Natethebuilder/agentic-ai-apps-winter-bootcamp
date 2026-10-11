@@ -18,7 +18,7 @@ export default function RegistrationForm({ postLoginRedirect = '/?register=1' })
   const [principal, setPrincipal] = useState(undefined)
   const [authUnavailable, setAuthUnavailable] = useState(false)
   const [sessions, setSessions] = useState([])
-  const [organisation, setOrganisation] = useState('')
+  const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [environment, setEnvironment] = useState('local')
   const [consent, setConsent] = useState(false)
@@ -35,7 +35,7 @@ export default function RegistrationForm({ postLoginRedirect = '/?register=1' })
   }, [])
 
   const signedIn = principal?.identityProvider === 'github'
-  const valid = signedIn && sessions.length > 0 && organisation.trim() && email.trim() && consent
+  const valid = signedIn && sessions.length > 0 && company.trim() && email.trim() && consent
   const loginUrl = `/.auth/login/github?post_login_redirect_uri=${encodeURIComponent(postLoginRedirect)}`
 
   const toggleSession = (id) => setSessions((current) => (
@@ -57,7 +57,7 @@ export default function RegistrationForm({ postLoginRedirect = '/?register=1' })
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            organisation: organisation.trim(),
+            company: company.trim(),
             email: email.trim(),
             sessions,
             environment,
@@ -105,7 +105,7 @@ export default function RegistrationForm({ postLoginRedirect = '/?register=1' })
       <div className="registration-fields">
         <label>
           <span>Company or organisation</span>
-          <input required maxLength="160" autoComplete="organization" value={organisation} onChange={(event) => setOrganisation(event.target.value)} />
+          <input required maxLength="160" autoComplete="organization" value={company} onChange={(event) => setCompany(event.target.value)} />
         </label>
         <label>
           <span>Company email address</span>

@@ -1,7 +1,7 @@
 {
   "routes": [
     {
-      "route": "/api/*",
+      "route": "/api/register",
       "allowedRoles": ["authenticated"]
     }
   ],
@@ -16,7 +16,7 @@
     "exclude": ["/api/*", "/.auth/*", "/assets/*"]
   },
   "globalHeaders": {
-    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+    "Content-Security-Policy": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-lGS/mzk2+4gTc9Yr9omMJ/OKBZKW9+m28ai7v+KHK60='; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
