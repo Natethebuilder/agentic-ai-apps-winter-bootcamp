@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { Logos, Mascot } from '../winter/Decor.jsx'
+import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
 import { SnowToggle } from '../winter/Snowfall.jsx'
-import { AgentTerminal, Countdown, ScheduleQuery } from '../data/DataViz.jsx'
+import { AgentTerminal, Countdown, MedallionFlow, ScheduleQuery } from '../data/DataViz.jsx'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import {
@@ -18,7 +18,7 @@ const NAV = [
   ['join', 'Register'],
 ]
 
-const PREP_KEY = 'winter-bootcamp:prep'
+const PREP_KEY = 'foundry-agentic-development-winter-bootcamp:prep'
 const DECK_URL = `${import.meta.env.BASE_URL}#/deck`
 
 function useReveal(rootRef) {
@@ -123,8 +123,8 @@ function ProgrammeReveal() {
         disabled={open}
         onClick={() => setOpen(true)}
       >
-        <span className={s.mergeTop}><i />foundry project · programme</span>
-        <span className={s.mergeBranches}><strong>agent-apps/tbc</strong><i>→</i><strong>programme</strong></span>
+        <span className={s.mergeTop}><i />foundry project · agentic development</span>
+        <span className={s.mergeBranches}><strong>foundry/programme-tbc</strong><i>→</i><strong>bootcamp</strong></span>
         <span className={s.mergeSummary}>6 session placeholders · ready for review</span>
         <span className={s.mergeAction}>{open ? 'Deployed' : 'Deploy programme'}</span>
         <span className={s.mergePackets} aria-hidden="true"><i /><i /><i /><i /></span>
@@ -250,12 +250,9 @@ export default function Site({ snow, onToggleSnow }) {
       <header className={`${s.nav} ${scrolled ? s.navScrolled : ''}`}>
         <button type="button" className={s.brand} onClick={() => go('top')}>
           <span className={s.brandMark}>
-            <span className={s.brandDataGlyph}>
-              <span className={s.brandCodeGlyph}>AI</span>
-              <span className={s.brandDataPackets} aria-hidden="true"><i /><i /><i /></span>
-            </span>
+            <FoundryMark className={s.brandLogo} />
           </span>
-          <span className={s.brandText}><small>Agentic AI Apps</small><strong>Winter Bootcamp</strong></span>
+          <span className={s.brandText}><small>Foundry Agentic Development</small><strong>Winter Bootcamp</strong></span>
         </button>
         <nav className={s.navLinks} aria-label="Sections">
           {NAV.map(([id, label]) => (
@@ -272,9 +269,9 @@ export default function Site({ snow, onToggleSnow }) {
         <section id="top" className={`${s.panel} ${s.heroPanel}`} data-panel>
           <div className={s.hero}>
           <div className={s.heroText}>
-            <span className={s.pill}>FOUNDRY · {BOOTCAMP.season} · Online · Free · For the agent builder community</span>
+            <span className={s.pill}>MICROSOFT FOUNDRY · {BOOTCAMP.season} · Online · Free · For the agent builder community</span>
             <h1>
-              Agentic AI Apps <span className={s.highlight}>Winter Bootcamp</span>
+              Foundry Agentic Development <span className={s.highlight}>Winter Bootcamp</span>
             </h1>
             <p className={s.heroLead}>
               <strong>{BOOTCAMP.tagline}</strong> {BOOTCAMP.subtitle}
@@ -307,7 +304,7 @@ export default function Site({ snow, onToggleSnow }) {
           id="why"
           idx="01"
           eyebrow="Why join"
-          title="From model access to dependable agent applications."
+          title="From Foundry project to dependable agent application."
           subtitle="A hands-on programme for developers, architects, product builders, platform teams and technical leaders."
         >
           <div className={`${s.grid} ${s.g3}`}>
@@ -318,6 +315,9 @@ export default function Site({ snow, onToggleSnow }) {
                 <p>{p.desc}</p>
               </article>
             ))}
+          </div>
+          <div className={s.foundryLoop}>
+            <MedallionFlow />
           </div>
           <PersonaPicker />
         </Section>
@@ -338,8 +338,8 @@ export default function Site({ snow, onToggleSnow }) {
           id="schedule"
           idx="03"
           eyebrow="Schedule"
-          title="Six sessions. One connected agent build loop."
-          subtitle="Topics and dates are still being confirmed. The programme will connect intent, models, grounding, tools, orchestration and evaluation."
+          title="Six sessions. One connected Foundry build loop."
+          subtitle="Topics and dates are still being confirmed. The programme will connect intent, models, knowledge, tools, orchestration and evaluation."
         >
           <ScheduleQuery />
         </Section>

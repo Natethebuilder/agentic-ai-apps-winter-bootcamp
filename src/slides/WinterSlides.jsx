@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { BottomBar, Editable, Slide, useSlides } from '@deckio/deck-engine'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import { Logos, Mascot } from '../winter/Decor.jsx'
+import { MedallionFlow } from '../data/DataViz.jsx'
 import {
   BOOTCAMP, PERSONAS, PILLARS, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
 } from '../content.js'
@@ -53,7 +54,7 @@ export function WinterTitleSlide({ index }) {
         <div>
           <span className={s.pill}><Editable as="span" id="title.pill">FOUNDRY · {BOOTCAMP.season} · Online</Editable></span>
           <h1>
-            <Editable as="span" id="title.before">Agentic AI Apps</Editable>{' '}
+            <Editable as="span" id="title.before">Foundry Agentic Development</Editable>{' '}
             <Editable as="span" id="title.highlight" className={s.highlight}>Winter Bootcamp</Editable>
           </h1>
           <Editable as="p" id="title.subtitle" multiline className={s.subtitle}>
@@ -130,33 +131,17 @@ export function AudienceSlide({ index }) {
   )
 }
 
-export function FormatSlide({ index }) {
+export function FoundryLoopSlide({ index }) {
+  const { current } = useSlides()
   return (
-    <Frame index={index} id="format" orbs={['orbIce', 'orbPine']}>
+    <Frame index={index} id="foundry-loop" orbs={['orbIce', 'orbPine']}>
       <Header
-        id="format"
-        eyebrow="How you take part"
-        title="Two ways to take part"
-        subtitle="Every session has clear prerequisites. Meet them and build along, or sit back and follow live."
+        id="foundry-loop"
+        eyebrow="Foundry build loop"
+        title="One connected agent development loop."
+        subtitle="Move from a bounded job to models, trusted knowledge, safe tools and evaluation evidence."
       />
-      <div className={`${s.grid} ${s.grid2}`}>
-        <div className={s.card}>
-          <span className={s.kicker}>Hands-on</span>
-          <span className={s.icon}>BUILD</span>
-          <Editable as="h3" id="format.handson.title">Build it yourself</Editable>
-          <Editable as="p" id="format.handson.desc">
-            Build with the AI application tools used in each session while GitHub Copilot supports the workflow.
-          </Editable>
-        </div>
-        <div className={s.card}>
-          <span className={s.kicker}>Presenter-led</span>
-          <span className={s.icon}>WATCH</span>
-          <Editable as="h3" id="format.follow.title">Follow along</Editable>
-          <Editable as="p" id="format.follow.desc">
-            Watch the presenter build it live, ask questions, and take the materials home to try later.
-          </Editable>
-        </div>
-      </div>
+      <MedallionFlow compact running={current === index} />
     </Frame>
   )
 }
@@ -167,7 +152,7 @@ export function TimetableSlide({ index }) {
       <Header
         id="timetable"
         eyebrow="Programme schedule"
-        title="Six sessions. One connected agent build loop."
+        title="Six sessions. One connected Foundry build loop."
         subtitle="Topics and dates are still being confirmed. Each session will add another perspective on dependable AI applications."
       />
       <div className={`${s.grid} ${s.grid6}`}>
@@ -371,7 +356,7 @@ export function RegisterSlide({ index }) {
           >
             <div className={s.registrationModalHeader}>
               <div>
-                <span>Agentic AI Apps Winter Bootcamp</span>
+                <span>Foundry Agentic Development Winter Bootcamp</span>
                 <h2 id="deck-registration-title">Bootcamp registration</h2>
               </div>
               <button type="button" aria-label="Close registration" onClick={() => setRegistrationOpen(false)}>×</button>

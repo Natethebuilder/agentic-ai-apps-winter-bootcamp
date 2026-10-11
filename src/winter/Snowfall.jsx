@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-const STORAGE_KEY = 'ai-apps-winter-bootcamp:motion-field-v1'
+const STORAGE_KEY = 'foundry-agentic-development-winter-bootcamp:motion-field-v1'
 
 export function useSnowPreference() {
   const [enabled, setEnabled] = useState(() => {
@@ -26,10 +26,10 @@ export function SnowToggle({ enabled, onToggle, className = '' }) {
       className={`snow-toggle ${className}`}
       onClick={onToggle}
       aria-pressed={enabled}
-      title={enabled ? 'Pause motion field' : 'Resume motion field'}
+      title={enabled ? 'Pause Foundry signal field' : 'Resume Foundry signal field'}
     >
       <span aria-hidden="true">{enabled ? '◉' : '○'}</span>
-      <span className="snow-toggle-label">Field {enabled ? 'on' : 'off'}</span>
+      <span className="snow-toggle-label">Signals {enabled ? 'on' : 'off'}</span>
     </button>
   )
 }

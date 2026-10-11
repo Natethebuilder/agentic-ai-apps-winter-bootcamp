@@ -2,16 +2,16 @@
 // Topics, speakers and dates intentionally remain visible placeholders.
 
 export const BOOTCAMP = {
-  name: 'Agentic AI Apps Winter Bootcamp',
-  short: 'Winter Bootcamp',
-  tagline: 'Build dependable agents beyond the demo.',
+  name: 'Foundry Agentic Development Winter Bootcamp',
+  short: 'Foundry Winter Bootcamp',
+  tagline: 'Build dependable agents with Microsoft Foundry.',
   subtitle:
-    'A six-session community programme exploring models, grounding, tools, orchestration, evaluation and responsible delivery.',
+    'A six-session community programme connecting agent design, models, knowledge, tools, orchestration, evaluation and responsible delivery with GitHub Copilot.',
   season: 'Winter',
   kickoffDate: null,
   kickoffLabel: 'Dates to be announced',
   kickoff: null,
-  footer: 'Agentic AI Apps Winter Bootcamp',
+  footer: 'Foundry Agentic Development Winter Bootcamp',
 }
 
 const ACCENTS = ['#8ef5e5', '#a7a0ff', '#63d9ff', '#d29cff', '#69f2c1', '#8fc8ff']
@@ -51,10 +51,10 @@ export const SCHEDULE = SESSIONS.map((session) => ({
 
 export const PERSONAS = [
   {
-    id: 'builders', icon: 'AG', label: 'AI app developers',
-    desc: 'Turn model capability into useful application behaviour.',
-    does: 'Design agents around user outcomes, grounded context, bounded tools and observable runtime decisions.',
-    stack: ['Models', 'Grounding', 'Tools', 'Agents', 'Evals'],
+    id: 'builders', icon: 'FD', label: 'Foundry agent developers',
+    desc: 'Turn models and tools into useful, dependable agent behaviour.',
+    does: 'Build agents around user outcomes, Foundry projects, trusted knowledge, bounded tools and observable runtime decisions.',
+    stack: ['Foundry', 'Models', 'Knowledge', 'Tools', 'Evals'],
   },
   {
     id: 'architecture', icon: 'AR', label: 'Architects & platform teams',
@@ -80,8 +80,8 @@ export const PILLARS = [
   {
     id: 'loop',
     icon: '02',
-    title: 'Design the control loop',
-    desc: 'Make models, context, tools, state, retries and human hand-offs understandable.',
+    title: 'Build on a governed runtime',
+    desc: 'Make Foundry models, knowledge, tools, state, retries and human hand-offs understandable.',
   },
   {
     id: 'evaluate',
@@ -99,13 +99,13 @@ export const PIPELINE = [
     gate: 'Job is testable',
   },
   {
-    id: 'model', label: 'Model', sub: 'route', color: '#a7a0ff',
+    id: 'model', label: 'Models', sub: 'route', color: '#a7a0ff',
     what: 'Select capabilities, latency and cost that fit each step of the experience.',
     prompt: 'Compare model routes for quality, latency and cost.',
     gate: 'Route justified',
   },
   {
-    id: 'ground', label: 'Ground', sub: 'context', color: '#63d9ff',
+    id: 'ground', label: 'Knowledge', sub: 'ground', color: '#63d9ff',
     what: 'Connect trusted knowledge and application state without losing provenance.',
     prompt: 'Design a grounding strategy with clear source attribution.',
     gate: 'Context traceable',
@@ -173,7 +173,7 @@ export const PREP = [
   { id: 'copilot', icon: 'AI', title: 'GitHub Copilot access', desc: 'Bring an active Copilot plan through your organisation, education access or individual subscription.' },
   { id: 'node', icon: 'JS', title: 'Node.js LTS', desc: 'Use a supported Node.js release for the sample agent application and tooling.' },
   { id: 'python', icon: 'PY', title: 'Supported Python', desc: 'Some agent and evaluation examples may use Python; confirmed versions will be published with the sessions.' },
-  { id: 'foundry', icon: 'AF', title: 'Foundry access TBC', desc: 'Any required Microsoft Foundry project or model access will be confirmed before the hands-on sessions.' },
+  { id: 'foundry', icon: 'MF', title: 'Microsoft Foundry access TBC', desc: 'Any required Foundry project, model or Agent Service access will be confirmed before the hands-on sessions.' },
   { id: 'sample', icon: 'DATA', title: 'Sample content only', desc: 'Use workshop or non-sensitive data. Do not bring credentials, personal data or confidential production content.' },
 ]
 
@@ -182,7 +182,7 @@ export const SETUP_RESOURCES = [
   { id: 'node', label: 'Node.js LTS', check: 'node --version', login: 'No sign-in required', href: 'https://nodejs.org/' },
   { id: 'python', label: 'Python', check: 'python --version', login: 'No sign-in required', href: 'https://www.python.org/downloads/' },
   { id: 'copilot', label: 'GitHub Copilot CLI', check: 'copilot --version', login: 'copilot', href: 'https://docs.github.com/copilot' },
-  { id: 'foundry', label: 'Microsoft Foundry', check: 'Access requirements TBC', login: 'Use the workshop project when supplied', href: 'https://ai.azure.com/' },
+  { id: 'foundry', label: 'Microsoft Foundry', check: 'Access requirements TBC', login: 'Use the workshop project when supplied', href: 'https://learn.microsoft.com/azure/foundry/' },
   { id: 'github-mcp', label: 'GitHub MCP Server', check: '/mcp', login: 'Verify GitHub MCP is connected', href: 'https://github.com/github/github-mcp-server' },
 ]
 
@@ -193,7 +193,7 @@ export const FAQ = [
   },
   {
     q: 'Is this only for Microsoft developers?',
-    a: 'No. Microsoft Foundry inspires several examples, while the programme is framed around transferable agent design and delivery practices.',
+    a: 'No. Microsoft Foundry is the primary platform, while the programme teaches transferable agent design, evaluation and delivery practices.',
   },
   {
     q: 'What are the session topics?',
@@ -221,7 +221,7 @@ export const REGISTER_STEPS = [
 
 export const REGISTRATION = {
   eyebrow: 'Registration',
-  title: 'Join the Agentic AI Apps Winter Bootcamp.',
+  title: 'Join the Foundry Agentic Development Winter Bootcamp.',
   subtitle: 'Sign in with GitHub, confirm your sessions and provide the details needed for event access.',
   environments: [
     { id: 'local', label: 'I will use a local development environment' },

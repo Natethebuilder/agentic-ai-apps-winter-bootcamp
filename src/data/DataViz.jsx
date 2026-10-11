@@ -122,14 +122,14 @@ const NODE_Y = 206
 const AGENT = { x: 565, y: 44 }
 const XS = [95, 330, 565, 800, 1035]
 
-export function MedallionFlow({ compact = false, className = '' }) {
+export function MedallionFlow({ compact = false, running = true, className = '' }) {
   const [active, setActive] = useState(0)
   const [auto, setAuto] = useState(true)
   useEffect(() => {
-    if (!auto) return undefined
+    if (!auto || !running) return undefined
     const id = setInterval(() => setActive((a) => (a + 1) % PIPELINE.length), 3200)
     return () => clearInterval(id)
-  }, [auto])
+  }, [auto, running])
 
   const pick = (i) => { setAuto(false); setActive(i) }
   const stage = PIPELINE[active]
@@ -137,7 +137,7 @@ export function MedallionFlow({ compact = false, className = '' }) {
   return (
     <div className={`${d.flowWrap} ${compact ? d.flowCompact : ''} ${className}`}>
       <div className={d.flowScroll}>
-        <svg className={d.flowSvg} viewBox="0 0 1130 260" role="group" aria-label="Agentic AI application build loop">
+        <svg className={d.flowSvg} viewBox="0 0 1130 260" role="group" aria-label="Microsoft Foundry agent development loop">
           <defs>
             <pattern id="flow-grid" width="26" height="26" patternUnits="userSpaceOnUse">
               <path d="M26 0H0V26" fill="none" stroke="rgba(143,216,255,0.06)" strokeWidth="1" />
@@ -203,6 +203,23 @@ export function MedallionFlow({ compact = false, className = '' }) {
         </svg>
       </div>
 
+      <div className={d.flowMobileStages} role="tablist" aria-label="Foundry build stages">
+        {PIPELINE.map((item, index) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            aria-selected={index === active}
+            className={index === active ? d.flowMobileStageOn : ''}
+            style={{ '--c': item.color }}
+            onClick={() => pick(index)}
+          >
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            {item.label}
+          </button>
+        ))}
+      </div>
+
       <div className={d.flowDetail} style={{ '--c': stage.color }} aria-live="polite">
         <div>
           <span className={d.detailKicker}>{String(active + 1).padStart(2, '0')} · {stage.label}</span>
@@ -261,7 +278,7 @@ export function ScheduleQuery() {
         <code>
           <span className={d.kw}>programme:</span>{'\n'}
           {'  '}sessions: 6{'\n'}
-          {'  '}agent_loop: intent → model → ground → tools → evaluate{'\n'}
+          {'  '}agent_loop: intent → models → knowledge → tools → evaluate{'\n'}
           {'  '}details: <span className={d.tbl}>TBC</span>
         </code>
       </pre>

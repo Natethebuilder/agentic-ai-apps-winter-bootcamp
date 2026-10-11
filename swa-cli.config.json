@@ -1,6 +1,6 @@
 {
   "configurations": {
-    "agentic-ai-apps-winter-bootcamp": {
+    "foundry-agentic-development-winter-bootcamp": {
       "appLocation": ".",
       "apiLocation": "api",
       "outputLocation": "dist",

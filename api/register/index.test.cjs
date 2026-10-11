@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict')
+const { createHash } = require('node:crypto')
 const test = require('node:test')
 const register = require('./index.js')
 
@@ -68,8 +69,11 @@ test('forwards an event-routed deterministic upsert payload', async () => {
   assert.equal(context.res.status, 202)
   assert.equal(String(received.url), 'https://flow.example.test/register')
   assert.equal(received.options.headers['x-registration-secret'], 'test-only-secret')
-  assert.equal(received.body.eventId, 'agentic-ai-apps-winter-bootcamp')
+  assert.equal(received.body.eventId, 'foundry-agentic-development-winter-bootcamp')
   assert.equal(received.body.email, 'builder@example.com')
   assert.equal(received.body.githubUsername, 'octocat')
-  assert.match(received.body.registrationId, /^[a-f0-9]{64}$/)
+  assert.equal(
+    received.body.registrationId,
+    createHash('sha256').update('foundry-agentic-development-winter-bootcamp:github-user-42').digest('hex'),
+  )
 })

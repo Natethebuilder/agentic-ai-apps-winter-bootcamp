@@ -1,6 +1,6 @@
 const { createHash } = require('node:crypto')
 
-const EVENT_ID = 'agentic-ai-apps-winter-bootcamp'
+const EVENT_ID = 'foundry-agentic-development-winter-bootcamp'
 const SESSION_IDS = new Set(['session-01', 'session-02', 'session-03', 'session-04', 'session-05', 'session-06'])
 const ENVIRONMENTS = new Set(['local', 'cloud'])
 

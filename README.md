@@ -1,12 +1,12 @@
-# Agentic AI Apps Winter Bootcamp
+# Foundry Agentic Development Winter Bootcamp
 
-Interactive public website and DECKIO presentation for a six-session community bootcamp about dependable agent applications.
+Interactive public website and DECKIO presentation for a six-session community bootcamp about dependable agent development with Microsoft Foundry and GitHub Copilot.
 
 Topics, dates, speakers and headshots intentionally remain visible placeholders until the programme is confirmed.
 
 | Route | Experience |
 | --- | --- |
-| `#/` | Public website with Foundry-inspired interactions, programme placeholders, setup, FAQ and registration |
+| `#/` | Public website with Microsoft Foundry interactions, programme placeholders, setup, FAQ and registration |
 | `#/deck` | Horizontal DECKIO presentation with the same content and embedded registration |
 
 ## Develop
@@ -28,8 +28,8 @@ The protected API:
 1. reads the authenticated GitHub identity from `x-ms-client-principal`;
 2. validates company, email, session IDs, environment and consent;
 3. derives an event-scoped SHA-256 `RegistrationId`;
-4. sends `eventId: agentic-ai-apps-winter-bootcamp` to the shared registration flow;
-5. lets that flow route the submission into the dedicated AI Apps SharePoint List.
+4. sends `eventId: foundry-agentic-development-winter-bootcamp` to the shared registration flow;
+5. lets that flow route the submission into the dedicated Foundry Agentic Development SharePoint List.
 
 | Setting | Purpose |
 | --- | --- |
@@ -40,4 +40,4 @@ Never commit either value. See [docs/registration-backend.md](docs/registration-
 
 ## Deploy
 
-Pushing to `main` deploys through `.github/workflows/deploy.yml` using the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN_AI_APPS_WINTER`.
+Pushing to `main` deploys through `.github/workflows/deploy.yml` using the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN_FOUNDRY_AGENTIC_DEVELOPMENT`. The existing Azure Static Web Apps resource is reused.

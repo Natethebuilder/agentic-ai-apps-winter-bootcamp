@@ -48,7 +48,7 @@ body {
 
 .deck-ty-watermark { display: none; }
 
-/* ── Snow ─────────────────────────────────────────────────────────────── */
+/* ── Foundry signal field ─────────────────────────────────────────────── */
 .snowfall {
   position: fixed;
   inset: 0;
