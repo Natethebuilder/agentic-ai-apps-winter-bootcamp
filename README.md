@@ -9,6 +9,12 @@ Topics, dates, speakers and headshots intentionally remain visible placeholders 
 | `#/` | Public website with Microsoft Foundry interactions, programme placeholders, setup, FAQ and registration |
 | `#/deck` | Horizontal DECKIO presentation with the same content and embedded registration |
 
+## Live
+
+- Website: <https://mango-mushroom-0c5c73e0f.6.azurestaticapps.net/>
+- Deck: <https://mango-mushroom-0c5c73e0f.6.azurestaticapps.net/#/deck>
+- Registration: GitHub-authenticated and routed through the shared multi-event flow to the dedicated private Foundry SharePoint List
+
 ## Develop
 
 ```powershell
@@ -37,6 +43,8 @@ The protected API:
 | `REGISTRATION_FLOW_SHARED_SECRET` | Server-side secret validated by the shared flow |
 
 Never commit either value. See [docs/registration-backend.md](docs/registration-backend.md).
+
+The deployed backend has been verified for invalid-secret rejection, first-registration creation and deterministic repeat-registration update without creating duplicate rows.
 
 ## Deploy
 
