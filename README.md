@@ -1,48 +1,43 @@
 # Agentic AI Apps Winter Bootcamp
 
-Interactive public website and DECKIO presentation for a six-session winter bootcamp serving the broader agent builder community.
+Interactive public website and DECKIO presentation for a six-session community bootcamp about dependable agent applications.
 
-The experience is intentionally a skeleton: dates, topics, speakers and headshots remain explicit placeholders until the programme is confirmed.
+Topics, dates, speakers and headshots intentionally remain visible placeholders until the programme is confirmed.
 
 | Route | Experience |
 | --- | --- |
-| `#/` | Public event website, Foundry-inspired interactive labs and registration |
-| `#/deck` | Presentation deck driven by the same event content |
+| `#/` | Public website with Foundry-inspired interactions, programme placeholders, setup, FAQ and registration |
+| `#/deck` | Horizontal DECKIO presentation with the same content and embedded registration |
 
 ## Develop
 
-```bash
+```powershell
 npm install
-npm run dev
 npm test
+npm run dev
 npm run build
+npm run build:swa
 ```
 
-The production architecture uses one Azure Static Web App for the website, deck, GitHub authentication and protected registration API.
+Azure Static Web Apps hosts the website, deck, GitHub authentication and protected registration API on one origin.
 
 ## Registration architecture
 
-1. Azure Static Web Apps supplies the verified GitHub identity through `/.auth/me`.
-2. The browser submits only event choices and contact fields to `/api/register`.
-3. The API independently verifies `x-ms-client-principal`, validates the request and hashes the application-scoped user ID.
-4. Power Automate deterministically upserts a row in the private `Agentic AI Apps Bootcamp Registrations` Microsoft List.
+The protected API:
 
-See [docs/registration-backend.md](docs/registration-backend.md) for the dedicated SharePoint site, List schema, Power Automate flow, settings and verification checklist.
+1. reads the authenticated GitHub identity from `x-ms-client-principal`;
+2. validates company, email, session IDs, environment and consent;
+3. derives an event-scoped SHA-256 `RegistrationId`;
+4. sends `eventId: agentic-ai-apps-winter-bootcamp` to the shared registration flow;
+5. lets that flow route the submission into the dedicated AI Apps SharePoint List.
 
-## Deployment
-
-Pushing to `main` runs `.github/workflows/deploy.yml`.
-
-| Setting | Value |
+| Setting | Purpose |
 | --- | --- |
-| App location | `/` |
-| API location | `api` |
-| Output location | `dist` |
-| Build command | `npm run build:swa` |
-| Deployment secret | `AZURE_STATIC_WEB_APPS_API_TOKEN_AI_APPS_WINTER` |
+| `REGISTRATION_FLOW_URL` | Existing shared Data Winter Bootcamp registration flow endpoint |
+| `REGISTRATION_FLOW_SHARED_SECRET` | Server-side secret validated by the shared flow |
 
-The workflow contains no credentials. The deployment token is stored as the repository secret above. Configure `REGISTRATION_FLOW_URL` and `REGISTRATION_FLOW_SHARED_SECRET` only after the dedicated Power Automate flow exists.
+Never commit either value. See [docs/registration-backend.md](docs/registration-backend.md).
 
-## Programme placeholders
+## Deploy
 
-Update `src/content.js` when dates, topics and speakers are confirmed. The website and deck consume the same six session records, so changes remain synchronized.
+Pushing to `main` deploys through `.github/workflows/deploy.yml` using the repository secret `AZURE_STATIC_WEB_APPS_API_TOKEN_AI_APPS_WINTER`.

@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react'
-import project from '../deck.config.js'
 import DeckView from './DeckView.jsx'
 import Site from './site/Site.jsx'
-import AuroraField, { useMotionPreference } from './theme/AuroraField.jsx'
+import Snowfall, { useSnowPreference } from './winter/Snowfall.jsx'
+import project from '../deck.config.js'
 
 function useHashRoute() {
-  const readRoute = () => (window.location.hash.startsWith('#/deck') ? 'deck' : 'site')
-  const [route, setRoute] = useState(readRoute)
-
+  const read = () => (window.location.hash.startsWith('#/deck') ? 'deck' : 'site')
+  const [route, setRoute] = useState(read)
   useEffect(() => {
-    const handleHashChange = () => setRoute(readRoute())
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+    const onHash = () => setRoute(read())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
   }, [])
-
   return route
 }
 
 export default function App() {
   const route = useHashRoute()
-  const [motion, setMotion] = useMotionPreference()
+  const [snow, setSnow] = useSnowPreference()
+  const toggleSnow = () => setSnow((v) => !v)
 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', project.accent)
@@ -28,10 +27,10 @@ export default function App() {
 
   return (
     <>
-      <AuroraField enabled={motion} density={route === 'deck' ? 0.65 : 1} />
+      <Snowfall enabled={snow} density={route === 'deck' ? 0.6 : 1} />
       {route === 'deck'
-        ? <DeckView motion={motion} onToggleMotion={() => setMotion((value) => !value)} />
-        : <Site motion={motion} onToggleMotion={() => setMotion((value) => !value)} />}
+        ? <DeckView snow={snow} onToggleSnow={toggleSnow} />
+        : <Site snow={snow} onToggleSnow={toggleSnow} />}
     </>
   )
 }

@@ -1,8 +1,8 @@
-import { i as __toESM } from "./rolldown-runtime-B-lAHAz2.js";
+import { r as __toESM } from "./rolldown-runtime-DEy6nfl2.js";
 import { t as require_react } from "./react.js";
 import { t as require_react_dom } from "./react-dom.js";
 import { t as require_jsx_runtime } from "./react_jsx-runtime.js";
-import { n as useOrderedItems, r as InlineEditContext, t as EditableList } from "./EditableList-BHAKbQmq.js";
+import { n as useOrderedItems, r as InlineEditContext, t as EditableList } from "./EditableList-DGc3cJxn.js";
 import styles from "C:/Users/t-nathanb/.copilot/repos/copilot-worktrees/agentic-ai-apps-winter-bootcamp/natethebuilder-effective-fortnight/node_modules/@deckio/deck-engine/components/Navigation.module.css";
 import styles$1 from "C:/Users/t-nathanb/.copilot/repos/copilot-worktrees/agentic-ai-apps-winter-bootcamp/natethebuilder-effective-fortnight/node_modules/@deckio/deck-engine/components/BottomBar.module.css";
 //#region node_modules/@deckio/deck-engine/context/nav-utils.js
@@ -167,7 +167,7 @@ function useIsExporting() {
 //#endregion
 //#region node_modules/@deckio/deck-engine/context/SlideContext.jsx
 var import_jsx_runtime = require_jsx_runtime();
-var GitHubStarPrompt = (0, import_react.lazy)(() => import("./GitHubStarPrompt-C0aTi6BS.js"));
+var GitHubStarPrompt = (0, import_react.lazy)(() => import("./GitHubStarPrompt-CbIhnaIF.js"));
 var STAR_PROMPT_DEV = (() => {
 	try {
 		return Boolean(import.meta && import.meta.env && import.meta.env.DEV);
@@ -509,12 +509,11 @@ function Slide({ index, className = "", children }) {
 		if (!DEV || index !== current || !ref.current) return;
 		const el = ref.current;
 		const check = () => {
-			const hasOverflow = Array.from(el.children).some((c) => {
+			setOverflow(Array.from(el.children).some((c) => {
 				const pos = getComputedStyle(c).position;
 				if (pos === "absolute" || pos === "fixed") return false;
 				return c.offsetTop + c.offsetHeight > el.clientHeight;
-			});
-			setOverflow(hasOverflow);
+			}));
 		};
 		check();
 		const obs = new ResizeObserver(check);
@@ -751,7 +750,7 @@ function EditableToolbar() {
 	const currentAlign = entryStyle && entryStyle.textAlign || "";
 	const isBold = currentWeight === "bold" || currentWeight === 700 || currentWeight === "700";
 	const isItalic = currentStyleAttr === "italic";
-	const node = /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+	return (0, import_react_dom.createPortal)(/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		ref: rootRef,
 		className: "deckio-editable-toolbar",
 		"data-deckio-toolbar-root": "",
@@ -921,8 +920,7 @@ function EditableToolbar() {
 				})]
 			}) : null
 		]
-	});
-	return (0, import_react_dom.createPortal)(node, document.body);
+	}), document.body);
 }
 //#endregion
 //#region node_modules/@deckio/deck-engine/components/Editable.jsx
@@ -1300,7 +1298,7 @@ function InlineEditToast({ status, onDismiss }) {
 	if (typeof document === "undefined" || !document.body) return null;
 	const text = status ? TOAST_STATUS_TEXT[status] : null;
 	const isAlert = status === "error" || status === "conflict";
-	const node = /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+	return (0, import_react_dom.createPortal)(/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "deckio-inline-edit-toast-root",
 		"data-deckio-toast-root": "",
 		"data-html2canvas-ignore": "true",
@@ -1325,8 +1323,7 @@ function InlineEditToast({ status, onDismiss }) {
 				}) : null
 			]
 		}) : null
-	});
-	return (0, import_react_dom.createPortal)(node, document.body);
+	}), document.body);
 }
 function normalizeEditableText(raw, multiline) {
 	const s = raw == null ? "" : String(raw);
@@ -2265,7 +2262,7 @@ async function exportDeckPdf({ current, goTo, project, selectedCustomer, totalSl
 	const deck = document.querySelector(".deck");
 	const slides = Array.from(deck?.querySelectorAll(".slide") || []);
 	if (!deck || slides.length === 0) throw new Error("No slides found");
-	const [{ domToPng }, { jsPDF }] = await Promise.all([import("./dist-3EiKcmRC.js"), import("./jspdf.es.min-D_ZWd10q.js").then((n) => n.t)]);
+	const [{ domToPng }, { jsPDF }] = await Promise.all([import("./dist-Be2CyPZj.js"), import("./jspdf.es.min-DUaxsYt3.js")]);
 	const { layout, quality, fit } = resolveExportOptions(exportOptions);
 	const bg = getSlideBackground();
 	const orientation = getPdfOrientation(layout);
@@ -2337,7 +2334,7 @@ async function exportDeckPptx({ current, goTo, project, selectedCustomer, totalS
 	const deck = document.querySelector(".deck");
 	const slides = Array.from(deck?.querySelectorAll(".slide") || []);
 	if (!deck || slides.length === 0) throw new Error("No slides found");
-	const [{ domToPng }, PptxGenJS] = await Promise.all([import("./dist-3EiKcmRC.js"), import("./pptxgen.es-CKLMYUWV.js")]);
+	const [{ domToPng }, PptxGenJS] = await Promise.all([import("./dist-Be2CyPZj.js"), import("./pptxgen.es-GagpR4ns.js")]);
 	const Pptx = PptxGenJS.default || PptxGenJS;
 	const { layout, quality, fit } = resolveExportOptions(exportOptions);
 	const bg = getSlideBackground();

@@ -1,85 +1,89 @@
 {
-  "hash": "0b4247a8",
+  "hash": "08f93857",
   "configHash": "4a50bd97",
-  "lockfileHash": "ce08131d",
-  "browserHash": "53eff9ad",
+  "lockfileHash": "7169aaf0",
+  "browserHash": "48ebd27d",
   "optimized": {
     "@deckio/deck-engine": {
       "src": "../../node_modules/@deckio/deck-engine/index.js",
       "file": "@deckio_deck-engine.js",
-      "fileHash": "ab8b4ac6",
+      "fileHash": "e0f09af9",
       "needsInterop": false
     },
     "react-dom": {
       "src": "../../node_modules/react-dom/index.js",
       "file": "react-dom.js",
-      "fileHash": "74bb09f0",
+      "fileHash": "a47798ce",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "6877d22f",
+      "fileHash": "75a338ce",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "aff3d529",
+      "fileHash": "47f6452f",
       "needsInterop": true
     },
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "3d43f8bd",
+      "fileHash": "40b3e7fb",
       "needsInterop": true
     },
     "react/jsx-runtime": {
       "src": "../../node_modules/react/jsx-runtime.js",
       "file": "react_jsx-runtime.js",
-      "fileHash": "1f9d745f",
+      "fileHash": "1aec10a6",
       "needsInterop": true
     }
   },
   "chunks": {
-    "EditableList-BHAKbQmq": {
-      "file": "EditableList-BHAKbQmq.js",
+    "EditableList-DGc3cJxn": {
+      "file": "EditableList-DGc3cJxn.js",
       "isDynamicEntry": false
     },
-    "EditableListSortable-CwprxICj": {
-      "file": "EditableListSortable-CwprxICj.js",
+    "EditableListSortable-Ce5KRZkS": {
+      "file": "EditableListSortable-Ce5KRZkS.js",
       "isDynamicEntry": true
     },
-    "GitHubStarPrompt-C0aTi6BS": {
-      "file": "GitHubStarPrompt-C0aTi6BS.js",
+    "GitHubStarPrompt-CbIhnaIF": {
+      "file": "GitHubStarPrompt-CbIhnaIF.js",
       "isDynamicEntry": true
     },
-    "dist-3EiKcmRC": {
-      "file": "dist-3EiKcmRC.js",
+    "dist-Be2CyPZj": {
+      "file": "dist-Be2CyPZj.js",
       "isDynamicEntry": true
     },
-    "html2canvas-BJabpPP1": {
-      "file": "html2canvas-BJabpPP1.js",
+    "html2canvas-DDAl3X2L": {
+      "file": "html2canvas-DDAl3X2L.js",
       "isDynamicEntry": true
     },
-    "index.es-QK-PSMnf": {
-      "file": "index.es-QK-PSMnf.js",
+    "index.es-DJpVPuRz": {
+      "file": "index.es-DJpVPuRz.js",
       "isDynamicEntry": true
     },
-    "jspdf.es.min-D_ZWd10q": {
-      "file": "jspdf.es.min-D_ZWd10q.js",
+    "jspdf.es.min-DUaxsYt3": {
+      "file": "jspdf.es.min-DUaxsYt3.js",
       "isDynamicEntry": true
     },
-    "pptxgen.es-CKLMYUWV": {
-      "file": "pptxgen.es-CKLMYUWV.js",
+    "pptxgen.es-GagpR4ns": {
+      "file": "pptxgen.es-GagpR4ns.js",
       "isDynamicEntry": true
     },
-    "purify.es-D2ckzg14": {
-      "file": "purify.es-D2ckzg14.js",
+    "purify.es-Bfx81M_8": {
+      "file": "purify.es-Bfx81M_8.js",
       "isDynamicEntry": true
     },
-    "rolldown-runtime-B-lAHAz2": {
-      "file": "rolldown-runtime-B-lAHAz2.js",
+    "rolldown-runtime-DEy6nfl2": {
+      "file": "rolldown-runtime-DEy6nfl2.js",
+      "isDynamicEntry": false
+    },
+    "typeof-KEtdrNHU": {
+      "file": "typeof-KEtdrNHU.js",
       "isDynamicEntry": false
     }
   }

@@ -1,0 +1,62 @@
+.wizard {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--card) 90%, transparent);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+}
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--border); }
+.tabs button {
+  appearance: none; border: 0; border-right: 1px solid var(--border);
+  padding: 15px 12px; cursor: pointer; color: var(--muted-foreground);
+  background: color-mix(in srgb, var(--night) 50%, transparent);
+  font: 700 13px/1.2 ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+.tabs button:last-child { border-right: 0; }
+.tabs button[aria-selected="true"] { color: var(--frost); background: color-mix(in srgb, var(--ice) 13%, var(--card)); box-shadow: inset 0 -2px var(--ice); }
+.panel { padding: 24px; animation: in 0.35s ease both; }
+.panel h3 { margin: 5px 0 7px; font-size: 22px; }
+.panel p { color: var(--muted-foreground); line-height: 1.55; }
+.panelLead { margin-bottom: 18px; }
+.kicker { color: var(--ice); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: 1.6px; text-transform: uppercase; }
+.intro { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-bottom: 18px; }
+.download {
+  flex-shrink: 0; text-decoration: none; padding: 11px 16px; border-radius: 999px;
+  color: var(--night); background: var(--ice); font-weight: 800;
+}
+.command, .commandBlock {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  border: 1px solid color-mix(in srgb, var(--ice) 24%, var(--border));
+  background: color-mix(in srgb, var(--night) 72%, transparent);
+  border-radius: 12px; margin-top: 10px; padding: 12px 14px;
+}
+.command code, .commandBlock code, .signins code, .note code { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; }
+.command code { min-width: 0; overflow-x: auto; white-space: nowrap; }
+.commandBlock { align-items: flex-start; }
+.commandBlock pre { min-width: 0; margin: 0; overflow-x: auto; line-height: 1.7; }
+.copy {
+  appearance: none; flex-shrink: 0; cursor: pointer; padding: 6px 10px; border-radius: 7px;
+  border: 1px solid color-mix(in srgb, var(--ice) 40%, transparent);
+  color: var(--ice); background: color-mix(in srgb, var(--ice) 8%, transparent); font: inherit; font-size: 12px; font-weight: 700;
+}
+.note { margin-top: 16px; padding: 13px 15px; border-radius: 12px; border-left: 3px solid var(--gold); background: color-mix(in srgb, var(--gold) 8%, transparent); color: var(--muted-foreground); line-height: 1.55; }
+.note strong { color: var(--frost); }
+.resourceGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+.resource { display: flex; flex-direction: column; gap: 5px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: inherit; }
+.resource:hover { border-color: var(--ice); }
+.resource span { color: var(--muted-foreground); font-size: 13px; line-height: 1.45; }
+.resource i { color: var(--ice); font-size: 12px; font-style: normal; }
+.signins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.signins article { padding: 15px; border-radius: 13px; border: 1px solid var(--border); background: color-mix(in srgb, var(--night) 55%, transparent); min-width: 0; }
+.signins div { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.signins a { color: var(--ice); font-size: 12px; }
+.signins code { display: block; color: var(--frost); overflow-x: auto; white-space: nowrap; font-size: 12px; }
+@keyframes in { from { opacity: 0; transform: translateY(6px); } }
+@media (max-width: 700px) {
+  .tabs button { font-size: 11px; padding: 13px 7px; }
+  .panel { padding: 18px; }
+  .intro { align-items: flex-start; flex-direction: column; }
+  .download { width: 100%; text-align: center; }
+  .resourceGrid, .signins { grid-template-columns: 1fr; }
+  .command { align-items: flex-start; }
+}

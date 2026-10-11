@@ -11,9 +11,7 @@ const principal = {
 
 function request(body, auth = principal) {
   return {
-    headers: auth
-      ? { 'x-ms-client-principal': Buffer.from(JSON.stringify(auth)).toString('base64') }
-      : {},
+    headers: auth ? { 'x-ms-client-principal': Buffer.from(JSON.stringify(auth)).toString('base64') } : {},
     body,
   }
 }
@@ -22,7 +20,7 @@ function validBody() {
   return {
     company: 'Example Org',
     email: 'Builder@Example.com',
-    sessions: ['session-1', 'session-6'],
+    sessions: ['session-01', 'session-06'],
     environment: 'cloud',
     consent: true,
   }
@@ -43,12 +41,12 @@ test('rejects unknown or duplicate session identifiers', async () => {
   configuredEnvironment()
   const context = {}
   const body = validBody()
-  body.sessions = ['session-1', 'session-1']
+  body.sessions = ['session-01', 'session-01']
   await register(context, request(body))
   assert.equal(context.res.status, 400)
 })
 
-test('requires event-specific backend settings', async () => {
+test('requires shared backend settings', async () => {
   delete process.env.REGISTRATION_FLOW_URL
   delete process.env.REGISTRATION_FLOW_SHARED_SECRET
   const context = {}
@@ -56,7 +54,7 @@ test('requires event-specific backend settings', async () => {
   assert.equal(context.res.status, 503)
 })
 
-test('forwards a validated event-scoped deterministic upsert payload', async () => {
+test('forwards an event-routed deterministic upsert payload', async () => {
   configuredEnvironment()
   let received
   global.fetch = async (url, options) => {
@@ -68,8 +66,9 @@ test('forwards a validated event-scoped deterministic upsert payload', async () 
   await register(context, request(validBody()))
 
   assert.equal(context.res.status, 202)
-  assert.equal(received.url, 'https://flow.example.test/register')
+  assert.equal(String(received.url), 'https://flow.example.test/register')
   assert.equal(received.options.headers['x-registration-secret'], 'test-only-secret')
+  assert.equal(received.body.eventId, 'agentic-ai-apps-winter-bootcamp')
   assert.equal(received.body.email, 'builder@example.com')
   assert.equal(received.body.githubUsername, 'octocat')
   assert.match(received.body.registrationId, /^[a-f0-9]{64}$/)

@@ -1,5 +1,8 @@
 {
-  "name": "agentic-ai-apps-winter-api",
-  "version": "0.1.0",
-  "private": true
+  "name": "agentic-ai-apps-winter-bootcamp-api",
+  "private": true,
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20"
+  }
 }

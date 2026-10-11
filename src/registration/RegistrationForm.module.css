@@ -1,0 +1,69 @@
+.authCard, .form {
+  border: 1px solid color-mix(in srgb, var(--ice) 28%, var(--border));
+  border-radius: 22px; background: color-mix(in srgb, var(--card) 92%, transparent);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.34);
+}
+.authCard { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 24px; }
+.authCard h3 { margin-bottom: 5px; font-size: 21px; }
+.authCard p, .authCard small { color: var(--muted-foreground); line-height: 1.5; }
+.authCard small { display: block; margin-top: 7px; color: var(--gold); }
+.githubMark { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: #f6f8fa; color: #0d1117; font-weight: 900; }
+.signIn { text-decoration: none; padding: 11px 17px; border-radius: 999px; background: var(--frost); color: var(--night); font-weight: 800; white-space: nowrap; }
+.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); border-top-color: var(--ice); animation: spin .8s linear infinite; }
+.form { padding: 24px; }
+.identity { display: flex; align-items: center; gap: 13px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.avatar {
+  width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center;
+  border-radius: 50%; border: 2px solid var(--ice); background: #f6f8fa; color: #0d1117; font-weight: 900;
+}
+.identity div { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.identity span { color: var(--muted-foreground); font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; }
+.identity strong { font-size: 18px; overflow-wrap: anywhere; }
+.identity a { color: var(--ice); font-size: 13px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
+.fields label { display: flex; flex-direction: column; gap: 7px; }
+.fields span, fieldset legend { font-weight: 700; font-size: 14px; }
+.fields input {
+  width: 100%; min-width: 0; padding: 12px 13px; border-radius: 10px;
+  border: 1px solid var(--border); color: var(--frost);
+  background: color-mix(in srgb, var(--night) 70%, transparent); font: inherit;
+}
+.fields input:focus { outline: 2px solid var(--ice); outline-offset: 1px; }
+.sessionField, .environment { border: 0; margin: 24px 0 0; padding: 0; }
+.sessionField legend, .environment legend { margin-bottom: 12px; }
+.sessionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sessionGrid label {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 11px;
+  padding: 13px; border-radius: 13px; border: 1px solid var(--border);
+  cursor: pointer; transition: border-color .2s, background .2s, transform .2s;
+}
+.sessionGrid label:hover { transform: translateY(-2px); border-color: color-mix(in srgb, var(--ice) 55%, transparent); }
+.sessionGrid input { position: absolute; opacity: 0; pointer-events: none; }
+.sessionGrid strong { display: block; font-size: 14px; line-height: 1.35; }
+.sessionGrid small { display: block; color: var(--muted-foreground); margin-top: 3px; line-height: 1.35; }
+.sessionGrid i { font-style: normal; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; color: var(--ice); border: 1px solid color-mix(in srgb, var(--ice) 40%, transparent); }
+.sessionGrid .sessionOn { background: color-mix(in srgb, var(--pine) 14%, var(--card)); border-color: var(--green); }
+.sessionGrid .sessionOn i { color: var(--night); background: var(--green); border-color: var(--green); }
+.environment { display: flex; flex-wrap: wrap; gap: 10px; }
+.environment legend { width: 100%; }
+.environment label { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+.environment input { accent-color: var(--ice); }
+.consent { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 11px; margin-top: 22px; padding: 14px; border-radius: 12px; background: color-mix(in srgb, var(--night) 50%, transparent); color: var(--muted-foreground); font-size: 13px; line-height: 1.5; }
+.consent input { margin-top: 3px; accent-color: var(--ice); }
+.submitRow { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
+.submitRow button { appearance: none; border: 0; border-radius: 999px; padding: 12px 20px; color: #050718; background: linear-gradient(135deg, var(--ice), var(--purple)); font: inherit; font-weight: 800; cursor: pointer; }
+.submitRow button:disabled { opacity: .48; cursor: not-allowed; }
+.submitRow small { color: var(--muted-foreground); }
+.message { margin-top: 15px; padding: 11px 13px; border-radius: 10px; color: var(--green); background: color-mix(in srgb, var(--green) 10%, transparent); }
+.error { color: var(--holly); background: color-mix(in srgb, var(--holly) 10%, transparent); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 700px) {
+  .authCard { grid-template-columns: auto minmax(0, 1fr); padding: 18px; }
+  .signIn { grid-column: 1 / -1; text-align: center; }
+  .form { padding: 18px; }
+  .fields, .sessionGrid { grid-template-columns: 1fr; }
+  .identity { align-items: flex-start; }
+  .identity a { text-align: right; }
+  .submitRow { align-items: flex-start; flex-direction: column; }
+  .submitRow button { width: 100%; }
+}

@@ -1,6 +1,7 @@
 const { createHash } = require('node:crypto')
 
-const SESSION_IDS = new Set(['session-1', 'session-2', 'session-3', 'session-4', 'session-5', 'session-6'])
+const EVENT_ID = 'agentic-ai-apps-winter-bootcamp'
+const SESSION_IDS = new Set(['session-01', 'session-02', 'session-03', 'session-04', 'session-05', 'session-06'])
 const ENVIRONMENTS = new Set(['local', 'cloud'])
 
 function response(status, body) {
@@ -20,40 +21,33 @@ function getHeader(req, name) {
 }
 
 function readPrincipal(req) {
-  const header = getHeader(req, 'x-ms-client-principal')
-  if (!header) return null
-  return JSON.parse(Buffer.from(header, 'base64').toString('utf8'))
-}
-
-function readBody(req) {
-  if (!req.body) return {}
-  if (typeof req.body === 'string') return JSON.parse(req.body)
-  return req.body
+  const encoded = getHeader(req, 'x-ms-client-principal')
+  if (!encoded || encoded.length > 16_384) return null
+  return JSON.parse(Buffer.from(encoded, 'base64').toString('utf8'))
 }
 
 module.exports = async function register(context, req) {
   let principal
-  let body
-
   try {
     principal = readPrincipal(req)
-    body = readBody(req)
   } catch {
-    context.res = response(400, { error: 'The registration request is not valid.' })
+    context.res = response(401, { error: 'Invalid authentication context.' })
     return
   }
 
   if (
     !principal
     || principal.identityProvider !== 'github'
+    || typeof principal.userDetails !== 'string'
+    || typeof principal.userId !== 'string'
     || !principal.userDetails
     || !principal.userId
-    || !principal.userRoles?.includes('authenticated')
   ) {
     context.res = response(401, { error: 'Sign in with GitHub before registering.' })
     return
   }
 
+  const body = req.body || {}
   const company = typeof body.company === 'string' ? body.company.trim() : ''
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
   const requestedSessions = Array.isArray(body.sessions) ? body.sessions : []
@@ -69,7 +63,7 @@ module.exports = async function register(context, req) {
     return
   }
   if (!sessions.length || sessions.length !== requestedSessions.length) {
-    context.res = response(400, { error: 'Choose at least one valid session without duplicates.' })
+    context.res = response(400, { error: 'Choose at least one valid session.' })
     return
   }
   if (!environment || body.consent !== true) {
@@ -78,18 +72,27 @@ module.exports = async function register(context, req) {
   }
 
   const flowUrl = process.env.REGISTRATION_FLOW_URL
-  const sharedSecret = process.env.REGISTRATION_FLOW_SHARED_SECRET
-
-  if (!flowUrl || !sharedSecret) {
+  const flowSecret = process.env.REGISTRATION_FLOW_SHARED_SECRET
+  if (!flowUrl || !flowSecret) {
     context.res = response(503, { error: 'Registration storage is not configured yet.' })
     return
   }
 
-  const registrationId = createHash('sha256')
-    .update(principal.userId)
-    .digest('hex')
+  let parsedFlowUrl
+  try {
+    parsedFlowUrl = new URL(flowUrl)
+  } catch {
+    context.res = response(503, { error: 'Registration storage is not configured correctly.' })
+    return
+  }
+  if (parsedFlowUrl.protocol !== 'https:') {
+    context.res = response(503, { error: 'Registration storage requires a secure endpoint.' })
+    return
+  }
 
+  const registrationId = createHash('sha256').update(`${EVENT_ID}:${principal.userId}`).digest('hex')
   const payload = {
+    eventId: EVENT_ID,
     registrationId,
     githubUserId: principal.userId,
     githubUsername: principal.userDetails,
@@ -103,13 +106,14 @@ module.exports = async function register(context, req) {
 
   let flowResponse
   try {
-    flowResponse = await fetch(flowUrl, {
+    flowResponse = await fetch(parsedFlowUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-registration-secret': sharedSecret,
+        'x-registration-secret': flowSecret,
       },
       body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(10_000),
     })
   } catch {
     context.res = response(502, { error: 'Registration storage is temporarily unavailable.' })

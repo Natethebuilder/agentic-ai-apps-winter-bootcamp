@@ -4,7 +4,9 @@
       "appLocation": ".",
       "apiLocation": "api",
       "outputLocation": "dist",
-      "appDevserverUrl": "http://localhost:5210"
+      "appBuildCommand": "npm run build:swa",
+      "run": "npm run dev -- --host 0.0.0.0",
+      "appDevserverUrl": "http://localhost:5173"
     }
   }
 }
