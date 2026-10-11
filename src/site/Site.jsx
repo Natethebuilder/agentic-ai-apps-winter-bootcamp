@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
 import { SnowToggle } from '../winter/Snowfall.jsx'
-import { AgentTerminal, Countdown, MedallionFlow, ScheduleQuery } from '../data/DataViz.jsx'
+import { AgentTerminal, Countdown, ScheduleQuery } from '../data/DataViz.jsx'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import {
@@ -33,7 +33,7 @@ function useReveal(rootRef) {
     els.forEach((el) => io.observe(el))
 
     // Items pop in as they scroll into view; long single-column phone sections otherwise feel static
-    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}, .${s.flow}`)
+    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}`)
     const itemIo = new IntersectionObserver((entries) => {
       entries.filter((e) => e.isIntersecting).forEach((e, k) => {
         e.target.style.setProperty('--i', k)
@@ -316,9 +316,6 @@ export default function Site({ snow, onToggleSnow }) {
               </article>
             ))}
           </div>
-          <div className={s.foundryLoop}>
-            <MedallionFlow />
-          </div>
           <PersonaPicker />
         </Section>
 
@@ -338,7 +335,7 @@ export default function Site({ snow, onToggleSnow }) {
           id="schedule"
           idx="03"
           eyebrow="Schedule"
-          title="Six sessions. One connected Foundry build loop."
+          title="Six sessions. One connected Foundry programme."
           subtitle="Topics and dates are still being confirmed. The programme will connect intent, models, knowledge, tools, orchestration and evaluation."
         >
           <ScheduleQuery />

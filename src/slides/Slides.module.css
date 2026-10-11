@@ -290,21 +290,51 @@
 
 .caption { font-size: 14px; color: var(--muted-foreground); }
 
-/* ── Flow bar ── */
-.flow {
+/* ── Static Foundry development path ── */
+.loopPath {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.loopStage {
+  min-width: 0;
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--loop-accent) 42%, var(--border));
+  border-top: 3px solid var(--loop-accent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--loop-accent) 10%, var(--card)), var(--card));
+}
+.loopStageHead {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 14px 18px;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--card) 80%, transparent);
-  font-size: 14px;
-  font-weight: 600;
+  gap: 9px;
+  margin-bottom: 12px;
 }
-.flowArrow { color: var(--holly); }
+.loopStageHead span {
+  color: var(--loop-accent);
+  font: 800 11px/1 ui-monospace, monospace;
+  letter-spacing: 1px;
+}
+.loopStageHead strong { color: var(--frost); font-size: 17px; }
+.loopStage p {
+  min-height: 72px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.loopStage small {
+  display: block;
+  margin-top: 14px;
+  color: var(--loop-accent);
+  font: 700 11px/1.3 ui-monospace, monospace;
+}
+.loopCaption {
+  max-width: 900px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  line-height: 1.55;
+}
 
 /* ── Points & steps ── */
 .points { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
@@ -551,8 +581,10 @@
   .doorWeek { font-size: 10px; letter-spacing: 1.2px; }
   .doorDate { font-size: 12px; }
 
-  .flow { flex-direction: column; gap: 4px; padding: 12px 14px; }
-  .flowArrow { display: inline-block; transform: rotate(90deg); }
+  .loopPath { grid-template-columns: 1fr; gap: 10px; }
+  .loopStage { padding: 14px; }
+  .loopStage p { min-height: 0; }
+  .loopCaption { font-size: 13px; }
   .point { padding: 12px 14px; font-size: 15px; gap: 12px; }
   .stepNum { width: 30px; height: 30px; }
   .registerSlideGrid { grid-template-columns: 1fr; }

@@ -3,9 +3,8 @@ import { createPortal } from 'react-dom'
 import { BottomBar, Editable, Slide, useSlides } from '@deckio/deck-engine'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import { Logos, Mascot } from '../winter/Decor.jsx'
-import { MedallionFlow } from '../data/DataViz.jsx'
 import {
-  BOOTCAMP, PERSONAS, PILLARS, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
+  BOOTCAMP, PERSONAS, PILLARS, PIPELINE, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
 } from '../content.js'
 import s from './Slides.module.css'
 
@@ -132,16 +131,27 @@ export function AudienceSlide({ index }) {
 }
 
 export function FoundryLoopSlide({ index }) {
-  const { current } = useSlides()
   return (
     <Frame index={index} id="foundry-loop" orbs={['orbIce', 'orbPine']}>
       <Header
         id="foundry-loop"
-        eyebrow="Foundry build loop"
-        title="One connected agent development loop."
-        subtitle="Move from a bounded job to models, trusted knowledge, safe tools and evaluation evidence."
+        eyebrow="Foundry development path"
+        title="Five stages. No mystery."
+        subtitle="Frame the job, choose the route, ground it, bound its actions and prove quality before release."
       />
-      <MedallionFlow compact running={current === index} />
+      <div className={s.loopPath} aria-label="Foundry agent development path">
+        {PIPELINE.map((stage, stageIndex) => (
+          <div key={stage.id} className={s.loopStage} style={{ '--loop-accent': stage.color }}>
+            <div className={s.loopStageHead}>
+              <span>{String(stageIndex + 1).padStart(2, '0')}</span>
+              <strong>{stage.label}</strong>
+            </div>
+            <p>{stage.what}</p>
+            <small>Gate · {stage.gate}</small>
+          </div>
+        ))}
+      </div>
+      <p className={s.loopCaption}>GitHub Copilot supports the work at each stage; Microsoft Foundry provides the governed runtime and evaluation surface.</p>
     </Frame>
   )
 }
@@ -152,7 +162,7 @@ export function TimetableSlide({ index }) {
       <Header
         id="timetable"
         eyebrow="Programme schedule"
-        title="Six sessions. One connected Foundry build loop."
+        title="Six sessions. One connected Foundry programme."
         subtitle="Topics and dates are still being confirmed. Each session will add another perspective on dependable AI applications."
       />
       <div className={`${s.grid} ${s.grid6}`}>

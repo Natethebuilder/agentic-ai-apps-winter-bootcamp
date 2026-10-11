@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { PIPELINE, SCHEDULE, TERMINAL_SCRIPTS } from '../content.js'
+import { SCHEDULE, TERMINAL_SCRIPTS } from '../content.js'
 import d from './Data.module.css'
-
-const BASE = import.meta.env.BASE_URL
 
 /* ── Countdown to the first session, styled as a scheduled pipeline run ── */
 export function Countdown({ target, date, dateLabel, className = '' }) {
@@ -115,129 +113,6 @@ export function AgentTerminal({ className = '', children }) {
   )
 }
 
-/* ── AI application build loop with an agent at every hop ── */
-const NODE_W = 150
-const NODE_H = 78
-const NODE_Y = 206
-const AGENT = { x: 565, y: 44 }
-const XS = [95, 330, 565, 800, 1035]
-
-export function MedallionFlow({ compact = false, running = true, className = '' }) {
-  const [active, setActive] = useState(0)
-  const [auto, setAuto] = useState(true)
-  useEffect(() => {
-    if (!auto || !running) return undefined
-    const id = setInterval(() => setActive((a) => (a + 1) % PIPELINE.length), 3200)
-    return () => clearInterval(id)
-  }, [auto, running])
-
-  const pick = (i) => { setAuto(false); setActive(i) }
-  const stage = PIPELINE[active]
-
-  return (
-    <div className={`${d.flowWrap} ${compact ? d.flowCompact : ''} ${className}`}>
-      <div className={d.flowScroll}>
-        <svg className={d.flowSvg} viewBox="0 0 1130 260" role="group" aria-label="Microsoft Foundry agent development loop">
-          <defs>
-            <pattern id="flow-grid" width="26" height="26" patternUnits="userSpaceOnUse">
-              <path d="M26 0H0V26" fill="none" stroke="rgba(143,216,255,0.06)" strokeWidth="1" />
-            </pattern>
-            <filter id="flow-glow" x="-100%" y="-100%" width="300%" height="300%">
-              <feGaussianBlur stdDeviation="5" result="b" />
-              <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
-          </defs>
-          <rect width="1130" height="260" fill="url(#flow-grid)" />
-
-          {XS.map((x, i) => (
-            <path
-              key={`a${i}`}
-              d={`M${AGENT.x} ${AGENT.y + 24} C ${AGENT.x} 120, ${x} 110, ${x} ${NODE_Y - NODE_H / 2}`}
-              className={`${d.agentLine} ${i === active ? d.agentLineOn : ''}`}
-            />
-          ))}
-
-          {XS.slice(0, -1).map((x, i) => {
-            const path = `M${x + NODE_W / 2} ${NODE_Y} L${XS[i + 1] - NODE_W / 2} ${NODE_Y}`
-            return (
-              <g key={`e${i}`}>
-                <path d={path} className={d.edge} />
-                {[0, 1, 2].map((k) => (
-                  <rect key={k} x="-5" y="-3.5" width="10" height="7" rx="2" className={d.packet} style={{ fill: PIPELINE[i + 1].color }}>
-                    <animateMotion dur="1.8s" begin={`${-k * 0.6}s`} repeatCount="indefinite" path={path} />
-                  </rect>
-                ))}
-              </g>
-            )
-          })}
-
-          <g className={d.agentNode}>
-            <rect x={AGENT.x - 122} y={AGENT.y - 24} width="244" height="48" rx="24" />
-            <image href={`${BASE}copilot-mascot.png`} x={AGENT.x - 112} y={AGENT.y - 19} width="38" height="38" />
-            <text x={AGENT.x - 66} y={AGENT.y + 6}>GitHub Copilot agent</text>
-          </g>
-
-          {PIPELINE.map((p, i) => (
-            <g
-              key={p.id}
-              className={`${d.node} ${i === active ? d.nodeOn : ''}`}
-              transform={`translate(${XS[i] - NODE_W / 2} ${NODE_Y - NODE_H / 2})`}
-              style={{ '--c': p.color }}
-              role="button"
-              tabIndex={0}
-              aria-pressed={i === active}
-              aria-label={`${p.label}: ${p.what}`}
-              onClick={() => pick(i)}
-              onMouseEnter={() => pick(i)}
-              onFocus={() => pick(i)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(i) }
-              }}
-            >
-              <rect width={NODE_W} height={NODE_H} rx="16" className={d.nodeBox} />
-              <circle cx="26" cy="32" r="8" fill={p.color} filter={i === active ? 'url(#flow-glow)' : undefined} />
-              <text x="44" y="38" className={d.nodeLabel}>{p.label}</text>
-              <text x="18" y="62" className={d.nodeSub}>{p.sub}</text>
-            </g>
-          ))}
-        </svg>
-      </div>
-
-      <div className={d.flowMobileStages} role="tablist" aria-label="Foundry build stages">
-        {PIPELINE.map((item, index) => (
-          <button
-            key={item.id}
-            type="button"
-            role="tab"
-            aria-selected={index === active}
-            className={index === active ? d.flowMobileStageOn : ''}
-            style={{ '--c': item.color }}
-            onClick={() => pick(index)}
-          >
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            {item.label}
-          </button>
-        ))}
-      </div>
-
-      <div className={d.flowDetail} style={{ '--c': stage.color }} aria-live="polite">
-        <div>
-          <span className={d.detailKicker}>{String(active + 1).padStart(2, '0')} · {stage.label}</span>
-          <p>{stage.what}</p>
-        </div>
-        <div>
-          <span className={d.detailKicker}>Ask the agent</span>
-          <p className={d.detailPrompt}>“{stage.prompt}”</p>
-        </div>
-        <div>
-          <span className={d.detailKicker}>Quality gate</span>
-          <p className={d.detailGate}>✓ {stage.gate}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 /* ── Programme rendered as a workflow manifest and result grid ── */
 export function ScheduleQuery() {
   const ref = useRef(null)
@@ -278,7 +153,7 @@ export function ScheduleQuery() {
         <code>
           <span className={d.kw}>programme:</span>{'\n'}
           {'  '}sessions: 6{'\n'}
-          {'  '}agent_loop: intent → models → knowledge → tools → evaluate{'\n'}
+          {'  '}development_path: intent → models → knowledge → tools → evaluate{'\n'}
           {'  '}details: <span className={d.tbl}>TBC</span>
         </code>
       </pre>
