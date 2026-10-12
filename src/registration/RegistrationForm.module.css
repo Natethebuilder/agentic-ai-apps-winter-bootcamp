@@ -1,27 +1,16 @@
-.authCard, .form {
+.form {
   border: 1px solid color-mix(in srgb, var(--ice) 28%, var(--border));
   border-radius: 22px; background: color-mix(in srgb, var(--card) 92%, transparent);
   box-shadow: 0 20px 55px rgba(0, 0, 0, 0.34);
 }
-.authCard { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 18px; padding: 24px; }
-.authCard h3 { margin-bottom: 5px; font-size: 21px; }
-.authCard p, .authCard small { color: var(--muted-foreground); line-height: 1.5; }
-.authCard small { display: block; margin-top: 7px; color: var(--gold); }
-.githubMark { width: 46px; height: 46px; display: grid; place-items: center; border-radius: 50%; background: #f6f8fa; color: #0d1117; font-weight: 900; }
-.signIn { text-decoration: none; padding: 11px 17px; border-radius: 999px; background: var(--frost); color: var(--night); font-weight: 800; white-space: nowrap; }
-.spinner { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); border-top-color: var(--ice); animation: spin .8s linear infinite; }
-.form { padding: 24px; }
-.identity { display: flex; align-items: center; gap: 13px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-.avatar {
-  width: 48px; height: 48px; flex: 0 0 48px; display: grid; place-items: center;
-  border-radius: 50%; border: 2px solid var(--ice); background: #f6f8fa; color: #0d1117; font-weight: 900;
-}
-.identity div { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.identity span { color: var(--muted-foreground); font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; }
-.identity strong { font-size: 18px; overflow-wrap: anywhere; }
-.identity a { color: var(--ice); font-size: 13px; }
+.form { min-width: 0; max-width: 100%; padding: 24px; }
+.ticketNotice { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.ticketNotice > span { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); background: color-mix(in srgb, var(--gold) 12%, var(--night)); color: var(--gold); font: 900 14px/1 ui-monospace, monospace; }
+.ticketNotice strong { display: block; font-size: 17px; }
+.ticketNotice p { margin-top: 5px; color: var(--muted-foreground); font-size: 13px; line-height: 1.5; }
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
 .fields label { display: flex; flex-direction: column; gap: 7px; }
+.companyField { grid-column: 1 / -1; }
 .fields span, fieldset legend { font-weight: 700; font-size: 14px; }
 .fields input {
   width: 100%; min-width: 0; padding: 12px 13px; border-radius: 10px;
@@ -29,7 +18,11 @@
   background: color-mix(in srgb, var(--night) 70%, transparent); font: inherit;
 }
 .fields input:focus { outline: 2px solid var(--ice); outline-offset: 1px; }
-.sessionField, .environment { border: 0; margin: 24px 0 0; padding: 0; }
+.fields input[aria-invalid="true"] { border-color: var(--holly); }
+.emailMatch, .emailMismatch { font-size: 11px; line-height: 1.3; }
+.emailMatch { color: var(--green); }
+.emailMismatch { color: var(--holly); }
+.sessionField, .environment { min-width: 0; max-width: 100%; border: 0; margin: 24px 0 0; padding: 0; }
 .sessionField legend, .environment legend { margin-bottom: 12px; }
 .sessionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .sessionGrid label {
@@ -46,8 +39,11 @@
 .sessionGrid .sessionOn i { color: var(--night); background: var(--green); border-color: var(--green); }
 .environment { display: flex; flex-wrap: wrap; gap: 10px; }
 .environment legend { width: 100%; }
-.environment label { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 999px; cursor: pointer; }
+.environment label { display: flex; align-items: flex-start; gap: 10px; flex: 1 1 320px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; cursor: pointer; }
 .environment input { accent-color: var(--ice); }
+.environment label > span { display: flex; flex-direction: column; gap: 4px; }
+.environment strong { font-size: 13px; }
+.environment small { color: var(--muted-foreground); font-size: 12px; line-height: 1.4; }
 .consent { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 11px; margin-top: 22px; padding: 14px; border-radius: 12px; background: color-mix(in srgb, var(--night) 50%, transparent); color: var(--muted-foreground); font-size: 13px; line-height: 1.5; }
 .consent input { margin-top: 3px; accent-color: var(--ice); }
 .submitRow { display: flex; align-items: center; gap: 16px; margin-top: 20px; }
@@ -56,14 +52,9 @@
 .submitRow small { color: var(--muted-foreground); }
 .message { margin-top: 15px; padding: 11px 13px; border-radius: 10px; color: var(--green); background: color-mix(in srgb, var(--green) 10%, transparent); }
 .error { color: var(--holly); background: color-mix(in srgb, var(--holly) 10%, transparent); }
-@keyframes spin { to { transform: rotate(360deg); } }
 @media (max-width: 700px) {
-  .authCard { grid-template-columns: auto minmax(0, 1fr); padding: 18px; }
-  .signIn { grid-column: 1 / -1; text-align: center; }
   .form { padding: 18px; }
   .fields, .sessionGrid { grid-template-columns: 1fr; }
-  .identity { align-items: flex-start; }
-  .identity a { text-align: right; }
   .submitRow { align-items: flex-start; flex-direction: column; }
   .submitRow button { width: 100%; }
 }

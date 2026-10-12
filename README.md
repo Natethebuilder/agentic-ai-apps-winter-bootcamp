@@ -13,7 +13,7 @@ Topics, dates, speakers and headshots intentionally remain visible placeholders 
 
 - Website: <https://mango-mushroom-0c5c73e0f.6.azurestaticapps.net/>
 - Deck: <https://mango-mushroom-0c5c73e0f.6.azurestaticapps.net/#/deck>
-- Registration: GitHub-authenticated and routed through the shared multi-event flow to the dedicated private Foundry SharePoint List
+- Registration: Public form with confirmed company email, routed through the shared multi-event flow to the dedicated private Foundry SharePoint List
 
 ## Develop
 
@@ -25,17 +25,19 @@ npm run build
 npm run build:swa
 ```
 
-Azure Static Web Apps hosts the website, deck, GitHub authentication and protected registration API on one origin.
+Azure Static Web Apps hosts the website, deck and registration API on one origin.
 
 ## Registration architecture
 
-The protected API:
+The registration API:
 
-1. reads the authenticated GitHub identity from `x-ms-client-principal`;
-2. validates company, email, session IDs, environment and consent;
-3. derives an event-scoped SHA-256 `RegistrationId`;
+1. validates company, matching email entries, session IDs, environment and consent;
+2. uses a browser-held opaque token to derive an event-scoped SHA-256 `RegistrationId`;
+3. sends legacy GitHub fields as explicit `not-collected` compatibility markers;
 4. sends `eventId: foundry-agentic-development-winter-bootcamp` to the shared registration flow;
 5. lets that flow route the submission into the dedicated Foundry Agentic Development SharePoint List.
+
+A few days before the event, the attendee receives a Golden Ticket invitation containing the link to join the event GitHub organization. The environment includes $100 worth of GitHub Copilot AI credits.
 
 | Setting | Purpose |
 | --- | --- |
@@ -44,7 +46,7 @@ The protected API:
 
 Never commit either value. See [docs/registration-backend.md](docs/registration-backend.md).
 
-The deployed backend has been verified for invalid-secret rejection, first-registration creation and deterministic repeat-registration update without creating duplicate rows.
+The backend uses the browser-held registration token for repeat updates from the same browser without relying on GitHub OAuth.
 
 ## Deploy
 

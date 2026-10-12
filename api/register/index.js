@@ -1,8 +1,9 @@
-const { createHash } = require('node:crypto')
+const { createHash, randomUUID } = require('node:crypto')
 
 const EVENT_ID = 'foundry-agentic-development-winter-bootcamp'
 const SESSION_IDS = new Set(['session-01', 'session-02', 'session-03', 'session-04', 'session-05', 'session-06'])
 const ENVIRONMENTS = new Set(['local', 'cloud'])
+const REGISTRATION_TOKEN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 function response(status, body) {
   return {
@@ -15,41 +16,12 @@ function response(status, body) {
   }
 }
 
-function getHeader(req, name) {
-  if (typeof req.headers?.get === 'function') return req.headers.get(name)
-  return req.headers?.[name] || req.headers?.[name.toLowerCase()]
-}
-
-function readPrincipal(req) {
-  const encoded = getHeader(req, 'x-ms-client-principal')
-  if (!encoded || encoded.length > 16_384) return null
-  return JSON.parse(Buffer.from(encoded, 'base64').toString('utf8'))
-}
-
 module.exports = async function register(context, req) {
-  let principal
-  try {
-    principal = readPrincipal(req)
-  } catch {
-    context.res = response(401, { error: 'Invalid authentication context.' })
-    return
-  }
-
-  if (
-    !principal
-    || principal.identityProvider !== 'github'
-    || typeof principal.userDetails !== 'string'
-    || typeof principal.userId !== 'string'
-    || !principal.userDetails
-    || !principal.userId
-  ) {
-    context.res = response(401, { error: 'Sign in with GitHub before registering.' })
-    return
-  }
-
   const body = req.body || {}
   const company = typeof body.company === 'string' ? body.company.trim() : ''
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
+  const emailConfirmation = typeof body.emailConfirmation === 'string' ? body.emailConfirmation.trim().toLowerCase() : ''
+  const suppliedToken = typeof body.registrationToken === 'string' ? body.registrationToken.trim() : ''
   const requestedSessions = Array.isArray(body.sessions) ? body.sessions : []
   const sessions = [...new Set(requestedSessions.filter((id) => SESSION_IDS.has(id)))]
   const environment = ENVIRONMENTS.has(body.environment) ? body.environment : ''
@@ -60,6 +32,14 @@ module.exports = async function register(context, req) {
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
     context.res = response(400, { error: 'Enter a valid company email address.' })
+    return
+  }
+  if (email !== emailConfirmation) {
+    context.res = response(400, { error: 'The company email addresses must match.' })
+    return
+  }
+  if (suppliedToken && !REGISTRATION_TOKEN.test(suppliedToken)) {
+    context.res = response(400, { error: 'The registration session is invalid. Refresh the page and try again.' })
     return
   }
   if (!sessions.length || sessions.length !== requestedSessions.length) {
@@ -90,12 +70,13 @@ module.exports = async function register(context, req) {
     return
   }
 
-  const registrationId = createHash('sha256').update(`${EVENT_ID}:${principal.userId}`).digest('hex')
+  const registrationToken = suppliedToken || randomUUID()
+  const registrationId = createHash('sha256').update(`${EVENT_ID}:${registrationToken}`).digest('hex')
   const payload = {
     eventId: EVENT_ID,
     registrationId,
-    githubUserId: principal.userId,
-    githubUsername: principal.userDetails,
+    githubUserId: 'not-collected',
+    githubUsername: 'not-collected',
     company,
     email,
     sessions,
@@ -125,5 +106,5 @@ module.exports = async function register(context, req) {
     return
   }
 
-  context.res = response(202, { ok: true })
+  context.res = response(202, { ok: true, registrationToken })
 }

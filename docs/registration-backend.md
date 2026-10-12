@@ -1,6 +1,6 @@
 # Foundry Agentic Development registration backend
 
-This event uses the existing Agentic Data Winter Bootcamp Power Automate registration flow rather than a separate flow. The protected API sends:
+This event uses the existing Agentic Data Winter Bootcamp Power Automate registration flow rather than a separate flow. GitHub OAuth is not used for registration. The API sends:
 
 ```json
 {
@@ -8,7 +8,7 @@ This event uses the existing Agentic Data Winter Bootcamp Power Automate registr
 }
 ```
 
-The API calculates `SHA256(eventId + ":" + application-scoped GitHub user ID)` so one GitHub identity can register for multiple bootcamps without cross-event collisions.
+The API calculates `SHA256(eventId + ":" + registrationToken)`, where `registrationToken` is an opaque UUID stored in the attendee's browser after the first successful submission.
 
 ## Dedicated SharePoint target
 
@@ -25,10 +25,10 @@ The API calculates `SHA256(eventId + ":" + application-scoped GitHub user ID)` s
 
 | Display name | Type | Required | Notes |
 | --- | --- | --- | --- |
-| Title | Single line text | No | Standard column; the flow always writes the verified GitHub username |
+| Title | Single line text | No | Standard column currently receives `not-collected` |
 | RegistrationId | Single line text | Yes | Unique and indexed |
-| GitHubUserId | Single line text | Yes | Application-scoped GitHub identity |
-| GitHubUsername | Single line text | Yes | Verified username |
+| GitHubUserId | Single line text | Yes | Legacy compatibility field set to `not-collected` |
+| GitHubUsername | Single line text | Yes | Legacy compatibility field set to `not-collected` |
 | Company | Single line text | Yes | Organisation |
 | CompanyEmail | Single line text | Yes | Event communication |
 | Sessions | Multiple lines text | Yes | Semicolon-delimited session IDs |
@@ -48,6 +48,12 @@ The shared flow keeps `eventId` optional for the legacy Data client and validate
 6. The false path preserves the unchanged Data fallback for missing or unrecognized event IDs.
 7. Accepted registrations use the shared `202` response; an invalid shared secret returns `401`.
 
+The attendee enters the company email twice, and the browser and API reject values that do not match. This reduces typing mistakes but does not verify ownership of the mailbox. The browser-held token lets the same browser update its registration without treating the email address as an authentication credential.
+
+## Golden Ticket access
+
+A few days before the event starts, the event invitation supplies the Golden Ticket link used to join the event GitHub organization. The environment includes $100 worth of AI credits for GitHub Copilot.
+
 ## Azure Static Web Apps settings
 
 The settings are configured on:
@@ -65,7 +71,6 @@ Do not expose either value in source, browser responses, documentation or logs.
 ## Live verification
 
 - A Foundry-shaped request with an invalid secret returned HTTP `401`.
-- The first GitHub-authenticated submission executed `Create_foundry_registration`, skipped `Update_foundry_registration`, and skipped every Software and Data action.
+- The earlier GitHub-authenticated create/update checks were completed before the Golden Ticket registration migration.
 - The List contained exactly one row with all six session IDs, `local` environment and consent enabled.
-- Repeating the same registration executed `Update_foundry_registration`, skipped `Create_foundry_registration`, and again skipped every Software and Data action.
-- The List remained at exactly one row and `UpdatedAt` advanced from `2026-10-11 13:15` to `2026-10-11 13:23` Pacific time.
+- New registrations use `not-collected` in the legacy GitHub fields and return an opaque token for same-browser updates.
