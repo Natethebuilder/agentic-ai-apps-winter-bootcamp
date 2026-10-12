@@ -33,11 +33,11 @@ The registration API:
 
 1. validates company, matching email entries, session IDs, environment and consent;
 2. uses a browser-held opaque token to derive an event-scoped SHA-256 `RegistrationId`;
-3. sends legacy GitHub fields as explicit `not-collected` compatibility markers;
+3. sends canonical company-email, session-selection and environment-preference fields without GitHub identity;
 4. sends `eventId: foundry-agentic-development-winter-bootcamp` to the shared registration flow;
-5. lets that flow route the submission into the dedicated Foundry Agentic Development SharePoint List.
+5. lets that flow route the submission into the dedicated Foundry Agentic Development SharePoint List and initialize its operational statuses.
 
-A few days before the event, the attendee receives a Golden Ticket invitation containing the link to join the event GitHub organization. The environment includes $100 worth of GitHub Copilot AI credits.
+A few days before the event, the attendee receives an invitation containing the link to join the event GitHub organization. The event environment includes $100 worth of GitHub Copilot AI credits.
 
 | Setting | Purpose |
 | --- | --- |

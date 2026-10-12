@@ -75,12 +75,10 @@ module.exports = async function register(context, req) {
   const payload = {
     eventId: EVENT_ID,
     registrationId,
-    githubUserId: 'not-collected',
-    githubUsername: 'not-collected',
     company,
-    email,
-    sessions,
-    environment,
+    companyEmail: email,
+    sessionSelections: sessions,
+    environmentPreference: environment,
     consent: true,
     updatedAt: new Date().toISOString(),
   }

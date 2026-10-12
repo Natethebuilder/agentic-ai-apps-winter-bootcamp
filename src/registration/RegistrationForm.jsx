@@ -65,7 +65,7 @@ export default function RegistrationForm() {
         setRegistrationToken(result.registrationToken)
       }
       setStatus('success')
-      setMessage('Thanks. Your registration is saved. Golden Ticket access details will be sent a few days before the event.')
+      setMessage('Thanks. Your registration is saved. GitHub organization access details will be sent a few days before the event.')
     } catch (error) {
       setStatus('error')
       setMessage(error.message)
@@ -75,9 +75,9 @@ export default function RegistrationForm() {
   return (
     <form className={s.form} onSubmit={submit}>
       <div className={s.ticketNotice}>
-        <span aria-hidden="true">GT</span>
+        <span aria-hidden="true">GH</span>
         <div>
-          <strong>GitHub Golden Ticket access</strong>
+          <strong>GitHub organization access</strong>
           <p>A few days before the event, your invitation will include the link to join the event GitHub organization. The environment includes $100 of GitHub Copilot AI credits.</p>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function RegistrationForm() {
         <button type="submit" disabled={!valid || status === 'submitting' || status === 'success'}>
           {status === 'submitting' ? 'Saving…' : status === 'success' ? 'Registered ✓' : 'Submit registration'}
         </button>
-        <small>No GitHub sign-in is required. Golden Ticket access is sent to your confirmed company email.</small>
+        <small>No GitHub sign-in is required. The organization invitation is sent to your confirmed company email.</small>
       </div>
       {message && <p className={`${s.message} ${status === 'error' ? s.error : ''}`} role="status">{message}</p>}
     </form>
