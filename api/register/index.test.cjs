@@ -103,5 +103,62 @@ test('forwards an anonymous event-routed upsert payload', async () => {
     received.body.registrationId,
     createHash('sha256').update(`foundry-agentic-development-winter-bootcamp:${registrationToken}`).digest('hex'),
   )
+  assert.equal(
+    received.body.registrationEmailKey,
+    createHash('sha256').update('foundry-agentic-development-winter-bootcamp:builder@example.com').digest('hex'),
+  )
   assert.equal(context.res.body.registrationToken, registrationToken)
+  assert.equal('registrationEmailKey' in context.res.body, false)
+})
+
+test('normalizes company email before deriving the deterministic downstream email key', async () => {
+  configuredEnvironment()
+  let received
+  global.fetch = async (url, options) => {
+    received = { url, body: JSON.parse(options.body) }
+    return { ok: true }
+  }
+
+  const body = validBody()
+  body.email = '  BUILDER@Example.COM  '
+  body.emailConfirmation = 'builder@example.com'
+  const context = {}
+  await register(context, request(body))
+
+  assert.equal(context.res.status, 202)
+  assert.equal(received.body.companyEmail, 'builder@example.com')
+  assert.equal(
+    received.body.registrationEmailKey,
+    createHash('sha256').update('foundry-agentic-development-winter-bootcamp:builder@example.com').digest('hex'),
+  )
+})
+
+test('ignores caller attempts to override server-derived registration identifiers', async () => {
+  configuredEnvironment()
+  let received
+  global.fetch = async (url, options) => {
+    received = { url, body: JSON.parse(options.body) }
+    return { ok: true }
+  }
+
+  const body = {
+    ...validBody(),
+    registrationId: 'caller-registration-id',
+    registrationEmailKey: 'caller-email-key',
+  }
+  const context = {}
+  await register(context, request(body))
+
+  assert.equal(context.res.status, 202)
+  assert.equal(
+    received.body.registrationId,
+    createHash('sha256').update(`foundry-agentic-development-winter-bootcamp:${registrationToken}`).digest('hex'),
+  )
+  assert.equal(
+    received.body.registrationEmailKey,
+    createHash('sha256').update('foundry-agentic-development-winter-bootcamp:builder@example.com').digest('hex'),
+  )
+  assert.equal(context.res.body.registrationToken, registrationToken)
+  assert.equal('registrationId' in context.res.body, false)
+  assert.equal('registrationEmailKey' in context.res.body, false)
 })
