@@ -162,21 +162,21 @@ export function TimetableSlide({ index }) {
       <Header
         id="timetable"
         eyebrow="Programme schedule"
-        title="Six sessions. One connected Foundry programme."
-        subtitle="Topics and dates are still being confirmed. Each session will add another perspective on dependable AI applications."
+        title="Six placeholder Fridays. Six sessions available each day."
+        subtitle="These dates and times exist to test the complete registration flow. Every schedule detail remains TBC."
       />
       <div className={`${s.grid} ${s.grid6}`}>
-        {SCHEDULE.map((session, i) => (
-          <div key={session.id} className={s.door} style={{ '--door-accent': session.accent }}>
-            <span className={s.doorIcon} aria-hidden="true">{session.scheduleMark}</span>
+        {SCHEDULE.map((date, i) => (
+          <div key={date.id} className={s.door} style={{ '--door-accent': SESSIONS[i].accent }}>
+            <span className={s.doorIcon} aria-hidden="true">FRI</span>
             <span className={s.doorNum}>{i + 1}</span>
-            <Editable as="span" id={`timetable.${session.id}.week`} className={s.doorWeek}>{session.track}</Editable>
-            <Editable as="span" id={`timetable.${session.id}.date`} className={s.doorDate}>{session.format}</Editable>
+            <Editable as="span" id={`timetable.${date.id}.week`} className={s.doorWeek}>{date.date}</Editable>
+            <Editable as="span" id={`timetable.${date.id}.date`} className={s.doorDate}>09:30–15:00 · TBC</Editable>
           </div>
         ))}
       </div>
       <Editable as="p" id="timetable.caption" className={s.caption}>
-        Topics · dates · speakers to be announced
+        Placeholder dates and times · all six sessions available on every date · final schedule TBC
       </Editable>
     </Frame>
   )

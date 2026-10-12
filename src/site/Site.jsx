@@ -343,8 +343,8 @@ export default function Site({ snow, onToggleSnow }) {
           id="schedule"
           idx="03"
           eyebrow="Schedule"
-          title="Six sessions. One connected Foundry programme."
-          subtitle="Topics and dates are still being confirmed. The programme will connect intent, models, knowledge, tools, orchestration and evaluation."
+          title="Six placeholder Fridays. Six sessions available each day."
+          subtitle="The dates and times below are deliberately marked TBC. They exist so the registration workflow can be exercised before the final programme is confirmed."
         >
           <ScheduleQuery />
         </Section>

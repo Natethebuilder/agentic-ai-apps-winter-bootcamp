@@ -24,6 +24,12 @@
 .emailMismatch { color: var(--holly); }
 .sessionField, .environment { min-width: 0; max-width: 100%; border: 0; margin: 24px 0 0; padding: 0; }
 .sessionField legend, .environment legend { margin-bottom: 12px; }
+.scheduleNotice { margin: -3px 0 14px; color: var(--gold); font-size: 12px; line-height: 1.5; }
+.dateGroups { display: grid; gap: 14px; }
+.dateGroup { min-width: 0; padding: 14px; border: 1px solid var(--border); border-radius: 16px; background: color-mix(in srgb, var(--night) 42%, transparent); }
+.dateGroup > header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 11px; }
+.dateGroup > header span { color: var(--frost); font-weight: 800; }
+.dateGroup > header small { color: var(--gold); font: 700 10px/1.2 ui-monospace, monospace; text-transform: uppercase; letter-spacing: .8px; }
 .sessionGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .sessionGrid label {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 11px;
@@ -55,6 +61,8 @@
 @media (max-width: 700px) {
   .form { padding: 18px; }
   .fields, .sessionGrid { grid-template-columns: 1fr; }
+  .dateGroup { padding: 12px; }
+  .dateGroup > header { align-items: flex-start; flex-direction: column; gap: 4px; }
   .submitRow { align-items: flex-start; flex-direction: column; }
   .submitRow button { width: 100%; }
 }

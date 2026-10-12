@@ -18,7 +18,7 @@ The public form uses the shared multi-event Power Automate flow and a dedicated 
 | `RegistrationId` | Single line of text | Unique, indexed event-scoped identifier |
 | `Company` | Single line of text | Company or organisation |
 | `CompanyEmail` | Single line of text | Normalized communication address |
-| `SessionSelections` | Choice, multiple selections | Filterable `session-01` through `session-06` selections |
+| `SessionSelections` | Choice, multiple selections | The 36 allowlisted `YYYY-MM-DD|HH:MM|session-id` placeholder selections |
 | `Sessions` | Multiple lines of text | Temporary semicolon-delimited compatibility copy |
 | `Environment` | Choice | `local` or `cloud` |
 | `OrganizationAccessStatus` | Choice | `Pending`, `Invitation queued`, `Invitation sent`, `Joined`, or `Issue` |
@@ -48,7 +48,10 @@ This lets the same browser update the same row without using the email address a
   "registrationId": "event-scoped SHA-256 value",
   "company": "Example organisation",
   "companyEmail": "person@example.com",
-  "sessionSelections": ["session-01", "session-06"],
+  "sessionSelections": [
+    "2026-12-04|09:30|session-01",
+    "2027-01-22|15:00|session-06"
+  ],
   "environmentPreference": "local",
   "consent": true,
   "updatedAt": "2026-01-01T12:00:00.000Z"
@@ -56,6 +59,36 @@ This lets the same browser update the same row without using the email address a
 ```
 
 The shared flow temporarily accepts `email`, `sessions`, and `environment` as aliases during deployment migration. New clients use only the canonical fields above.
+
+## Placeholder schedule selection contract
+
+The public schedule is deliberately marked placeholder/TBC. Registration accepts all six sessions on each of these Friday dates:
+
+| Placeholder date | Session times |
+| --- | --- |
+| `2026-12-04` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+| `2026-12-11` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+| `2026-12-18` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+| `2027-01-08` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+| `2027-01-15` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+| `2027-01-22` | `09:30`, `10:30`, `11:30`, `13:00`, `14:00`, `15:00` |
+
+The canonical stored selection format is:
+
+```text
+YYYY-MM-DD|HH:MM|session-id
+```
+
+Session times are fixed by session ID for workflow testing:
+
+- `session-01` → `09:30`
+- `session-02` → `10:30`
+- `session-03` → `11:30`
+- `session-04` → `13:00`
+- `session-05` → `14:00`
+- `session-06` → `15:00`
+
+The API allowlists exactly 36 combinations and rejects unknown dates, mismatched times, unknown session IDs and duplicate selections.
 
 ## Shared flow behavior
 
@@ -97,7 +130,7 @@ A few days before the event, the invitation provides the link for joining the ev
 
 - The public site and registration API do not require GitHub sign-in.
 - The disabled GitHub OAuth route returns `404`.
-- Registration tests validate email confirmation, session IDs, backend settings, and the canonical payload.
+- Registration tests validate email confirmation, valid and invalid date-time-session selections, backend settings, and the canonical payload.
 - Test submissions require explicit approval because they create or update SharePoint data.
 - A create should initialize the two operational status fields.
 - A repeat submission from the same browser should update the same row and preserve status progress.

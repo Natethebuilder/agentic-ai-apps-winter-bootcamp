@@ -8,9 +8,9 @@ export const BOOTCAMP = {
   subtitle:
     'A six-session community programme connecting agent design, models, knowledge, tools, orchestration, evaluation and responsible delivery with GitHub Copilot.',
   season: 'Winter',
-  kickoffDate: null,
-  kickoffLabel: 'Dates to be announced',
-  kickoff: null,
+  kickoffDate: 'Friday 4 December 2026 · placeholder schedule',
+  kickoffLabel: 'Placeholder dates and times · TBC',
+  kickoff: '2026-12-04T09:30:00+01:00',
   footer: 'Foundry Agentic Development Winter Bootcamp',
 }
 
@@ -42,12 +42,47 @@ export const SESSIONS = Array.from({ length: 6 }, (_, index) => {
   }
 })
 
-export const SCHEDULE = SESSIONS.map((session) => ({
-  ...session,
-  dateIso: null,
-  date: 'Date TBC',
-  status: 'to be announced',
+export const PLACEHOLDER_DATES = [
+  { iso: '2026-12-04', label: 'Fri 4 Dec 2026' },
+  { iso: '2026-12-11', label: 'Fri 11 Dec 2026' },
+  { iso: '2026-12-18', label: 'Fri 18 Dec 2026' },
+  { iso: '2027-01-08', label: 'Fri 8 Jan 2027' },
+  { iso: '2027-01-15', label: 'Fri 15 Jan 2027' },
+  { iso: '2027-01-22', label: 'Fri 22 Jan 2027' },
+]
+
+export const SESSION_TIMES = {
+  'session-01': '09:30',
+  'session-02': '10:30',
+  'session-03': '11:30',
+  'session-04': '13:00',
+  'session-05': '14:00',
+  'session-06': '15:00',
+}
+
+export const SCHEDULE = PLACEHOLDER_DATES.map((date, index) => ({
+  id: `date-${date.iso}`,
+  number: String(index + 1).padStart(2, '0'),
+  dateIso: date.iso,
+  date: date.label,
+  weekday: 'Friday',
+  status: 'placeholder · TBC',
+  sessions: SESSIONS.map((session) => ({
+    ...session,
+    time: SESSION_TIMES[session.id],
+    selection: `${date.iso}|${SESSION_TIMES[session.id]}|${session.id}`,
+  })),
 }))
+
+export const REGISTRATION_CHOICES = SCHEDULE.flatMap((date) => date.sessions.map((session) => ({
+  value: session.selection,
+  dateIso: date.dateIso,
+  date: date.date,
+  sessionId: session.id,
+  number: session.number,
+  time: session.time,
+  title: session.title,
+})))
 
 export const PERSONAS = [
   {
@@ -208,7 +243,7 @@ export const FAQ = [
   },
   {
     q: 'When does it start?',
-    a: 'Dates and start times are still to be announced.',
+    a: 'The public schedule currently uses six Friday placeholder dates and times so registration can be tested end to end. Every date and time remains TBC until confirmed.',
   },
   {
     q: 'Will the sessions be hands-on?',
@@ -230,14 +265,14 @@ export const FAQ = [
 
 export const REGISTER_STEPS = [
   'Enter and confirm your company email address',
-  'Choose the sessions and development environment you need',
+  'Choose placeholder date, time and session combinations plus the development environment you need',
   'Receive the GitHub organization invitation link a few days before the event',
 ]
 
 export const REGISTRATION = {
   eyebrow: 'Registration',
   title: 'Join the Foundry Agentic Development Winter Bootcamp.',
-  subtitle: 'Confirm your company email, choose your sessions and provide the details needed for event access.',
+  subtitle: 'Confirm your company email, choose placeholder date and session combinations, and provide the details needed for event access.',
   environments: [
     { id: 'local', label: 'I will use a local development environment' },
     { id: 'cloud', label: 'I need a cloud development environment' },

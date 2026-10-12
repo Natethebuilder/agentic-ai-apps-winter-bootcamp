@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { REGISTRATION, SESSIONS } from '../content.js'
+import { PLACEHOLDER_DATES, REGISTRATION, REGISTRATION_CHOICES } from '../content.js'
 import s from './RegistrationForm.module.css'
 
 const TOKEN_KEY = 'foundry-agentic-development-winter-bootcamp:registration-token'
@@ -29,8 +29,8 @@ export default function RegistrationForm() {
   const emailMismatch = Boolean(emailConfirmation) && !emailsMatch
   const valid = sessions.length > 0 && company.trim() && emailsMatch && consent
 
-  const toggleSession = (id) => setSessions((current) => (
-    current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
+  const toggleSession = (selection) => setSessions((current) => (
+    current.includes(selection) ? current.filter((item) => item !== selection) : [...current, selection]
   ))
 
   const submit = async (event) => {
@@ -106,14 +106,32 @@ export default function RegistrationForm() {
       </div>
 
       <fieldset className={s.sessionField}>
-        <legend>Which sessions are you interested in?</legend>
-        <div className={s.sessionGrid}>
-          {SESSIONS.map((session) => (
-            <label key={session.id} className={sessions.includes(session.id) ? s.sessionOn : ''}>
-              <input type="checkbox" checked={sessions.includes(session.id)} onChange={() => toggleSession(session.id)} />
-              <span><strong>{session.number} · {session.title}</strong><small>{session.subtitle}</small></span>
-              <i>{sessions.includes(session.id) ? '✓' : '+'}</i>
-            </label>
+        <legend>Which placeholder dates and sessions are you interested in?</legend>
+        <p className={s.scheduleNotice}>All dates and times below are placeholders for workflow testing and remain TBC.</p>
+        <div className={s.dateGroups}>
+          {PLACEHOLDER_DATES.map((date) => (
+            <section key={date.iso} className={s.dateGroup}>
+              <header>
+                <span>{date.label}</span>
+                <small>Placeholder · TBC</small>
+              </header>
+              <div className={s.sessionGrid}>
+                {REGISTRATION_CHOICES.filter((choice) => choice.dateIso === date.iso).map((choice) => (
+                  <label key={choice.value} className={sessions.includes(choice.value) ? s.sessionOn : ''}>
+                    <input
+                      type="checkbox"
+                      checked={sessions.includes(choice.value)}
+                      onChange={() => toggleSession(choice.value)}
+                    />
+                    <span>
+                      <strong>{choice.time} · Session {choice.number}</strong>
+                      <small>{choice.title}</small>
+                    </span>
+                    <i>{sessions.includes(choice.value) ? '✓' : '+'}</i>
+                  </label>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </fieldset>

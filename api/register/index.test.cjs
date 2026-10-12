@@ -15,7 +15,10 @@ function validBody() {
     email: 'Builder@Example.com',
     emailConfirmation: 'builder@example.com',
     registrationToken,
-    sessions: ['session-01', 'session-06'],
+    sessions: [
+      '2026-12-04|09:30|session-01',
+      '2027-01-22|15:00|session-06',
+    ],
     environment: 'cloud',
     consent: true,
   }
@@ -35,11 +38,32 @@ test('rejects mismatched email confirmation', async () => {
   assert.equal(context.res.status, 400)
 })
 
-test('rejects unknown or duplicate session identifiers', async () => {
+test('rejects duplicate date-time-session selections', async () => {
   configuredEnvironment()
   const context = {}
   const body = validBody()
-  body.sessions = ['session-01', 'session-01']
+  body.sessions = [
+    '2026-12-04|09:30|session-01',
+    '2026-12-04|09:30|session-01',
+  ]
+  await register(context, request(body))
+  assert.equal(context.res.status, 400)
+})
+
+test('rejects an invalid placeholder date-time-session selection', async () => {
+  configuredEnvironment()
+  const context = {}
+  const body = validBody()
+  body.sessions = ['2026-12-05|09:30|session-01']
+  await register(context, request(body))
+  assert.equal(context.res.status, 400)
+})
+
+test('rejects a valid date paired with the wrong session time', async () => {
+  configuredEnvironment()
+  const context = {}
+  const body = validBody()
+  body.sessions = ['2026-12-04|10:30|session-01']
   await register(context, request(body))
   assert.equal(context.res.status, 400)
 })

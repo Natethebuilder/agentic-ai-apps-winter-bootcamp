@@ -1,7 +1,18 @@
 const { createHash, randomUUID } = require('node:crypto')
 
 const EVENT_ID = 'foundry-agentic-development-winter-bootcamp'
-const SESSION_IDS = new Set(['session-01', 'session-02', 'session-03', 'session-04', 'session-05', 'session-06'])
+const PLACEHOLDER_DATES = ['2026-12-04', '2026-12-11', '2026-12-18', '2027-01-08', '2027-01-15', '2027-01-22']
+const SESSION_TIMES = {
+  'session-01': '09:30',
+  'session-02': '10:30',
+  'session-03': '11:30',
+  'session-04': '13:00',
+  'session-05': '14:00',
+  'session-06': '15:00',
+}
+const SESSION_SELECTIONS = new Set(PLACEHOLDER_DATES.flatMap((date) => (
+  Object.entries(SESSION_TIMES).map(([sessionId, time]) => `${date}|${time}|${sessionId}`)
+)))
 const ENVIRONMENTS = new Set(['local', 'cloud'])
 const REGISTRATION_TOKEN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
@@ -23,7 +34,7 @@ module.exports = async function register(context, req) {
   const emailConfirmation = typeof body.emailConfirmation === 'string' ? body.emailConfirmation.trim().toLowerCase() : ''
   const suppliedToken = typeof body.registrationToken === 'string' ? body.registrationToken.trim() : ''
   const requestedSessions = Array.isArray(body.sessions) ? body.sessions : []
-  const sessions = [...new Set(requestedSessions.filter((id) => SESSION_IDS.has(id)))]
+  const sessions = [...new Set(requestedSessions.filter((selection) => SESSION_SELECTIONS.has(selection)))]
   const environment = ENVIRONMENTS.has(body.environment) ? body.environment : ''
 
   if (!company || company.length > 160) {
@@ -43,7 +54,7 @@ module.exports = async function register(context, req) {
     return
   }
   if (!sessions.length || sessions.length !== requestedSessions.length) {
-    context.res = response(400, { error: 'Choose at least one valid session.' })
+    context.res = response(400, { error: 'Choose at least one valid placeholder date, time and session combination.' })
     return
   }
   if (!environment || body.consent !== true) {
