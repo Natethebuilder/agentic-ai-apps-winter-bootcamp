@@ -4,7 +4,7 @@ import { BottomBar, Editable, Slide, useSlides } from '@deckio/deck-engine'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import { Logos, Mascot } from '../winter/Decor.jsx'
 import {
-  BOOTCAMP, GOLDEN_TICKET, PERSONAS, PILLARS, PIPELINE, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
+  BOOTCAMP, GITHUB_ACCESS, PERSONAS, PILLARS, PIPELINE, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
 } from '../content.js'
 import s from './Slides.module.css'
 
@@ -94,7 +94,7 @@ export function OfferingSlide({ index }) {
         {[
           ['online', 'Online', 'Join live from anywhere'],
           ['weeks', 'Six sessions', 'Topics and dates TBC'],
-          ['credits', '$100 AI credits', 'Included with Golden Ticket'],
+          ['credits', '$100 AI credits', 'Included with event access'],
           ['cost', 'Free', 'Only your time'],
           ['team', 'Delivered by', 'Microsoft Solution Engineers & Architects'],
         ].map(([k, v, l]) => (
@@ -341,9 +341,9 @@ export function RegisterSlide({ index }) {
           ))}
         </div>
         <div className={s.registerPrompt}>
-          <span className={s.registerPromptMark}>GT</span>
+          <span className={s.registerPromptMark}>GH</span>
           <div>
-            <strong>{GOLDEN_TICKET.eyebrow}</strong>
+            <strong>{GITHUB_ACCESS.eyebrow}</strong>
             <p>The organization invitation and $100 of GitHub Copilot AI credits arrive a few days before the event.</p>
           </div>
           <button type="button" onClick={() => setRegistrationOpen(true)}>Open registration</button>

@@ -67,9 +67,14 @@ test('forwards an anonymous event-routed upsert payload', async () => {
   assert.equal(String(received.url), 'https://flow.example.test/register')
   assert.equal(received.options.headers['x-registration-secret'], 'test-only-secret')
   assert.equal(received.body.eventId, 'foundry-agentic-development-winter-bootcamp')
-  assert.equal(received.body.email, 'builder@example.com')
-  assert.equal(received.body.githubUserId, 'not-collected')
-  assert.equal(received.body.githubUsername, 'not-collected')
+  assert.equal(received.body.companyEmail, 'builder@example.com')
+  assert.deepEqual(received.body.sessionSelections, validBody().sessions)
+  assert.equal(received.body.environmentPreference, 'cloud')
+  assert.equal('githubUserId' in received.body, false)
+  assert.equal('githubUsername' in received.body, false)
+  assert.equal('email' in received.body, false)
+  assert.equal('sessions' in received.body, false)
+  assert.equal('environment' in received.body, false)
   assert.equal(
     received.body.registrationId,
     createHash('sha256').update(`foundry-agentic-development-winter-bootcamp:${registrationToken}`).digest('hex'),

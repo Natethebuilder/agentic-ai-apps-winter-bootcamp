@@ -1,76 +1,103 @@
 # Foundry Agentic Development registration backend
 
-This event uses the existing Agentic Data Winter Bootcamp Power Automate registration flow rather than a separate flow. GitHub OAuth is not used for registration. The API sends:
+The public form uses the shared multi-event Power Automate flow and a dedicated private SharePoint List. GitHub OAuth and GitHub identity are not used for registration.
+
+## SharePoint target
+
+- Site: `https://microsofteur.sharepoint.com/teams/FoundryAgenticDevelopmentWinterBootcamp`
+- List: `Foundry Agentic Development Bootcamp Registrations`
+- List ID: `b2367510-4900-4925-85af-f082b92d2f56`
+- Classification: `Confidential \ Internal-Only`
+- Privacy: private
+- Permissions: inherited from the operations site
+- Version history: enabled, 50 versions
+
+| Column | Type | Purpose |
+| --- | --- | --- |
+| `Title` | Single line of text | Standard field; receives the company email and can be hidden from the operational view |
+| `RegistrationId` | Single line of text | Unique, indexed event-scoped identifier |
+| `Company` | Single line of text | Company or organisation |
+| `CompanyEmail` | Single line of text | Normalized communication address |
+| `SessionSelections` | Choice, multiple selections | Filterable `session-01` through `session-06` selections |
+| `Sessions` | Multiple lines of text | Temporary semicolon-delimited compatibility copy |
+| `Environment` | Choice | `local` or `cloud` |
+| `OrganizationAccessStatus` | Choice | `Pending`, `Invitation queued`, `Invitation sent`, `Joined`, or `Issue` |
+| `CloudEnvironmentStatus` | Choice | `Not requested`, `Requested`, `Allocated`, `Ready`, `Waitlisted`, or `Issue` |
+| `Consent` | Yes/No | Explicit data consent |
+| `UpdatedAt` | Date and time | Latest submitted timestamp |
+
+`GitHubUserId` and `GitHubUsername` are obsolete and should not exist in the final schema.
+
+## Registration identity
+
+The attendee enters the company email twice. The browser and API normalize both values and reject the submission unless they match.
+
+The first accepted response returns an opaque UUID token stored in the browser. The API derives:
+
+```text
+SHA256("foundry-agentic-development-winter-bootcamp:" + registrationToken)
+```
+
+This lets the same browser update the same row without using the email address as an authentication credential.
+
+## API payload
 
 ```json
 {
-  "eventId": "foundry-agentic-development-winter-bootcamp"
+  "eventId": "foundry-agentic-development-winter-bootcamp",
+  "registrationId": "event-scoped SHA-256 value",
+  "company": "Example organisation",
+  "companyEmail": "person@example.com",
+  "sessionSelections": ["session-01", "session-06"],
+  "environmentPreference": "local",
+  "consent": true,
+  "updatedAt": "2026-01-01T12:00:00.000Z"
 }
 ```
 
-The API calculates `SHA256(eventId + ":" + registrationToken)`, where `registrationToken` is an opaque UUID stored in the attendee's browser after the first successful submission.
+The shared flow temporarily accepts `email`, `sessions`, and `environment` as aliases during deployment migration. New clients use only the canonical fields above.
 
-## Dedicated SharePoint target
+## Shared flow behavior
 
-- Site title: `Foundry Agentic Development Winter Bootcamp`
-- Site URL: `https://microsofteur.sharepoint.com/teams/FoundryAgenticDevelopmentWinterBootcamp`
-- Classification: `Confidential \ Internal-Only`
-- Privacy: private
-- List: `Foundry Agentic Development Bootcamp Registrations`
-- List ID: `b2367510-4900-4925-85af-f082b92d2f56`
-- Permissions: inherited from the private site and restricted to its operations owners
-- Version history: enabled, 50 versions
+The live flow is `Agentic Winter Bootcamps Registration Upsert`:
 
-## List schema
+1. Invalid shared secrets return HTTP `401`.
+2. `foundry-agentic-development-winter-bootcamp` routes only to this List.
+3. Missing or unrecognized event IDs return HTTP `400`.
+4. `Get_foundry_items` queries `RegistrationId` with top count `1`.
+5. The branch updates the first matching row or creates one when absent.
+6. Creates set `OrganizationAccessStatus` to `Pending`.
+7. Creates set `CloudEnvironmentStatus` to `Requested` for cloud or `Not requested` for local.
+8. Updates preserve both operational status fields.
+9. Accepted registrations return HTTP `202`.
 
-| Display name | Type | Required | Notes |
-| --- | --- | --- | --- |
-| Title | Single line text | No | Standard column currently receives `not-collected` |
-| RegistrationId | Single line text | Yes | Unique and indexed |
-| GitHubUserId | Single line text | Yes | Legacy compatibility field set to `not-collected` |
-| GitHubUsername | Single line text | Yes | Legacy compatibility field set to `not-collected` |
-| Company | Single line text | Yes | Organisation |
-| CompanyEmail | Single line text | Yes | Event communication |
-| Sessions | Multiple lines text | Yes | Semicolon-delimited session IDs |
-| Environment | Choice | Yes | Only `local` or `cloud` |
-| Consent | Yes/No | Yes | Explicit consent; default `No` |
-| UpdatedAt | Date and time | Yes | Latest submission timestamp, including time |
+The flow writes filterable `SessionSelections` and the temporary `Sessions` text copy.
 
-## Deployed shared-flow routing
+## Operational view
 
-The shared flow keeps `eventId` optional for the legacy Data client and validates `x-registration-secret` before any SharePoint action.
+Prioritize `CompanyEmail`, `Company`, `SessionSelections`, `Environment`, both status columns, `Consent`, and `UpdatedAt`. Hide `Title`, `RegistrationId`, and `Sessions` from the default view where practical.
 
-1. `Route_registration` sends `agentic-software-development-winter-bootcamp` to the Software branch.
-2. Its false path evaluates `Route_foundry`.
-3. `Route_foundry` sends `foundry-agentic-development-winter-bootcamp` to the Foundry branch.
-4. The Foundry branch runs `Get_foundry_items` with `RegistrationId` and a top count of `1`.
-5. An existing row runs `Update_foundry_registration`; otherwise `Create_foundry_registration` runs.
-6. The false path preserves the unchanged Data fallback for missing or unrecognized event IDs.
-7. Accepted registrations use the shared `202` response; an invalid shared secret returns `401`.
-
-The attendee enters the company email twice, and the browser and API reject values that do not match. This reduces typing mistakes but does not verify ownership of the mailbox. The browser-held token lets the same browser update its registration without treating the email address as an authentication credential.
-
-## Golden Ticket access
-
-A few days before the event starts, the event invitation supplies the Golden Ticket link used to join the event GitHub organization. The environment includes $100 worth of AI credits for GitHub Copilot.
-
-## Azure Static Web Apps settings
-
-The settings are configured on:
+## Azure Static Web Apps
 
 - Resource group: `rg-agentic-ai-apps-winter-bootcamp`
 - Static Web App: `swa-agentic-ai-apps-winter-bootcamp`
 
-| Name | Status |
+| Setting | Purpose |
 | --- | --- |
-| `REGISTRATION_FLOW_URL` | Configured with the existing shared flow endpoint |
-| `REGISTRATION_FLOW_SHARED_SECRET` | Configured with the existing server-side secret |
+| `REGISTRATION_FLOW_URL` | Shared flow endpoint |
+| `REGISTRATION_FLOW_SHARED_SECRET` | Server-side secret validated by the flow |
 
-Do not expose either value in source, browser responses, documentation or logs.
+Do not expose either value in source, documentation, browser responses, or logs.
 
-## Live verification
+## GitHub organization access
 
-- A Foundry-shaped request with an invalid secret returned HTTP `401`.
-- The earlier GitHub-authenticated create/update checks were completed before the Golden Ticket registration migration.
-- The List contained exactly one row with all six session IDs, `local` environment and consent enabled.
-- New registrations use `not-collected` in the legacy GitHub fields and return an opaque token for same-browser updates.
+A few days before the event, the invitation provides the link for joining the event GitHub organization. The event environment includes $100 worth of GitHub Copilot AI credits.
+
+## Verification
+
+- The public site and registration API do not require GitHub sign-in.
+- The disabled GitHub OAuth route returns `404`.
+- Registration tests validate email confirmation, session IDs, backend settings, and the canonical payload.
+- Test submissions require explicit approval because they create or update SharePoint data.
+- A create should initialize the two operational status fields.
+- A repeat submission from the same browser should update the same row and preserve status progress.
