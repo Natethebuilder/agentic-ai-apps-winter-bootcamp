@@ -106,7 +106,7 @@ The shared flow `Agentic Winter Bootcamps Registration Upsert` must implement th
 1. Invalid shared secrets return HTTP `401`.
 2. `foundry-agentic-development-winter-bootcamp` routes only to this List.
 3. Missing or unrecognized event IDs return HTTP `400`.
-4. Configure the HTTP trigger concurrency control with `runs: 1`. Anonymous submissions are processed serially so two simultaneous requests cannot both pass the duplicate lookup before either create completes.
+4. Keep synchronous Response actions so validation and storage failures return the correct HTTP `400`, `401`, or `202` result only after SharePoint processing completes.
 5. Configure secure inputs and outputs on steps that contain the shared secret or registration payload, restrict flow ownership, and use the shortest practical run-history retention period.
 6. During cutover, `Get_foundry_items` queries with top count `1` for either `Title` equal to `registrationEmailKey` or immutable `CompanyEmail` equal to the normalized submitted email.
 7. The branch updates the first matching row or creates one when absent.
