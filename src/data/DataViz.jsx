@@ -50,6 +50,7 @@ export function Countdown({ target, date, dateLabel, className = '' }) {
       {(t != null || dateLabel) && (
         <p className={d.cdFoot}>
           First session: {t != null ? new Date(t).toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'short' }) : dateLabel}
+          {t != null && dateLabel ? ` · ${dateLabel}` : ''}
         </p>
       )}
     </div>
@@ -152,9 +153,11 @@ export function ScheduleQuery() {
       <pre className={d.qCode}>
         <code>
           <span className={d.kw}>programme:</span>{'\n'}
-          {'  '}sessions: 6{'\n'}
+          {'  '}placeholder_fridays: 6{'\n'}
+          {'  '}sessions_per_date: 6{'\n'}
+          {'  '}registration_choices: 36{'\n'}
           {'  '}development_path: intent → models → knowledge → tools → evaluate{'\n'}
-          {'  '}details: <span className={d.tbl}>TBC</span>
+          {'  '}schedule_status: <span className={d.tbl}>placeholder · TBC</span>
         </code>
       </pre>
       <div className={`${d.qProgress} ${loading ? d.qProgressOn : ''}`} />
@@ -162,17 +165,17 @@ export function ScheduleQuery() {
         <table className={d.qGrid}>
           <thead>
             <tr>
-              <th className={d.num}>session</th><th>focus</th><th>lead</th><th>session_date</th><th>status</th>
+              <th className={d.num}>date</th><th>placeholder Friday</th><th>times</th><th>sessions</th><th>status</th>
             </tr>
           </thead>
           <tbody key={run}>
-            {run > 0 && SCHEDULE.map((session, i) => (
-              <tr key={session.id} style={{ animationDelay: `${i * 70}ms` }}>
-                <td className={d.num}>{session.number}</td>
-                <td>{session.shortTitle}</td>
-                <td>{session.lead}</td>
-                <td>{session.date === 'Date TBC' ? <span className={d.null} title="Date to be confirmed">TBC</span> : session.date}</td>
-                <td><span className={d.pending}>{session.status}</span></td>
+            {run > 0 && SCHEDULE.map((date, i) => (
+              <tr key={date.id} style={{ animationDelay: `${i * 70}ms` }}>
+                <td className={d.num}>{date.number}</td>
+                <td>{date.date}</td>
+                <td>{date.sessions.map((session) => session.time).join(' · ')}</td>
+                <td>01–06</td>
+                <td><span className={d.pending}>{date.status}</span></td>
               </tr>
             ))}
           </tbody>
@@ -180,7 +183,7 @@ export function ScheduleQuery() {
       </div>
       <div className={d.qFoot}>
         <span>{run > 0 ? `${SCHEDULE.length} rows · ${ms} ms` : 'Not run yet'}</span>
-        <span>Topics, dates and speakers will be added when confirmed</span>
+        <span>All public dates and times are placeholders · TBC</span>
       </div>
     </div>
   )

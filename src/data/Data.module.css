@@ -135,6 +135,6 @@
   .qCode { font-size: 12.5px; padding: 14px; }
   .qGrid { font-size: 13px; }
   .qGrid th, .qGrid td { padding: 9px 12px; }
-  .qGrid th:nth-child(3), .qGrid td:nth-child(3) { display: none; }
+  .qGrid th:nth-child(4), .qGrid td:nth-child(4) { display: none; }
   .qFoot { padding: 10px 14px; }
 }
