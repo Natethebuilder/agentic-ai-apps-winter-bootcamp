@@ -83,9 +83,11 @@ module.exports = async function register(context, req) {
 
   const registrationToken = suppliedToken || randomUUID()
   const registrationId = createHash('sha256').update(`${EVENT_ID}:${registrationToken}`).digest('hex')
+  const registrationEmailKey = createHash('sha256').update(`${EVENT_ID}:${email}`).digest('hex')
   const payload = {
     eventId: EVENT_ID,
     registrationId,
+    registrationEmailKey,
     company,
     companyEmail: email,
     sessionSelections: sessions,
