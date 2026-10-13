@@ -14,33 +14,122 @@ export const BOOTCAMP = {
   footer: 'Foundry Agentic Development Winter Bootcamp',
 }
 
-const ACCENTS = ['#8ef5e5', '#a7a0ff', '#63d9ff', '#d29cff', '#69f2c1', '#8fc8ff']
-
-export const SESSIONS = Array.from({ length: 6 }, (_, index) => {
-  const number = String(index + 1).padStart(2, '0')
-  return {
-    id: `session-${number}`,
-    number,
+export const SESSIONS = [
+  {
+    id: 'session-01',
+    number: '01',
     title: '[Session topic TBC]',
-    shortTitle: `Session ${number}`,
-    track: 'Topic TBC',
+    shortTitle: 'Session 01',
+    track: 'Foundations TBC',
     subtitle: 'Session details will be added when the programme is confirmed.',
-    lead: '[Speaker TBC]',
-    audience: 'Agent builder community',
+    owner: 'Nathan Brahmbhatt',
+    ownerInitials: 'NB',
+    ownerRole: 'Host and session owner',
+    audience: 'All agent builders',
     format: 'Format TBC',
-    scheduleMark: `A${index + 1}`,
-    accent: ACCENTS[index],
-    spotlight: 'The session focus and hands-on challenge will be announced.',
-    overview:
-      'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: [
-      'Learning outcomes TBC',
-      'Hands-on activity TBC',
-      'Tools and prerequisites TBC',
-    ],
-    tools: ['Tools TBC'],
-  }
-})
+    scheduleMark: 'A1',
+    accent: '#8ef5e5',
+    spotlight: 'The foundations focus and hands-on challenge will be announced.',
+    overview: 'This placeholder reserves the foundations session. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['Azure AI Foundry', 'Microsoft Learn: Azure AI Foundry', 'GitHub Copilot'],
+  },
+  {
+    id: 'session-02',
+    number: '02',
+    title: '[Session topic TBC]',
+    shortTitle: 'Session 02',
+    track: 'Models TBC',
+    subtitle: 'Session details will be added when the programme is confirmed.',
+    owner: '[Agent architecture owner TBC]',
+    ownerInitials: 'AA',
+    ownerRole: 'Agent architecture',
+    audience: 'AI application developers',
+    format: 'Format TBC',
+    scheduleMark: 'A2',
+    accent: '#a7a0ff',
+    spotlight: 'The models and architecture focus will be announced.',
+    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['Foundry Models', 'Model catalog', 'Prompt flow'],
+  },
+  {
+    id: 'session-03',
+    number: '03',
+    title: '[Session topic TBC]',
+    shortTitle: 'Session 03',
+    track: 'Knowledge TBC',
+    subtitle: 'Session details will be added when the programme is confirmed.',
+    owner: '[Knowledge and RAG owner TBC]',
+    ownerInitials: 'KR',
+    ownerRole: 'Knowledge and grounding',
+    audience: 'AI and ML engineers',
+    format: 'Format TBC',
+    scheduleMark: 'A3',
+    accent: '#63d9ff',
+    spotlight: 'The knowledge, grounding and RAG focus will be announced.',
+    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['RAG', 'Foundry Knowledge', 'Microsoft Learn: Grounding'],
+  },
+  {
+    id: 'session-04',
+    number: '04',
+    title: '[Session topic TBC]',
+    shortTitle: 'Session 04',
+    track: 'Tools TBC',
+    subtitle: 'Session details will be added when the programme is confirmed.',
+    owner: '[Tool orchestration owner TBC]',
+    ownerInitials: 'TO',
+    ownerRole: 'Tools and orchestration',
+    audience: 'Platform engineers',
+    format: 'Format TBC',
+    scheduleMark: 'A4',
+    accent: '#d29cff',
+    spotlight: 'The tools, orchestration and approval focus will be announced.',
+    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['Foundry Agent Service', 'Tool calling', 'Human approval'],
+  },
+  {
+    id: 'session-05',
+    number: '05',
+    title: '[Session topic TBC]',
+    shortTitle: 'Session 05',
+    track: 'Evaluation TBC',
+    subtitle: 'Session details will be added when the programme is confirmed.',
+    owner: '[Evaluation owner TBC]',
+    ownerInitials: 'EV',
+    ownerRole: 'Evaluation and safety',
+    audience: 'Responsible AI teams',
+    format: 'Format TBC',
+    scheduleMark: 'A5',
+    accent: '#69f2c1',
+    spotlight: 'The evaluation, responsible AI and safety focus will be announced.',
+    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['Foundry Evaluation', 'Responsible AI', 'Safety evaluations'],
+  },
+  {
+    id: 'session-06',
+    number: '06',
+    title: '[Session topic TBC]',
+    shortTitle: 'Session 06',
+    track: 'Production TBC',
+    subtitle: 'Session details will be added when the programme is confirmed.',
+    owner: '[Production owner TBC]',
+    ownerInitials: 'PR',
+    ownerRole: 'Production and observability',
+    audience: 'Technical product and build teams',
+    format: 'Format TBC',
+    scheduleMark: 'A6',
+    accent: '#8fc8ff',
+    spotlight: 'The production, observability and deployment focus will be announced.',
+    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
+    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
+    tools: ['Tracing and observability', 'Production deployment', 'Azure monitoring'],
+  },
+]
 
 export const PLACEHOLDER_DATES = [
   { iso: '2026-12-04', label: 'Fri 4 Dec 2026' },
@@ -86,19 +175,25 @@ export const REGISTRATION_CHOICES = SCHEDULE.flatMap((date) => date.sessions.map
 
 export const PERSONAS = [
   {
-    id: 'builders', icon: 'FD', label: 'Foundry agent developers',
+    id: 'builders', icon: 'AD', label: 'AI application developers',
     desc: 'Turn models and tools into useful, dependable agent behaviour.',
     does: 'Build agents around user outcomes, Foundry projects, trusted knowledge, bounded tools and observable runtime decisions.',
-    stack: ['Foundry', 'Models', 'Knowledge', 'Tools', 'Evals'],
+    stack: ['Azure AI Foundry', 'Models', 'RAG', 'Tools', 'Evals'],
   },
   {
-    id: 'architecture', icon: 'AR', label: 'Architects & platform teams',
+    id: 'architecture', icon: 'SA', label: 'Solution & cloud architects',
     desc: 'Shape the runtime, integration and operational boundaries.',
     does: 'Compare model routes, orchestration patterns, approvals, safety controls and platform integration choices.',
-    stack: ['Foundry', 'APIs', 'Identity', 'Observability'],
+    stack: ['Azure AI Foundry', 'APIs', 'Identity', 'Observability'],
   },
   {
-    id: 'product', icon: 'PX', label: 'Product & technical leaders',
+    id: 'engineering', icon: 'PE', label: 'Platform & AI/ML engineers',
+    desc: 'Build the secure foundations, knowledge connections and operational path.',
+    does: 'Prepare environments, integrate data and tools, and make agent behavior observable in production.',
+    stack: ['Platform', 'AI/ML', 'RAG', 'Safety', 'Monitoring'],
+  },
+  {
+    id: 'product', icon: 'PB', label: 'Technical product & build teams',
     desc: 'Connect agent autonomy to measurable product value.',
     does: 'Frame the job, define success, understand risk and build evaluation into the product lifecycle.',
     stack: ['Intent', 'Quality', 'Safety', 'Iteration'],
@@ -225,17 +320,46 @@ export const SETUP_RESOURCES = [
   { id: 'python', label: 'Python', check: 'python --version', login: 'No sign-in required', href: 'https://www.python.org/downloads/' },
   { id: 'copilot', label: 'GitHub Copilot CLI', check: 'copilot --version', login: 'copilot', href: 'https://docs.github.com/copilot' },
   { id: 'foundry', label: 'Microsoft Foundry', check: 'Access requirements TBC', login: 'Use the workshop project when supplied', href: 'https://learn.microsoft.com/azure/foundry/' },
+  { id: 'agents', label: 'Foundry Agent Service', check: 'Review agent service concepts', login: 'Workshop access requirements TBC', href: 'https://learn.microsoft.com/azure/foundry/agents/' },
+  { id: 'evaluation', label: 'Foundry evaluation', check: 'Review evaluation concepts', login: 'No sign-in required for guidance', href: 'https://learn.microsoft.com/azure/foundry/concepts/evaluation-approach-gen-ai' },
+  { id: 'responsible-ai', label: 'Responsible AI', check: 'Review safety guidance', login: 'No sign-in required for guidance', href: 'https://learn.microsoft.com/azure/ai-foundry/responsible-use-of-ai-overview' },
   { id: 'github-mcp', label: 'GitHub MCP Server', check: '/mcp', login: 'Verify GitHub MCP is connected', href: 'https://github.com/github/github-mcp-server' },
+]
+
+export const READINESS_PATHS = [
+  {
+    id: 'ready',
+    number: '01',
+    title: 'Skip the foundations walkthrough when every check passes',
+    desc: 'If your local tools, access and sample environment are already ready, move directly to the confirmed session prerequisites.',
+  },
+  {
+    id: 'guided',
+    number: '02',
+    title: 'Use foundations and guided setup when anything is pending',
+    desc: 'Complete the readiness checklist and guided setup before relying on the hands-on environment.',
+  },
+  {
+    id: 'cloud',
+    number: '03',
+    title: 'Cloud access remains subject to confirmed capacity and quotas',
+    desc: 'Selecting cloud records your need; it does not guarantee allocation until workshop capacity and Foundry quotas are confirmed.',
+  },
+]
+
+export const TEAM = [
+  { id: 'host', initials: 'NB', name: 'Nathan Brahmbhatt', role: 'Host', focus: 'Bootcamp host and programme coordination' },
+  { id: 'architecture', initials: 'AA', name: '[Agent architecture owner TBC]', role: 'Session owner', focus: 'Agent architecture and models' },
+  { id: 'knowledge', initials: 'KR', name: '[Knowledge and RAG owner TBC]', role: 'Session owner', focus: 'Knowledge, grounding and RAG' },
+  { id: 'tools', initials: 'TO', name: '[Tool orchestration owner TBC]', role: 'Session owner', focus: 'Tools, orchestration and approvals' },
+  { id: 'evaluation', initials: 'EV', name: '[Evaluation owner TBC]', role: 'Session owner', focus: 'Evaluation, safety and responsible AI' },
+  { id: 'production', initials: 'PR', name: '[Production owner TBC]', role: 'Session owner', focus: 'Observability and production deployment' },
 ]
 
 export const FAQ = [
   {
     q: 'Who is this for?',
-    a: 'Developers, architects, product builders, platform teams, technical leaders and curious practitioners building AI applications.',
-  },
-  {
-    q: 'Is this only for Microsoft developers?',
-    a: 'No. Microsoft Foundry is the primary platform, while the programme teaches transferable agent design, evaluation and delivery practices.',
+    a: 'AI application developers, solution and cloud architects, platform engineers, AI/ML engineers, and technical product or build teams.',
   },
   {
     q: 'What are the session topics?',
@@ -274,9 +398,18 @@ export const REGISTRATION = {
   title: 'Join the Foundry Agentic Development Winter Bootcamp.',
   subtitle: 'Confirm your company email, choose placeholder date and session combinations, and provide the details needed for event access.',
   environments: [
-    { id: 'local', label: 'I will use a local development environment' },
-    { id: 'cloud', label: 'I need a cloud development environment' },
+    {
+      id: 'local',
+      label: 'I will use a local development environment',
+      desc: 'Choose this if your readiness checks already pass or you will use the foundations and guided setup path.',
+    },
+    {
+      id: 'cloud',
+      label: 'I need a cloud development environment',
+      desc: 'Cloud access is subject to confirmed workshop capacity and Foundry quotas; selecting this records your need but does not guarantee allocation.',
+    },
   ],
+  slotHelp: 'Every placeholder Friday runs the same six-session agenda. Choose the specific date and session times that work for you.',
   consent:
     'I consent to Microsoft using my company, company email, session choices and environment preference to administer the bootcamp, send the GitHub organization invitation, provision access, communicate with me and improve the programme. Registration data is deleted after the administration period.',
 }

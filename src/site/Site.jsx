@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
-import { SnowToggle } from '../winter/Snowfall.jsx'
-import { AgentTerminal, Countdown, ScheduleQuery } from '../data/DataViz.jsx'
+import { AgentTerminal, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import {
-  BOOTCAMP, FAQ, GITHUB_ACCESS, PERSONAS, PILLARS, PREP, REGISTRATION, SESSIONS,
+  BOOTCAMP, FAQ, PERSONAS, PILLARS, PIPELINE, PREP, READINESS_PATHS, REGISTRATION, SESSIONS,
 } from '../content.js'
 import s from './Site.module.css'
 
@@ -14,8 +13,8 @@ const NAV = [
   ['lineup', 'Lineup'],
   ['schedule', 'Schedule'],
   ['prepare', 'Get ready'],
-  ['faq', 'FAQ'],
   ['join', 'Register'],
+  ['faq', 'FAQ'],
 ]
 
 const PREP_KEY = 'foundry-agentic-development-winter-bootcamp:prep'
@@ -109,6 +108,26 @@ function PersonaPicker() {
   )
 }
 
+function AgentFlow() {
+  return (
+    <div className={s.agentFlow} aria-label="Foundry agent development flow">
+      <header>
+        <span>Agent runtime path</span>
+        <strong>Intent → evidence</strong>
+      </header>
+      <div>
+        {PIPELINE.map((stage, index) => (
+          <article key={stage.id} style={{ '--flow-accent': stage.color }}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{stage.label}</strong>
+            <small>{stage.gate}</small>
+          </article>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function ProgrammeReveal() {
   const [open, setOpen] = useState(false)
 
@@ -146,10 +165,10 @@ function ProgrammeReveal() {
                   <small>{session.subtitle}</small>
                 </span>
                 <span className={s.sessionLead}>
-                  <span className={s.sessionHeadshot} aria-hidden="true"><i /><b /></span>
+                  <span className={s.sessionOwnerInitials} aria-hidden="true">{session.ownerInitials}</span>
                   <span className={s.sessionLeadCopy}>
-                    <small>Session lead</small>
-                    <strong>{session.lead}</strong>
+                    <small>Session owner</small>
+                    <strong>{session.owner}</strong>
                   </span>
                 </span>
               </div>
@@ -228,7 +247,7 @@ function PrepChecklist() {
   )
 }
 
-export default function Site({ snow, onToggleSnow }) {
+export default function Site() {
   const rootRef = useRef(null)
   const [scrolled, setScrolled] = useState(false)
   useReveal(rootRef)
@@ -260,7 +279,6 @@ export default function Site({ snow, onToggleSnow }) {
           ))}
         </nav>
         <div className={s.navActions}>
-          <SnowToggle enabled={snow} onToggle={onToggleSnow} />
           <a className={`${s.btnGhost} ${s.navDeck}`} href={DECK_URL}>▶ Deck</a>
         </div>
       </header>
@@ -269,7 +287,7 @@ export default function Site({ snow, onToggleSnow }) {
         <section id="top" className={`${s.panel} ${s.heroPanel}`} data-panel>
           <div className={s.hero}>
           <div className={s.heroText}>
-            <span className={s.pill}>MICROSOFT FOUNDRY · {BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
+            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
             <h1>
               Foundry Agentic Development <span className={s.highlight}>Winter Bootcamp</span>
             </h1>
@@ -277,7 +295,7 @@ export default function Site({ snow, onToggleSnow }) {
               <strong>{BOOTCAMP.tagline}</strong> {BOOTCAMP.subtitle}
             </p>
             <div className={s.ctaRow}>
-              <a className={s.btnGhost} href={DECK_URL}>▶ Present the deck</a>
+              <button type="button" className={s.btnGhost} onClick={() => go('why')}>More info</button>
               <button type="button" className={s.btnGhost} onClick={() => go('lineup')}>See the lineup</button>
               <button type="button" className={s.btnPrimary} onClick={() => go('join')}>Register now</button>
             </div>
@@ -305,7 +323,7 @@ export default function Site({ snow, onToggleSnow }) {
           idx="01"
           eyebrow="Why join"
           title="From Foundry project to dependable agent application."
-          subtitle="A hands-on programme for developers, architects, product builders, platform teams and technical leaders."
+          subtitle="A hands-on programme for AI application developers, solution and cloud architects, platform and AI/ML engineers, and technical product teams."
         >
           <div className={`${s.grid} ${s.g3}`}>
             {PILLARS.map((p) => (
@@ -316,14 +334,7 @@ export default function Site({ snow, onToggleSnow }) {
               </article>
             ))}
           </div>
-          <div className={s.ticketCallout}>
-            <span aria-hidden="true">GH</span>
-            <div>
-              <small>{GITHUB_ACCESS.eyebrow}</small>
-              <h3>{GITHUB_ACCESS.title}</h3>
-              <p>{GITHUB_ACCESS.description}</p>
-            </div>
-          </div>
+          <AgentFlow />
           <PersonaPicker />
         </Section>
 
@@ -346,7 +357,7 @@ export default function Site({ snow, onToggleSnow }) {
           title="Six placeholder Fridays. Six sessions available each day."
           subtitle="The dates and times below are deliberately marked TBC. They exist so the registration workflow can be exercised before the final programme is confirmed."
         >
-          <ScheduleQuery />
+          <ScheduleBoard />
         </Section>
 
         <Section
@@ -357,6 +368,14 @@ export default function Site({ snow, onToggleSnow }) {
           subtitle="Prepare the core AI application tools, connect the required accounts, then tick off the checks. Progress stays in this browser only."
           className={s.preflightPanel}
         >
+          <div className={s.readinessPaths}>
+            {READINESS_PATHS.map((path) => (
+              <article key={path.id}>
+                <span>{path.number}</span>
+                <div><strong>{path.title}</strong><p>{path.desc}</p></div>
+              </article>
+            ))}
+          </div>
           <div className={s.setupStack}>
             <div className={s.preflightBlock}>
               <div className={s.preflightLabel}><span>01</span><strong>Readiness checklist</strong></div>
@@ -369,7 +388,17 @@ export default function Site({ snow, onToggleSnow }) {
           </div>
         </Section>
 
-        <Section id="faq" idx="05" eyebrow="FAQ" title="Frequently asked questions">
+        <Section
+          id="join"
+          idx="05"
+          eyebrow={REGISTRATION.eyebrow}
+          title={REGISTRATION.title}
+          subtitle={REGISTRATION.subtitle}
+        >
+          <RegistrationForm />
+        </Section>
+
+        <Section id="faq" idx="06" eyebrow="FAQ" title="Frequently asked questions">
           <div className={s.faq}>
             {FAQ.map((f) => (
               <details key={f.q} className={s.faqItem}>
@@ -378,16 +407,6 @@ export default function Site({ snow, onToggleSnow }) {
               </details>
             ))}
           </div>
-        </Section>
-
-        <Section
-          id="join"
-          idx="06"
-          eyebrow={REGISTRATION.eyebrow}
-          title={REGISTRATION.title}
-          subtitle={REGISTRATION.subtitle}
-        >
-          <RegistrationForm />
         </Section>
 
         <footer className={s.footer}>

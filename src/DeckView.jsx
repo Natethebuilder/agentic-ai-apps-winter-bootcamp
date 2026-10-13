@@ -2,7 +2,6 @@ import { InlineEditProvider, Navigation, SlideErrorBoundary, SlideProvider, useS
 import '@deckio/deck-engine/styles/editable.css'
 import project from '../deck.config.js'
 import { Mascot } from './winter/Decor.jsx'
-import { SnowToggle } from './winter/Snowfall.jsx'
 
 function FloatingCopilot() {
   const { current, totalSlides } = useSlides()
@@ -23,14 +22,13 @@ function DeliveryProgress() {
   )
 }
 
-export default function DeckView({ snow, onToggleSnow }) {
+export default function DeckView() {
   const { id, slides, theme } = project
   return (
     <InlineEditProvider overrides={{}} project={id}>
       <SlideProvider totalSlides={slides.length} project={id} slides={slides} theme={theme}>
         <div className="deck-chrome">
           <a className="deck-home-link" href="#/">← Website</a>
-          <SnowToggle enabled={snow} onToggle={onToggleSnow} />
         </div>
         <Navigation />
         <DeliveryProgress />

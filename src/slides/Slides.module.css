@@ -336,6 +336,22 @@
   line-height: 1.55;
 }
 
+.readinessPaths {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.readinessPaths > div {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--card) 84%, transparent);
+}
+.readinessPaths span { color: var(--ice); font: 800 10px/1 ui-monospace, monospace; }
+.readinessPaths strong { display: block; margin-top: 8px; color: var(--frost); font-size: 14px; line-height: 1.35; }
+.readinessPaths p { margin-top: 6px; color: var(--muted-foreground); font-size: 11px; line-height: 1.45; }
+
 /* ── Points & steps ── */
 .points { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
 .point {
@@ -457,33 +473,15 @@
 
 /* ── Team ── */
 .helper { align-items: center; text-align: center; }
-.helperAvatar {
-  width: 76px; height: 76px; border-radius: 50%;
-  position: relative;
-  overflow: hidden;
+.helperInitials {
+  width: 68px; height: 68px; border-radius: 50%;
+  display: grid; place-items: center;
+  color: var(--avatar-accent);
   background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--avatar-accent) 24%, var(--card)), var(--card));
-  border: 2px dashed color-mix(in srgb, var(--avatar-accent) 55%, transparent);
+  border: 2px solid color-mix(in srgb, var(--avatar-accent) 55%, transparent);
+  font: 900 16px/1 ui-monospace, monospace;
 }
-.helperAvatar i {
-  position: absolute;
-  left: 50%;
-  top: 13px;
-  width: 25px;
-  height: 25px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: #f4f8ff;
-}
-.helperAvatar b {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  width: 50px;
-  height: 29px;
-  transform: translateX(-50%);
-  border-radius: 28px 28px 12px 12px;
-  background: linear-gradient(180deg, #69b7ff, #2368bd);
-}
+.helperRole { color: var(--ice) !important; font-size: 10px !important; text-transform: uppercase; letter-spacing: 1px; }
 .helperTopic { font-size: 11px !important; }
 
 /* ── Disclaimer ── */
@@ -585,6 +583,8 @@
   .loopStage { padding: 14px; }
   .loopStage p { min-height: 0; }
   .loopCaption { font-size: 13px; }
+  .readinessPaths { grid-template-columns: 1fr; }
+  .readinessPaths > div { padding: 12px; }
   .point { padding: 12px 14px; font-size: 15px; gap: 12px; }
   .stepNum { width: 30px; height: 30px; }
   .registerSlideGrid { grid-template-columns: 1fr; }
@@ -602,9 +602,7 @@
     padding: 14px;
   }
   .registrationModalHeader h2 { font-size: 20px; }
-  .helperAvatar { width: 60px; height: 60px; }
-  .helperAvatar i { top: 10px; width: 20px; height: 20px; }
-  .helperAvatar b { bottom: 6px; width: 40px; height: 23px; }
+  .helperInitials { width: 56px; height: 56px; }
 
   .thanks { gap: 14px; }
   .thanks h1 { font-size: 52px; letter-spacing: -1.6px; }
