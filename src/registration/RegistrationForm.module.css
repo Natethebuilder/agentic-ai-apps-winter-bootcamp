@@ -73,6 +73,8 @@
 @media (max-width: 700px) {
   .form { padding: 18px; }
   .fields, .sessionGrid { grid-template-columns: 1fr; }
+  .dateTabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow-x: visible; }
+  .dateTabs button { min-width: 0; width: 100%; }
   .dateGroup { padding: 12px; }
   .dateGroup > header { align-items: flex-start; flex-direction: column; gap: 4px; }
   .submitRow { align-items: flex-start; flex-direction: column; }

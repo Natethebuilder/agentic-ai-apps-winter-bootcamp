@@ -362,10 +362,6 @@ export const FAQ = [
     a: 'AI application developers, solution and cloud architects, platform engineers, AI/ML engineers, and technical product or build teams.',
   },
   {
-    q: 'Is this only for Microsoft developers?',
-    a: 'No. Microsoft Foundry is the primary platform, while the programme teaches transferable agent design, evaluation and delivery practices.',
-  },
-  {
     q: 'What are the session topics?',
     a: 'The programme will contain six sessions. Topics, hands-on activities and prerequisites are still being confirmed.',
   },

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { AgentGlyph, Logos, Mascot } from '../winter/Decor.jsx'
+import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
 import { AgentTerminal, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import {
-  BOOTCAMP, FAQ, PERSONAS, PILLARS, PREP, READINESS_PATHS, REGISTRATION, SESSIONS,
+  BOOTCAMP, FAQ, PERSONAS, PILLARS, PIPELINE, PREP, READINESS_PATHS, REGISTRATION, SESSIONS,
 } from '../content.js'
 import s from './Site.module.css'
 
@@ -103,6 +103,26 @@ function PersonaPicker() {
           <span className={s.stackLabel}>your stack</span>
           {p.stack.map((t) => <span key={t} className={s.stackChip}>{t}</span>)}
         </div>
+      </div>
+    </div>
+  )
+}
+
+function AgentFlow() {
+  return (
+    <div className={s.agentFlow} aria-label="Foundry agent development flow">
+      <header>
+        <span>Agent runtime path</span>
+        <strong>Intent → evidence</strong>
+      </header>
+      <div>
+        {PIPELINE.map((stage, index) => (
+          <article key={stage.id} style={{ '--flow-accent': stage.color }}>
+            <span>{String(index + 1).padStart(2, '0')}</span>
+            <strong>{stage.label}</strong>
+            <small>{stage.gate}</small>
+          </article>
+        ))}
       </div>
     </div>
   )
@@ -249,7 +269,7 @@ export default function Site() {
       <header className={`${s.nav} ${scrolled ? s.navScrolled : ''}`}>
         <button type="button" className={s.brand} onClick={() => go('top')}>
           <span className={s.brandMark}>
-            <AgentGlyph className={s.brandLogo} />
+            <FoundryMark className={s.brandLogo} />
           </span>
           <span className={s.brandText}><small>Foundry Agentic Development</small><strong>Winter Bootcamp</strong></span>
         </button>
@@ -267,7 +287,7 @@ export default function Site() {
         <section id="top" className={`${s.panel} ${s.heroPanel}`} data-panel>
           <div className={s.hero}>
           <div className={s.heroText}>
-            <span className={s.pill}>MICROSOFT FOUNDRY · {BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
+            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
             <h1>
               Foundry Agentic Development <span className={s.highlight}>Winter Bootcamp</span>
             </h1>
@@ -314,6 +334,7 @@ export default function Site() {
               </article>
             ))}
           </div>
+          <AgentFlow />
           <PersonaPicker />
         </Section>
 
