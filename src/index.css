@@ -56,25 +56,6 @@ body {
   z-index: 150;
 }
 
-.snow-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--ice) 35%, transparent);
-  background: color-mix(in srgb, var(--card) 70%, transparent);
-  color: var(--foreground);
-  font: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  backdrop-filter: blur(8px);
-  transition: border-color 0.2s, transform 0.2s;
-}
-.snow-toggle:hover { border-color: var(--ice); transform: translateY(-1px); }
-.snow-toggle:focus-visible { outline: 2px solid var(--ice); outline-offset: 2px; }
-
 .deck ~ * [class*="progressTrack"], [class*="navWrapper"] > [class*="progressTrack"] { display: none; }
 
 /* ── Delivery-loop progress ───────────────────────────────────────────── */
@@ -216,7 +197,6 @@ button[title="Back to home"] { top: 36px !important; }
   button[title="Back to home"] { display: none !important; }
   .deck-chrome { top: 34px; left: 12px; gap: 8px; opacity: 0.9; }
   .deck-home-link { padding: 6px 12px; font-size: 12px; }
-  .deck-chrome .snow-toggle-label { display: none; }
   [class*="_navBtn_"] {
     top: auto !important;
     bottom: calc(14px + env(safe-area-inset-bottom, 0px));

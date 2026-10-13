@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import DeckView from './DeckView.jsx'
 import Site from './site/Site.jsx'
-import Snowfall, { useSnowPreference } from './winter/Snowfall.jsx'
+import Snowfall from './winter/Snowfall.jsx'
 import project from '../deck.config.js'
 
 function useHashRoute() {
@@ -17,8 +17,6 @@ function useHashRoute() {
 
 export default function App() {
   const route = useHashRoute()
-  const [snow, setSnow] = useSnowPreference()
-  const toggleSnow = () => setSnow((v) => !v)
 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', project.accent)
@@ -27,10 +25,10 @@ export default function App() {
 
   return (
     <>
-      <Snowfall enabled={snow} density={route === 'deck' ? 0.6 : 1} />
+      <Snowfall density={route === 'deck' ? 0.6 : 1} />
       {route === 'deck'
-        ? <DeckView snow={snow} onToggleSnow={toggleSnow} />
-        : <Site snow={snow} onToggleSnow={toggleSnow} />}
+        ? <DeckView />
+        : <Site />}
     </>
   )
 }

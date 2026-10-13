@@ -1,44 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
-const STORAGE_KEY = 'foundry-agentic-development-winter-bootcamp:motion-field-v1'
-
-export function useSnowPreference() {
-  const [enabled, setEnabled] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored === null ? true : stored === 'on'
-    } catch {
-      return true
-    }
-  })
-
-  useEffect(() => {
-    try { localStorage.setItem(STORAGE_KEY, enabled ? 'on' : 'off') } catch { /* ignore */ }
-  }, [enabled])
-
-  return [enabled, setEnabled]
-}
-
-export function SnowToggle({ enabled, onToggle, className = '' }) {
-  return (
-    <button
-      type="button"
-      className={`snow-toggle ${className}`}
-      onClick={onToggle}
-      aria-pressed={enabled}
-      title={enabled ? 'Pause Foundry signal field' : 'Resume Foundry signal field'}
-    >
-      <span aria-hidden="true">{enabled ? '◉' : '○'}</span>
-      <span className="snow-toggle-label">Signals {enabled ? 'on' : 'off'}</span>
-    </button>
-  )
-}
-
-export default function Snowfall({ enabled = true, density = 1 }) {
+export default function Snowfall({ density = 1 }) {
   const canvasRef = useRef(null)
 
   useEffect(() => {
-    if (!enabled) return undefined
     const canvas = canvasRef.current
     const ctx = canvas.getContext('2d')
     let raf = 0
@@ -129,8 +94,7 @@ export default function Snowfall({ enabled = true, density = 1 }) {
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onMove)
     }
-  }, [enabled, density])
+  }, [density])
 
-  if (!enabled) return null
   return <canvas ref={canvasRef} className="snowfall" aria-hidden="true" />
 }

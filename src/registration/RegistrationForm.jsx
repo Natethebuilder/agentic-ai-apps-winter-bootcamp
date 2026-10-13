@@ -14,6 +14,7 @@ function saveRegistrationToken(token) {
 
 export default function RegistrationForm() {
   const [sessions, setSessions] = useState([])
+  const [activeDate, setActiveDate] = useState(PLACEHOLDER_DATES[0].iso)
   const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [emailConfirmation, setEmailConfirmation] = useState('')
@@ -32,6 +33,9 @@ export default function RegistrationForm() {
   const toggleSession = (selection) => setSessions((current) => (
     current.includes(selection) ? current.filter((item) => item !== selection) : [...current, selection]
   ))
+  const activeChoices = REGISTRATION_CHOICES.filter((choice) => choice.dateIso === activeDate)
+  const selectedDates = new Set(sessions.map((selection) => selection.split('|')[0])).size
+  const selectedForDate = (dateIso) => sessions.filter((selection) => selection.startsWith(`${dateIso}|`)).length
 
   const submit = async (event) => {
     event.preventDefault()
@@ -107,33 +111,52 @@ export default function RegistrationForm() {
 
       <fieldset className={s.sessionField}>
         <legend>Which placeholder dates and sessions are you interested in?</legend>
-        <p className={s.scheduleNotice}>All dates and times below are placeholders for workflow testing and remain TBC.</p>
-        <div className={s.dateGroups}>
-          {PLACEHOLDER_DATES.map((date) => (
-            <section key={date.iso} className={s.dateGroup}>
-              <header>
-                <span>{date.label}</span>
-                <small>Placeholder · TBC</small>
-              </header>
-              <div className={s.sessionGrid}>
-                {REGISTRATION_CHOICES.filter((choice) => choice.dateIso === date.iso).map((choice) => (
-                  <label key={choice.value} className={sessions.includes(choice.value) ? s.sessionOn : ''}>
-                    <input
-                      type="checkbox"
-                      checked={sessions.includes(choice.value)}
-                      onChange={() => toggleSession(choice.value)}
-                    />
-                    <span>
-                      <strong>{choice.time} · Session {choice.number}</strong>
-                      <small>{choice.title}</small>
-                    </span>
-                    <i>{sessions.includes(choice.value) ? '✓' : '+'}</i>
-                  </label>
-                ))}
-              </div>
-            </section>
-          ))}
+        <p className={s.scheduleNotice}>{REGISTRATION.slotHelp} All dates and times remain placeholder/TBC.</p>
+        <div className={s.dateTabs} role="tablist" aria-label="Placeholder event dates">
+          {PLACEHOLDER_DATES.map((date) => {
+            const selected = selectedForDate(date.iso)
+            return (
+              <button
+                key={date.iso}
+                type="button"
+                role="tab"
+                aria-selected={activeDate === date.iso}
+                className={activeDate === date.iso ? s.dateTabOn : ''}
+                onClick={() => setActiveDate(date.iso)}
+              >
+                <strong>{date.label}</strong>
+                <small>{selected ? `${selected} selected` : 'TBC'}</small>
+              </button>
+            )
+          })}
         </div>
+        <div className={s.dateGroup} role="tabpanel">
+          <header>
+            <span>{PLACEHOLDER_DATES.find((date) => date.iso === activeDate)?.label}</span>
+            <small>Placeholder · TBC</small>
+          </header>
+          <div className={s.sessionGrid}>
+            {activeChoices.map((choice) => (
+              <label key={choice.value} className={sessions.includes(choice.value) ? s.sessionOn : ''}>
+                <input
+                  type="checkbox"
+                  checked={sessions.includes(choice.value)}
+                  onChange={() => toggleSession(choice.value)}
+                />
+                <span>
+                  <strong>{choice.time} · Session {choice.number}</strong>
+                  <small>{choice.title}</small>
+                </span>
+                <i>{sessions.includes(choice.value) ? '✓' : '+'}</i>
+              </label>
+            ))}
+          </div>
+        </div>
+        <p className={s.selectionSummary}>
+          {sessions.length
+            ? `${sessions.length} session ${sessions.length === 1 ? 'time' : 'times'} selected across ${selectedDates} ${selectedDates === 1 ? 'date' : 'dates'}.`
+            : 'No date and session times selected yet.'}
+        </p>
       </fieldset>
 
       <fieldset className={s.environment}>

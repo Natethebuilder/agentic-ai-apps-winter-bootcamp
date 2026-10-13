@@ -114,77 +114,49 @@ export function AgentTerminal({ className = '', children }) {
   )
 }
 
-/* ── Programme rendered as a workflow manifest and result grid ── */
-export function ScheduleQuery() {
-  const ref = useRef(null)
-  const timer = useRef(null)
-  const [run, setRun] = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [ms, setMs] = useState(0)
-
-  const execute = () => {
-    setLoading(true)
-    clearTimeout(timer.current)
-    timer.current = setTimeout(() => {
-      setLoading(false)
-      setRun((r) => r + 1)
-      setMs(18 + Math.floor(Math.random() * 40))
-    }, 650)
-  }
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return undefined
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) { execute(); io.disconnect() }
-    }, { threshold: 0.3 })
-    io.observe(el)
-    return () => { io.disconnect(); clearTimeout(timer.current) }
-  }, [])
-
+/* ── Six placeholder dates sharing one six-session agenda ── */
+export function ScheduleBoard() {
+  const [activeDate, setActiveDate] = useState(SCHEDULE[0].dateIso)
+  const active = SCHEDULE.find((date) => date.dateIso === activeDate) || SCHEDULE[0]
   return (
-    <div className={d.query} ref={ref}>
-      <div className={d.qBar}>
-        <span className={d.qTab}>programme.yml</span>
-        <button type="button" className={d.qRun} onClick={execute} disabled={loading}>
-          {loading ? 'Running…' : '▶ Run'}
-        </button>
+    <div className={d.scheduleBoard}>
+      <div className={d.dateRail} role="tablist" aria-label="Placeholder programme dates">
+        {SCHEDULE.map((date) => (
+          <button
+            key={date.id}
+            type="button"
+            role="tab"
+            aria-selected={date.dateIso === activeDate}
+            className={date.dateIso === activeDate ? d.dateCardOn : ''}
+            onClick={() => setActiveDate(date.dateIso)}
+          >
+            <span>{date.number}</span>
+            <strong>{date.date}</strong>
+            <small>Placeholder · TBC</small>
+          </button>
+        ))}
       </div>
-      <pre className={d.qCode}>
-        <code>
-          <span className={d.kw}>programme:</span>{'\n'}
-          {'  '}placeholder_fridays: 6{'\n'}
-          {'  '}sessions_per_date: 6{'\n'}
-          {'  '}registration_choices: 36{'\n'}
-          {'  '}development_path: intent → models → knowledge → tools → evaluate{'\n'}
-          {'  '}schedule_status: <span className={d.tbl}>placeholder · TBC</span>
-        </code>
-      </pre>
-      <div className={`${d.qProgress} ${loading ? d.qProgressOn : ''}`} />
-      <div className={d.qGridWrap}>
-        <table className={d.qGrid}>
-          <thead>
-            <tr>
-              <th className={d.num}>date</th><th>placeholder Friday</th><th>times</th><th>sessions</th><th>status</th>
-            </tr>
-          </thead>
-          <tbody key={run}>
-            {run > 0 && SCHEDULE.map((date, i) => (
-              <tr key={date.id} style={{ animationDelay: `${i * 70}ms` }}>
-                <td className={d.num}>{date.number}</td>
-                <td>{date.date}</td>
-                <td>{date.sessions.map((session) => session.time).join(' · ')}</td>
-                <td>01–06</td>
-                <td><span className={d.pending}>{date.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className={d.agenda} role="tabpanel">
+        <header>
+          <div>
+            <span>Selected placeholder date</span>
+            <h3>{active.date}</h3>
+          </div>
+          <strong>Same six-session agenda · TBC</strong>
+        </header>
+        <div className={d.agendaGrid}>
+          {active.sessions.map((session) => (
+            <article key={session.selection} className={d.agendaSlot}>
+              <time>{session.time}</time>
+              <div>
+                <strong>Session {session.number} · {session.track}</strong>
+                <small>{session.ownerRole} · {session.ownerInitials}</small>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
-      <div className={d.qFoot}>
-        <span>{run > 0 ? `${SCHEDULE.length} rows · ${ms} ms` : 'Not run yet'}</span>
-        <span>All public dates and times are placeholders · TBC</span>
-      </div>
+      <p className={d.scheduleFoot}>All six Fridays repeat this agenda. Dates, topics and owners remain placeholder/TBC.</p>
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { BottomBar, Editable, Slide, useSlides } from '@deckio/deck-engine'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import { Logos, Mascot } from '../winter/Decor.jsx'
 import {
-  BOOTCAMP, GITHUB_ACCESS, PERSONAS, PILLARS, PIPELINE, PREP, REGISTER_STEPS, SCHEDULE, SESSIONS,
+  BOOTCAMP, GITHUB_ACCESS, PERSONAS, PILLARS, PIPELINE, PREP, READINESS_PATHS, REGISTER_STEPS, SCHEDULE, SESSIONS, TEAM,
 } from '../content.js'
 import s from './Slides.module.css'
 
@@ -78,10 +78,10 @@ export function OfferingSlide({ index }) {
           <Editable as="span" id="offering.titleHighlight" className={s.highlight}>Evaluate every run.</Editable>
         </h1>
         <Editable as="p" id="offering.subtitle" multiline className={s.subtitle}>
-          A hands-on programme for developers, architects, product builders, platform teams and technical leaders.
+          A hands-on programme for AI application developers, solution and cloud architects, platform and AI/ML engineers, and technical product teams.
         </Editable>
       </div>
-      <div className={`${s.grid} ${s.grid3}`}>
+      <div className={`${s.grid} ${s.grid4}`}>
         {PILLARS.map((p) => (
           <div key={p.id} className={s.card}>
             <span className={s.icon}>{p.icon}</span>
@@ -187,10 +187,19 @@ export function SetupSlide({ index }) {
     <Frame index={index} id="setup" orbs={['orbIce', 'orbHolly']}>
       <Header
         id="setup"
-        eyebrow="Get ready"
-        title="Your AI application setup"
-        subtitle="Audit first, install only what is missing, then connect the accounts required by the confirmed sessions."
+        eyebrow="Foundations and readiness"
+        title="Choose the right setup path"
+        subtitle="Skip the foundations walkthrough only when every readiness check passes; otherwise use the guided setup before the hands-on programme."
       />
+      <div className={s.readinessPaths}>
+        {READINESS_PATHS.map((path) => (
+          <div key={path.id}>
+            <span>{path.number}</span>
+            <strong>{path.title}</strong>
+            <p>{path.desc}</p>
+          </div>
+        ))}
+      </div>
       <div className={`${s.grid} ${s.grid4}`}>
         {PREP.slice(0, 4).map((p) => (
           <div key={p.id} className={s.card}>
@@ -257,8 +266,8 @@ function SessionDetailSlide({ index, session }) {
             </div>
             <div className={`${s.detailPanel} ${s.detailToolbox}`}>
               <div>
-                <span className={s.detailLabel}>Session lead</span>
-                <strong>{session.lead}</strong>
+                <span className={s.detailLabel}>Session owner</span>
+                <strong>{session.owner}</strong>
               </div>
               <div className={s.detailTools}>{session.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>
             </div>
@@ -284,13 +293,13 @@ export function SurveySlide({ index }) {
         id="survey"
         eyebrow="One request from us"
         title="Tell us how we did"
-        subtitle="A very short survey after each session. It shows us what landed and shapes the next edition."
+        subtitle="After each session, we will ask how we did so your feedback can improve the next session."
       />
       <div className={s.points}>
         {[
           ['TIME', 'short', 'Very short, about 2 minutes'],
           ['SAFE', 'pii', 'No PII captured. Feedback links to a company, not a person'],
-          ['LOOP', 'improve', 'Shapes how we improve the programme'],
+          ['LOOP', 'improve', 'Used to improve the next session'],
         ].map(([icon, k, text]) => (
           <div key={k} className={s.point}>
             <span className={s.icon}>{icon}</span>
@@ -386,18 +395,16 @@ export function TeamSlide({ index }) {
       <Header
         id="team"
         eyebrow="Brought to you by"
-        title="Your session leads"
-        subtitle="Speaker names, headshots and session assignments will be added as the programme is confirmed."
+        title="Your team"
+        subtitle="Your host and session owners from the Microsoft AI application community."
       />
       <div className={`${s.grid} ${s.grid6}`}>
-        {SESSIONS.map((session) => (
-          <div key={session.id} className={`${s.card} ${s.helper}`}>
-            <span className={s.helperAvatar} style={{ '--avatar-accent': session.accent }} aria-label={`Photo placeholder for ${session.lead}`}>
-              <i aria-hidden="true" />
-              <b aria-hidden="true" />
-            </span>
-            <Editable as="h3" id={`team.${session.id}.name`}>{session.lead}</Editable>
-            <Editable as="p" id={`team.${session.id}.topic`} className={s.helperTopic}>{session.shortTitle}</Editable>
+        {TEAM.map((person, index) => (
+          <div key={person.id} className={`${s.card} ${s.helper}`}>
+            <span className={s.helperInitials} style={{ '--avatar-accent': SESSIONS[index]?.accent }}>{person.initials}</span>
+            <Editable as="h3" id={`team.${person.id}.name`}>{person.name}</Editable>
+            <Editable as="p" id={`team.${person.id}.role`} className={s.helperRole}>{person.role}</Editable>
+            <Editable as="p" id={`team.${person.id}.topic`} className={s.helperTopic}>{person.focus}</Editable>
           </div>
         ))}
       </div>

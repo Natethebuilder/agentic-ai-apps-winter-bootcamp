@@ -34,9 +34,9 @@ export default {
     SessionDetailsIntroSlide,
     ...sessionDetailSlides,
     SurveySlide,
-    RegisterSlide,
     TeamSlide,
     DisclaimerSlide,
+    RegisterSlide,
     ThankYouSlide,
   ],
 }

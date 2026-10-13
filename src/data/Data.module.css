@@ -121,8 +121,37 @@
 .pending { color: var(--gold); padding: 2px 8px; border-radius: 6px; background: color-mix(in srgb, var(--gold) 12%, transparent); font-size: 12px; }
 .qFoot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 10px 18px; font-size: 12px; color: var(--muted-foreground); }
 
+.scheduleBoard { display: grid; gap: 14px; }
+.dateRail { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.dateRail button {
+  min-width: 0; padding: 13px 11px; text-align: left; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 14px;
+  color: var(--muted-foreground); background: color-mix(in srgb, var(--card) 82%, transparent);
+}
+.dateRail button > * { display: block; }
+.dateRail button > span { color: var(--ice); font: 800 11px/1 ui-monospace, monospace; }
+.dateRail button strong { margin-top: 8px; color: var(--frost); font-size: 13px; line-height: 1.25; }
+.dateRail button small { margin-top: 6px; color: var(--muted-foreground); font: 700 9px/1.3 ui-monospace, monospace; text-transform: uppercase; }
+.dateRail .dateCardOn { border-color: var(--green); background: color-mix(in srgb, var(--pine) 16%, var(--card)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--green) 28%, transparent); }
+.agenda { padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--card) 88%, transparent); }
+.agenda > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.agenda > header span { color: var(--ice); font: 700 10px/1.2 ui-monospace, monospace; text-transform: uppercase; letter-spacing: 1px; }
+.agenda > header h3 { margin-top: 5px; color: var(--frost); font-size: 22px; }
+.agenda > header > strong { color: var(--gold); font-size: 12px; }
+.agendaGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 14px; }
+.agendaSlot { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 11px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: color-mix(in srgb, var(--night) 50%, transparent); }
+.agendaSlot time { color: var(--green); font: 800 13px/1 ui-monospace, monospace; }
+.agendaSlot div { min-width: 0; }
+.agendaSlot strong, .agendaSlot small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.agendaSlot strong { color: var(--frost); font-size: 13px; }
+.agendaSlot small { margin-top: 4px; color: var(--muted-foreground); font-size: 11px; }
+.scheduleFoot { color: var(--muted-foreground); font-size: 12px; }
+
 @media (max-width: 800px) {
   .cdNum { font-size: 24px; }
+  .dateRail { display: flex; overflow-x: auto; padding-bottom: 4px; }
+  .dateRail button { flex: 0 0 150px; }
+  .agendaGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 600px) {
   .countdown { padding: 14px 14px 12px; }
@@ -137,4 +166,7 @@
   .qGrid th, .qGrid td { padding: 9px 12px; }
   .qGrid th:nth-child(4), .qGrid td:nth-child(4) { display: none; }
   .qFoot { padding: 10px 14px; }
+  .agenda { padding: 14px; }
+  .agenda > header { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .agendaGrid { grid-template-columns: 1fr; }
 }
