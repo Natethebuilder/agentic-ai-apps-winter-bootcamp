@@ -1,16 +1,17 @@
 const { createHash, randomUUID } = require('node:crypto')
+const siteState = require('../site-state.json')
 
 const EVENT_ID = 'foundry-agentic-development-winter-bootcamp'
-const PLACEHOLDER_DATES = ['2026-12-04', '2026-12-11', '2026-12-18', '2027-01-08', '2027-01-15', '2027-01-22']
+const SESSION_DATES = ['2026-12-04', '2026-12-11', '2026-12-18', '2027-01-08', '2027-01-15', '2027-01-22']
 const SESSION_TIMES = {
-  'session-01': '09:30',
-  'session-02': '10:30',
-  'session-03': '11:30',
-  'session-04': '13:00',
-  'session-05': '14:00',
-  'session-06': '15:00',
+  foundations: '09:00',
+  'advanced-patterns': '10:00',
+  evaluate: '11:00',
+  deploy: '12:30',
+  operate: '13:30',
+  govern: '14:30',
 }
-const SESSION_SELECTIONS = new Set(PLACEHOLDER_DATES.flatMap((date) => (
+const SESSION_SELECTIONS = new Set(SESSION_DATES.flatMap((date) => (
   Object.entries(SESSION_TIMES).map(([sessionId, time]) => `${date}|${time}|${sessionId}`)
 )))
 const ENVIRONMENTS = new Set(['local', 'cloud'])
@@ -28,6 +29,12 @@ function response(status, body) {
 }
 
 module.exports = async function register(context, req) {
+  // State 2 in api/site-state.json pauses registration without removing the working flow.
+  if (siteState.registration === 2) {
+    context.res = response(403, { error: 'Registration will open soon.' })
+    return
+  }
+
   const body = req.body || {}
   const company = typeof body.company === 'string' ? body.company.trim() : ''
   const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
@@ -54,7 +61,7 @@ module.exports = async function register(context, req) {
     return
   }
   if (!sessions.length || sessions.length !== requestedSessions.length) {
-    context.res = response(400, { error: 'Choose at least one valid placeholder date, time and session combination.' })
+    context.res = response(400, { error: 'Choose at least one valid date and session time.' })
     return
   }
   if (!environment || body.consent !== true) {

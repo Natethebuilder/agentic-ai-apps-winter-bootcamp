@@ -3,9 +3,12 @@ import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
 import { AgentTerminal, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
+import SpeakerAvatar from '../speakers/SpeakerAvatar.jsx'
 import {
-  BOOTCAMP, FAQ, PERSONAS, PILLARS, PIPELINE, PREP, READINESS_PATHS, REGISTRATION, SESSIONS,
+  BOOTCAMP, DATES_NOTE, FAQ, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTRATION, REGISTRATION_SOON,
+  SESSIONS, sessionOwner,
 } from '../content.js'
+import { PREREQUISITES_STATE, REGISTRATION_OPEN } from '../siteState.js'
 import s from './Site.module.css'
 
 const NAV = [
@@ -32,7 +35,7 @@ function useReveal(rootRef) {
     els.forEach((el) => io.observe(el))
 
     // Items pop in as they scroll into view; long single-column phone sections otherwise feel static
-    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}`)
+    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}, .${s.flow}`)
     const itemIo = new IntersectionObserver((entries) => {
       entries.filter((e) => e.isIntersecting).forEach((e, k) => {
         e.target.style.setProperty('--i', k)
@@ -108,26 +111,6 @@ function PersonaPicker() {
   )
 }
 
-function AgentFlow() {
-  return (
-    <div className={s.agentFlow} aria-label="Foundry agent development flow">
-      <header>
-        <span>Agent runtime path</span>
-        <strong>Intent → evidence</strong>
-      </header>
-      <div>
-        {PIPELINE.map((stage, index) => (
-          <article key={stage.id} style={{ '--flow-accent': stage.color }}>
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            <strong>{stage.label}</strong>
-            <small>{stage.gate}</small>
-          </article>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 function ProgrammeReveal() {
   const [open, setOpen] = useState(false)
 
@@ -135,18 +118,22 @@ function ProgrammeReveal() {
     <div className={s.programmeReveal}>
       <button
         type="button"
-        className={`${s.programmeMerge} ${open ? s.programmeMergeOpen : ''}`}
+        className={`${s.programmeGift} ${open ? s.programmeGiftOpen : ''}`}
         aria-expanded={open}
         aria-controls="programme-sessions"
-        aria-label="Merge the programme"
+        aria-label="Unwrap the programme"
         disabled={open}
         onClick={() => setOpen(true)}
       >
-        <span className={s.mergeTop}><i />foundry project · agentic development</span>
-        <span className={s.mergeBranches}><strong>foundry/programme-tbc</strong><i>→</i><strong>bootcamp</strong></span>
-        <span className={s.mergeSummary}>6 session placeholders · ready for review</span>
-        <span className={s.mergeAction}>{open ? 'Deployed' : 'Deploy programme'}</span>
-        <span className={s.mergePackets} aria-hidden="true"><i /><i /><i /><i /></span>
+        <span className={s.programmeGiftPaper} aria-hidden="true" />
+        <span className={s.programmeRibbonV} aria-hidden="true" />
+        <span className={s.programmeRibbonH} aria-hidden="true" />
+        <span className={s.programmeBurst} aria-hidden="true">
+          {Array.from({ length: 10 }, (_, index) => <i key={index} style={{ '--i': index }} />)}
+        </span>
+        <span className={s.programmeGiftLid} aria-hidden="true">
+          <span className={s.programmeBow}>◆</span>
+        </span>
       </button>
 
       {open && (
@@ -160,12 +147,12 @@ function ProgrammeReveal() {
               <div className={s.sessionSummary}>
                 <span className={s.sessionNumber}>{session.number}</span>
                 <span className={s.sessionHeading}>
-                  <span className={s.sessionAudience}>{session.audience}</span>
+                  <span className={s.sessionAudience}>{session.time} · {session.audience}</span>
                   <strong>{session.title}</strong>
                   <small>{session.subtitle}</small>
                 </span>
                 <span className={s.sessionLead}>
-                  <span className={s.sessionOwnerInitials} aria-hidden="true">{session.ownerInitials}</span>
+                  <SpeakerAvatar person={sessionOwner(session)} className={s.sessionHeadshot} />
                   <span className={s.sessionLeadCopy}>
                     <small>Session owner</small>
                     <strong>{session.owner}</strong>
@@ -247,6 +234,21 @@ function PrepChecklist() {
   )
 }
 
+// Stands in for a section's interactive content while that part of the programme is not open yet.
+function SoonPanel({ mark, label, heading, body, children }) {
+  return (
+    <div className={s.soonPanel} role="status">
+      <span className={s.soonMark} aria-hidden="true">{mark}</span>
+      <div>
+        <small><i aria-hidden="true" />{label}</small>
+        <h3>{heading}</h3>
+        <p>{body}</p>
+      </div>
+      {children && <div className={s.soonActions}>{children}</div>}
+    </div>
+  )
+}
+
 export default function Site() {
   const rootRef = useRef(null)
   const [scrolled, setScrolled] = useState(false)
@@ -287,7 +289,7 @@ export default function Site() {
         <section id="top" className={`${s.panel} ${s.heroPanel}`} data-panel>
           <div className={s.hero}>
           <div className={s.heroText}>
-            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
+            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · Six one-hour sessions</span>
             <h1>
               Foundry Agentic Development <span className={s.highlight}>Winter Bootcamp</span>
             </h1>
@@ -297,12 +299,15 @@ export default function Site() {
             <div className={s.ctaRow}>
               <button type="button" className={s.btnGhost} onClick={() => go('why')}>More info</button>
               <button type="button" className={s.btnGhost} onClick={() => go('lineup')}>See the lineup</button>
-              <button type="button" className={s.btnPrimary} onClick={() => go('join')}>Register now</button>
+              <button type="button" className={s.btnPrimary} onClick={() => go('join')}>
+                {REGISTRATION_OPEN ? 'Register now' : REGISTRATION_SOON.cta}
+              </button>
             </div>
             <Countdown
               target={BOOTCAMP.kickoff}
               date={BOOTCAMP.kickoffDate}
               dateLabel={BOOTCAMP.kickoffLabel}
+              preliminary={!BOOTCAMP.datesConfirmed}
               className={s.countdown}
             />
           </div>
@@ -322,8 +327,8 @@ export default function Site() {
           id="why"
           idx="01"
           eyebrow="Why join"
-          title="From Foundry project to dependable agent application."
-          subtitle="A hands-on programme for AI application developers, solution and cloud architects, platform and AI/ML engineers, and technical product teams."
+          title="From a working agent to an operable, governed application."
+          subtitle="A hands-on programme for AI application developers, solution and cloud architects, platform and AI engineers, and technical product teams."
         >
           <div className={`${s.grid} ${s.g3}`}>
             {PILLARS.map((p) => (
@@ -334,7 +339,6 @@ export default function Site() {
               </article>
             ))}
           </div>
-          <AgentFlow />
           <PersonaPicker />
         </Section>
 
@@ -343,8 +347,8 @@ export default function Site() {
           id="lineup"
           idx="02"
           eyebrow="The lineup"
-          title="Assemble the programme."
-          subtitle="Deploy the placeholder programme to inspect all six reserved sessions."
+          title="Unwrap the programme."
+          subtitle="Open the gift, then explore each session, its owner and what you will learn."
           className={s.lineupPanel}
         >
           <ProgrammeReveal />
@@ -354,8 +358,8 @@ export default function Site() {
           id="schedule"
           idx="03"
           eyebrow="Schedule"
-          title="Six placeholder Fridays. Six sessions available each day."
-          subtitle="The dates and times below are deliberately marked TBC. They exist so the registration workflow can be exercised before the final programme is confirmed."
+          title="Six dates. The same complete programme."
+          subtitle={`All six sessions run on every date. ${REGISTRATION_OPEN ? 'When you register' : 'Once registration opens'}, pick as many sessions as you like, on as many dates as you like.${DATES_NOTE ? ` ${DATES_NOTE}` : ''}`}
         >
           <ScheduleBoard />
         </Section>
@@ -364,38 +368,60 @@ export default function Site() {
           id="prepare"
           idx="04"
           eyebrow="Get ready"
-          title="Pre-flight checks"
-          subtitle="Prepare the core AI application tools, connect the required accounts, then tick off the checks. Progress stays in this browser only."
+          title={PREREQUISITES[PREREQUISITES_STATE].title}
+          subtitle={PREREQUISITES[PREREQUISITES_STATE].subtitle}
           className={s.preflightPanel}
         >
-          <div className={s.readinessPaths}>
-            {READINESS_PATHS.map((path) => (
-              <article key={path.id}>
-                <span>{path.number}</span>
-                <div><strong>{path.title}</strong><p>{path.desc}</p></div>
-              </article>
-            ))}
-          </div>
-          <div className={s.setupStack}>
-            <div className={s.preflightBlock}>
-              <div className={s.preflightLabel}><span>01</span><strong>Readiness checklist</strong></div>
-              <PrepChecklist />
+          {PREREQUISITES_STATE === 'microhack' ? (
+            <div className={s.setupStack}>
+              <div className={s.readinessPaths}>
+                {MICROHACK_ACCESS.map((path, index) => (
+                  <article key={path.id}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <strong>{path.title}</strong>
+                      <p>{path.desc}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className={s.preflightBlock}>
+                <div className={s.preflightLabel}><span>01</span><strong>Readiness checklist</strong></div>
+                <PrepChecklist />
+              </div>
+              <div className={s.preflightBlock}>
+                <div className={s.preflightLabel}><span>02</span><strong>Guided setup</strong></div>
+                <SetupWizard />
+              </div>
             </div>
-            <div className={s.preflightBlock}>
-              <div className={s.preflightLabel}><span>02</span><strong>Guided setup</strong></div>
-              <SetupWizard />
-            </div>
-          </div>
+          ) : (
+            <SoonPanel
+              mark={PREREQUISITES.soon.mark}
+              label={PREREQUISITES.soon.label}
+              heading={PREREQUISITES.soon.heading}
+              body={PREREQUISITES.soon.body}
+            />
+          )}
         </Section>
 
         <Section
           id="join"
           idx="05"
-          eyebrow={REGISTRATION.eyebrow}
-          title={REGISTRATION.title}
-          subtitle={REGISTRATION.subtitle}
+          eyebrow={REGISTRATION_OPEN ? REGISTRATION.eyebrow : REGISTRATION_SOON.eyebrow}
+          title={REGISTRATION_OPEN ? REGISTRATION.title : REGISTRATION_SOON.title}
+          subtitle={REGISTRATION_OPEN ? REGISTRATION.subtitle : REGISTRATION_SOON.subtitle}
         >
-          <RegistrationForm />
+          {REGISTRATION_OPEN ? <RegistrationForm /> : (
+            <SoonPanel
+              mark="📅"
+              label={REGISTRATION_SOON.badge}
+              heading={REGISTRATION_SOON.heading}
+              body={REGISTRATION_SOON.body}
+            >
+              <button type="button" className={s.btnGhost} onClick={() => go('lineup')}>See the lineup</button>
+              <button type="button" className={s.btnGhost} onClick={() => go('schedule')}>View the schedule</button>
+            </SoonPanel>
+          )}
         </Section>
 
         <Section id="faq" idx="06" eyebrow="FAQ" title="Frequently asked questions">
@@ -413,7 +439,7 @@ export default function Site() {
           <Logos size="sm" />
           <p>
             Educational workshop series delivered by Microsoft. Not a consulting engagement. Use sample or
-            sample or non-sensitive data and repositories only. Workshop outputs are learning artifacts.
+            non-sensitive data, code and repositories only. Workshop outputs are learning artifacts.
           </p>
           <p className={s.footerSmall}>Built with DECKIO</p>
         </footer>

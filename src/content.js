@@ -1,415 +1,464 @@
 // Shared public content for the landing site and the deck.
-// Topics, speakers and dates intentionally remain visible placeholders.
+// Sessions and owners follow the Foundry Bootcamp deck (v7, slides 8, 11 and 18–23). Session times
+// match the Agentic Data Engineering Winter Bootcamp. The six Friday dates are preliminary.
+import { PREREQUISITES_STATE, REGISTRATION_OPEN } from './siteState.js'
 
 export const BOOTCAMP = {
   name: 'Foundry Agentic Development Winter Bootcamp',
-  short: 'Foundry Winter Bootcamp',
-  tagline: 'Build dependable agents with Microsoft Foundry.',
+  short: 'Winter Bootcamp',
+  tagline: 'Build, evaluate and operate AI agents with Microsoft Foundry.',
   subtitle:
-    'A six-session community programme connecting agent design, models, knowledge, tools, orchestration, evaluation and responsible delivery with GitHub Copilot.',
-  season: 'Winter',
-  kickoffDate: 'Friday 4 December 2026 · placeholder schedule',
-  kickoffLabel: 'Placeholder dates and times · TBC',
-  kickoff: '2026-12-04T09:30:00+01:00',
+    'Six practical sessions across the agent lifecycle, from a working agent to deployment, operations and organisational governance.',
+  season: 'Winter 2026/27',
+  kickoffDate: '2026-12-04',
+  kickoffLabel: 'Friday, 4 December 2026 · programme starts at 09:00',
+  // Add an ISO 8601 time with offset when the start time is confirmed.
+  kickoff: null,
+  // Switch to true once the six Fridays are confirmed; this removes the "preliminary" labels.
+  datesConfirmed: false,
   footer: 'Foundry Agentic Development Winter Bootcamp',
+}
+
+export const DATES_NOTE = BOOTCAMP.datesConfirmed ? '' : 'Dates are preliminary and subject to confirmation.'
+
+const ACCENT = {
+  build: '#a99bff',
+  ground: '#7fb0ff',
+  evaluate: '#ffc65c',
+  deploy: '#ff8fcf',
+  operate: '#6fe0c0',
+  govern: '#d7b8ff',
+  host: '#8b6cff',
 }
 
 export const SESSIONS = [
   {
-    id: 'session-01',
+    id: 'foundations',
     number: '01',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 01',
-    track: 'Foundations TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: 'Nathan Brahmbhatt',
-    ownerInitials: 'NB',
-    ownerRole: 'Host and session owner',
-    audience: 'All agent builders',
-    format: 'Format TBC',
-    scheduleMark: 'A1',
-    accent: '#8ef5e5',
-    spotlight: 'The foundations focus and hands-on challenge will be announced.',
-    overview: 'This placeholder reserves the foundations session. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['Azure AI Foundry', 'Microsoft Learn: Azure AI Foundry', 'GitHub Copilot'],
+    title: 'Build it — Foundations',
+    shortTitle: 'Build it — Foundations',
+    track: 'Build',
+    subtitle: 'Run a simple hosted agent with a model and one tool',
+    ownerId: 'sharanya',
+    owner: 'Sharanya Konandur',
+    ownerInitials: 'SK',
+    time: '09:00',
+    audience: 'Everyone',
+    format: 'Hosted agent',
+    accent: ACCENT.build,
+    spotlight: 'What does it take to go from an agent idea to an agent you can run, call and inspect?',
+    overview:
+      'This foundation session opens with Microsoft’s agent development lifecycle, so you know where every session in the bootcamp fits. You’ll learn the difference between prompt agents and hosted agents, and when you would choose each.\n\nThen you’ll run a simple hosted agent built with Microsoft Agent Framework: a model, simple instructions and one tool. You’ll call its tool and inspect how the agent ran in Microsoft Foundry.',
+    outcomes: [
+      'Understand the agent development lifecycle and where each session fits',
+      'Learn what prompt agents and hosted agents are, and when to choose each',
+      'Run a simple hosted agent with a model, simple instructions and one tool',
+      'Call the agent’s tool and inspect how it ran in Microsoft Foundry',
+    ],
+    tools: ['Microsoft Foundry', 'Foundry Agent Service', 'Microsoft Agent Framework', 'Hosted agents', 'Prompt agents', 'Tracing'],
   },
   {
-    id: 'session-02',
+    id: 'advanced-patterns',
     number: '02',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 02',
-    track: 'Models TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: '[Agent architecture owner TBC]',
-    ownerInitials: 'AA',
-    ownerRole: 'Agent architecture',
+    title: 'Build it — Advanced patterns',
+    shortTitle: 'Build it — Advanced patterns',
+    track: 'Ground',
+    subtitle: 'Ground the agent with retrieval (RAG)',
+    ownerId: 'yash',
+    owner: 'Yash Singh',
+    ownerInitials: 'YS',
+    time: '10:00',
     audience: 'AI application developers',
-    format: 'Format TBC',
-    scheduleMark: 'A2',
-    accent: '#a7a0ff',
-    spotlight: 'The models and architecture focus will be announced.',
-    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['Foundry Models', 'Model catalog', 'Prompt flow'],
-  },
-  {
-    id: 'session-03',
-    number: '03',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 03',
-    track: 'Knowledge TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: '[Knowledge and RAG owner TBC]',
-    ownerInitials: 'KR',
-    ownerRole: 'Knowledge and grounding',
-    audience: 'AI and ML engineers',
-    format: 'Format TBC',
-    scheduleMark: 'A3',
-    accent: '#63d9ff',
-    spotlight: 'The knowledge, grounding and RAG focus will be announced.',
-    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['RAG', 'Foundry Knowledge', 'Microsoft Learn: Grounding'],
-  },
-  {
-    id: 'session-04',
-    number: '04',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 04',
-    track: 'Tools TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: '[Tool orchestration owner TBC]',
-    ownerInitials: 'TO',
-    ownerRole: 'Tools and orchestration',
-    audience: 'Platform engineers',
-    format: 'Format TBC',
-    scheduleMark: 'A4',
-    accent: '#d29cff',
-    spotlight: 'The tools, orchestration and approval focus will be announced.',
-    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['Foundry Agent Service', 'Tool calling', 'Human approval'],
-  },
-  {
-    id: 'session-05',
-    number: '05',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 05',
-    track: 'Evaluation TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: '[Evaluation owner TBC]',
-    ownerInitials: 'EV',
-    ownerRole: 'Evaluation and safety',
-    audience: 'Responsible AI teams',
-    format: 'Format TBC',
-    scheduleMark: 'A5',
-    accent: '#69f2c1',
-    spotlight: 'The evaluation, responsible AI and safety focus will be announced.',
-    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['Foundry Evaluation', 'Responsible AI', 'Safety evaluations'],
-  },
-  {
-    id: 'session-06',
-    number: '06',
-    title: '[Session topic TBC]',
-    shortTitle: 'Session 06',
-    track: 'Production TBC',
-    subtitle: 'Session details will be added when the programme is confirmed.',
-    owner: '[Production owner TBC]',
-    ownerInitials: 'PR',
-    ownerRole: 'Production and observability',
-    audience: 'Technical product and build teams',
-    format: 'Format TBC',
-    scheduleMark: 'A6',
-    accent: '#8fc8ff',
-    spotlight: 'The production, observability and deployment focus will be announced.',
-    overview: 'This placeholder reserves a complete session in the programme. The confirmed description, examples, prerequisites and practical activity will be added here.',
-    outcomes: ['Learning outcomes TBC', 'Hands-on activity TBC', 'Tools and prerequisites TBC'],
-    tools: ['Tracing and observability', 'Production deployment', 'Azure monitoring'],
-  },
-]
-
-export const PLACEHOLDER_DATES = [
-  { iso: '2026-12-04', label: 'Fri 4 Dec 2026' },
-  { iso: '2026-12-11', label: 'Fri 11 Dec 2026' },
-  { iso: '2026-12-18', label: 'Fri 18 Dec 2026' },
-  { iso: '2027-01-08', label: 'Fri 8 Jan 2027' },
-  { iso: '2027-01-15', label: 'Fri 15 Jan 2027' },
-  { iso: '2027-01-22', label: 'Fri 22 Jan 2027' },
-]
-
-export const SESSION_TIMES = {
-  'session-01': '09:30',
-  'session-02': '10:30',
-  'session-03': '11:30',
-  'session-04': '13:00',
-  'session-05': '14:00',
-  'session-06': '15:00',
-}
-
-export const SCHEDULE = PLACEHOLDER_DATES.map((date, index) => ({
-  id: `date-${date.iso}`,
-  number: String(index + 1).padStart(2, '0'),
-  dateIso: date.iso,
-  date: date.label,
-  weekday: 'Friday',
-  status: 'placeholder · TBC',
-  sessions: SESSIONS.map((session) => ({
-    ...session,
-    time: SESSION_TIMES[session.id],
-    selection: `${date.iso}|${SESSION_TIMES[session.id]}|${session.id}`,
-  })),
-}))
-
-export const REGISTRATION_CHOICES = SCHEDULE.flatMap((date) => date.sessions.map((session) => ({
-  value: session.selection,
-  dateIso: date.dateIso,
-  date: date.date,
-  sessionId: session.id,
-  number: session.number,
-  time: session.time,
-  title: session.title,
-})))
-
-export const PERSONAS = [
-  {
-    id: 'builders', icon: 'AD', label: 'AI application developers',
-    desc: 'Turn models and tools into useful, dependable agent behaviour.',
-    does: 'Build agents around user outcomes, Foundry projects, trusted knowledge, bounded tools and observable runtime decisions.',
-    stack: ['Azure AI Foundry', 'Models', 'RAG', 'Tools', 'Evals'],
-  },
-  {
-    id: 'architecture', icon: 'SA', label: 'Solution & cloud architects',
-    desc: 'Shape the runtime, integration and operational boundaries.',
-    does: 'Compare model routes, orchestration patterns, approvals, safety controls and platform integration choices.',
-    stack: ['Azure AI Foundry', 'APIs', 'Identity', 'Observability'],
-  },
-  {
-    id: 'engineering', icon: 'PE', label: 'Platform & AI/ML engineers',
-    desc: 'Build the secure foundations, knowledge connections and operational path.',
-    does: 'Prepare environments, integrate data and tools, and make agent behavior observable in production.',
-    stack: ['Platform', 'AI/ML', 'RAG', 'Safety', 'Monitoring'],
-  },
-  {
-    id: 'product', icon: 'PB', label: 'Technical product & build teams',
-    desc: 'Connect agent autonomy to measurable product value.',
-    does: 'Frame the job, define success, understand risk and build evaluation into the product lifecycle.',
-    stack: ['Intent', 'Quality', 'Safety', 'Iteration'],
-  },
-]
-
-export const PILLARS = [
-  {
-    id: 'job',
-    icon: '01',
-    title: 'Start with the agent’s job',
-    desc: 'Frame the user outcome, operating boundary and approval model before choosing implementation details.',
-  },
-  {
-    id: 'loop',
-    icon: '02',
-    title: 'Build on a governed runtime',
-    desc: 'Make Foundry models, knowledge, tools, state, retries and human hand-offs understandable.',
+    format: 'RAG with Foundry IQ',
+    accent: ACCENT.ground,
+    spotlight: 'How do you make an agent answer from your organisation’s knowledge instead of guessing?',
+    overview:
+      'Retrieval-augmented generation (RAG) grounds an agent in your organisation’s knowledge. In this session you’ll follow the RAG flow end to end: ingest and chunk content, retrieve and filter it with Azure AI Search, and connect it to an agent through Foundry IQ.\n\nThe session stands on its own: you start from a provided starting state, so you don’t need to attend Foundations first.',
+    outcomes: [
+      'Understand how retrieval-augmented generation grounds an agent',
+      'Ingest and chunk organisational knowledge for retrieval',
+      'Retrieve and filter content with Azure AI Search',
+      'Connect the knowledge to an agent through Foundry IQ',
+      'Follow one RAG flow from ingestion to a grounded answer',
+    ],
+    tools: ['RAG', 'Azure AI Search', 'Foundry IQ', 'Chunking', 'Retrieval filters', 'Embedding models'],
   },
   {
     id: 'evaluate',
-    icon: '03',
-    title: 'Evaluate every run',
-    desc: 'Treat groundedness, task success, safety, latency and iteration as product capabilities.',
-  },
-]
-
-export const GITHUB_ACCESS = {
-  eyebrow: 'GitHub organization access',
-  title: 'Event organization access and $100 of GitHub Copilot AI credits.',
-  description:
-    'A few days before the event starts, registered attendees will receive an invitation containing the link to join the event GitHub organization. The event environment includes $100 worth of AI credits to use with GitHub Copilot.',
-}
-
-export const PIPELINE = [
-  {
-    id: 'intent', label: 'Intent', sub: 'job', color: '#8ef5e5',
-    what: 'Define the user outcome, success condition and operating boundary.',
-    prompt: 'Turn this product idea into a bounded agent job and measurable success criteria.',
-    gate: 'Job is testable',
-  },
-  {
-    id: 'model', label: 'Models', sub: 'route', color: '#a7a0ff',
-    what: 'Select capabilities, latency and cost that fit each step of the experience.',
-    prompt: 'Compare model routes for quality, latency and cost.',
-    gate: 'Route justified',
-  },
-  {
-    id: 'ground', label: 'Knowledge', sub: 'ground', color: '#63d9ff',
-    what: 'Connect trusted knowledge and application state without losing provenance.',
-    prompt: 'Design a grounding strategy with clear source attribution.',
-    gate: 'Context traceable',
-  },
-  {
-    id: 'tools', label: 'Tools', sub: 'actions', color: '#d29cff',
-    what: 'Give the agent narrowly scoped actions with explicit approvals and verification.',
-    prompt: 'Define the smallest safe tool surface for this task.',
-    gate: 'Actions bounded',
-  },
-  {
-    id: 'eval', label: 'Evaluate', sub: 'learn', color: '#69f2c1',
-    what: 'Measure task success, safety and operational quality on every run.',
-    prompt: 'Create an evaluation set and the signals needed before release.',
-    gate: 'Quality visible',
-  },
-]
-
-export const TERMINAL_SCRIPTS = [
-  {
-    workspace: '~/agent-intent',
-    prompt: 'Turn this support workflow into a bounded agent job with clear success criteria and escalation rules',
-    lines: [
-      { kind: 'info', text: 'Reading product intent', meta: 'support-agent.md' },
-      { kind: 'ok', text: 'success criteria', meta: '4 measurable outcomes' },
-      { kind: 'ok', text: 'operating boundary', meta: '3 escalation paths' },
-      { kind: 'done', text: 'Agent job ready for review' },
-    ],
-  },
-  {
-    workspace: '~/model-routing',
-    prompt: 'Compare model routes for this agent across quality, latency and cost',
-    lines: [
-      { kind: 'info', text: 'Reading task profile', meta: '12 representative runs' },
-      { kind: 'ok', text: 'fast route', meta: 'low latency' },
-      { kind: 'ok', text: 'reasoning route', meta: 'complex decisions only' },
-      { kind: 'done', text: 'Routing policy ready to evaluate' },
-    ],
-  },
-  {
-    workspace: '~/tool-runtime',
-    prompt: 'Design a safe tool-using agent with approval before external actions',
-    lines: [
-      { kind: 'info', text: 'Mapping actions', meta: 'read · draft · submit' },
-      { kind: 'ok', text: 'tool schemas', meta: 'bounded inputs' },
-      { kind: 'ok', text: 'approval gate', meta: 'submit action protected' },
-      { kind: 'done', text: 'Runtime ready for simulation' },
-    ],
-  },
-  {
-    workspace: '~/evaluation',
-    prompt: 'Create an evaluation set for groundedness, task success, safety and latency',
-    lines: [
-      { kind: 'info', text: 'Sampling representative runs', meta: '40 cases' },
-      { kind: 'ok', text: 'groundedness evaluator', meta: 'source-aware' },
-      { kind: 'ok', text: 'task success evaluator', meta: 'outcome-based' },
-      { kind: 'ok', text: 'safety and latency', meta: 'thresholds set' },
-      { kind: 'done', text: 'Evaluation plan ready' },
-    ],
-  },
-]
-
-export const PREP = [
-  { id: 'github', icon: 'GH', title: 'GitHub account ready', desc: 'Use the GitHub.com account that will accept the event organization invitation.' },
-  { id: 'copilot', icon: 'AI', title: 'GitHub Copilot access', desc: 'Bring an active Copilot plan through your organisation, education access or individual subscription.' },
-  { id: 'node', icon: 'JS', title: 'Node.js LTS', desc: 'Use a supported Node.js release for the sample agent application and tooling.' },
-  { id: 'python', icon: 'PY', title: 'Supported Python', desc: 'Some agent and evaluation examples may use Python; confirmed versions will be published with the sessions.' },
-  { id: 'foundry', icon: 'MF', title: 'Microsoft Foundry access TBC', desc: 'Any required Foundry project, model or Agent Service access will be confirmed before the hands-on sessions.' },
-  { id: 'sample', icon: 'DATA', title: 'Sample content only', desc: 'Use workshop or non-sensitive data. Do not bring credentials, personal data or confidential production content.' },
-]
-
-export const SETUP_RESOURCES = [
-  { id: 'gh', label: 'GitHub CLI', check: 'gh --version', login: 'gh auth login', href: 'https://cli.github.com/' },
-  { id: 'node', label: 'Node.js LTS', check: 'node --version', login: 'No sign-in required', href: 'https://nodejs.org/' },
-  { id: 'python', label: 'Python', check: 'python --version', login: 'No sign-in required', href: 'https://www.python.org/downloads/' },
-  { id: 'copilot', label: 'GitHub Copilot CLI', check: 'copilot --version', login: 'copilot', href: 'https://docs.github.com/copilot' },
-  { id: 'foundry', label: 'Microsoft Foundry', check: 'Access requirements TBC', login: 'Use the workshop project when supplied', href: 'https://learn.microsoft.com/azure/foundry/' },
-  { id: 'agents', label: 'Foundry Agent Service', check: 'Review agent service concepts', login: 'Workshop access requirements TBC', href: 'https://learn.microsoft.com/azure/foundry/agents/' },
-  { id: 'evaluation', label: 'Foundry evaluation', check: 'Review evaluation concepts', login: 'No sign-in required for guidance', href: 'https://learn.microsoft.com/azure/foundry/concepts/evaluation-approach-gen-ai' },
-  { id: 'responsible-ai', label: 'Responsible AI', check: 'Review safety guidance', login: 'No sign-in required for guidance', href: 'https://learn.microsoft.com/azure/ai-foundry/responsible-use-of-ai-overview' },
-  { id: 'github-mcp', label: 'GitHub MCP Server', check: '/mcp', login: 'Verify GitHub MCP is connected', href: 'https://github.com/github/github-mcp-server' },
-]
-
-export const READINESS_PATHS = [
-  {
-    id: 'ready',
-    number: '01',
-    title: 'Skip the foundations walkthrough when every check passes',
-    desc: 'If your local tools, access and sample environment are already ready, move directly to the confirmed session prerequisites.',
-  },
-  {
-    id: 'guided',
-    number: '02',
-    title: 'Use foundations and guided setup when anything is pending',
-    desc: 'Complete the readiness checklist and guided setup before relying on the hands-on environment.',
-  },
-  {
-    id: 'cloud',
     number: '03',
-    title: 'Cloud access remains subject to confirmed capacity and quotas',
-    desc: 'Selecting cloud records your need; it does not guarantee allocation until workshop capacity and Foundry quotas are confirmed.',
+    title: 'Evaluate it',
+    shortTitle: 'Evaluate it',
+    track: 'Evaluate',
+    subtitle: 'Assess agent quality with Foundry evaluations',
+    ownerId: 'garima',
+    owner: 'Garima Agrawal',
+    ownerInitials: 'GA',
+    time: '11:00',
+    audience: 'Developers & AI engineers',
+    format: 'Foundry evaluations',
+    accent: ACCENT.evaluate,
+    spotlight: 'An agent that runs is not the same as an agent that works. How do you tell the difference?',
+    overview:
+      'In this session you’ll use Microsoft Foundry’s evaluation capabilities on the shared IT Service Desk use case to assess how well an agent does its task, and learn to read what the results do and don’t tell you.\n\nThe application and dataset are provided, ready to evaluate, so you can join without attending the Build it sessions first.',
+    outcomes: [
+      'Understand why model and prompt changes need evaluation',
+      'Use Foundry evaluation capabilities on a provided agent and dataset',
+      'Assess how well an agent completes its task',
+      'Read evaluation results as evidence, not a guarantee of reliability',
+    ],
+    tools: ['Foundry evaluations', 'Evaluators', 'Evaluation datasets', 'Agent quality'],
+  },
+  {
+    id: 'deploy',
+    number: '04',
+    title: 'Deploy it',
+    shortTitle: 'Deploy it',
+    track: 'Deploy',
+    subtitle: 'Set up the infrastructure, then deploy the agent',
+    ownerId: 'youssef',
+    owner: 'Youssef Baccouche',
+    ownerInitials: 'YB',
+    time: '12:30',
+    audience: 'Platform & cloud engineers',
+    format: 'Infrastructure + deployment',
+    accent: ACCENT.deploy,
+    spotlight: 'What changes when your agent has to run on real infrastructure, with identities, networks and quotas?',
+    overview:
+      'Deploying an agent is two jobs: setting up the infrastructure it runs on, and deploying the agent itself. In this session you’ll look at both: Microsoft Foundry setup with infrastructure as code, networking, identity and permissions, and then deploying or updating a supplied agent.\n\nAlong the way you’ll keep capacity, quota, scaling and model throughput in view.',
+    outcomes: [
+      'Separate infrastructure deployment from deploying the agent',
+      'Set up Microsoft Foundry infrastructure with Bicep',
+      'Understand the networking, identity and permissions an agent needs',
+      'Deploy or update a supplied agent',
+      'Make capacity, quota and model throughput assumptions explicit',
+    ],
+    tools: ['Microsoft Foundry', 'Bicep', 'Networking', 'Identity & permissions', 'Quotas & throughput'],
+  },
+  {
+    id: 'operate',
+    number: '05',
+    title: 'Operate and integrate it',
+    shortTitle: 'Operate and integrate it',
+    track: 'Operate',
+    subtitle: 'Observe, diagnose and improve',
+    ownerId: 'mathieu',
+    owner: 'Mathieu Rietman',
+    ownerInitials: 'MR',
+    time: '13:30',
+    audience: 'Developers & operations teams',
+    format: 'Observe → diagnose → improve',
+    accent: ACCENT.operate,
+    spotlight: 'What do you do when your agent technically succeeds but still fails the task?',
+    overview:
+      'Once an agent is running, the work becomes observe → diagnose → improve. In this session you’ll use traces, failed tool calls, task failures, feedback and cost to understand how a running agent behaves, find out what went wrong and improve it.\n\nWhere access allows, the session also demonstrates how agents reach people through Microsoft 365 and Teams.',
+    outcomes: [
+      'Observe a running agent through its traces',
+      'Diagnose failed tool calls and task failures',
+      'Use operational feedback and cost to decide what to improve',
+      'Improve the agent and confirm the fix',
+    ],
+    tools: ['Tracing', 'Application Insights', 'User feedback', 'Cost', 'Microsoft 365 & Teams (demo)'],
+  },
+  {
+    id: 'govern',
+    number: '06',
+    title: 'Govern it',
+    shortTitle: 'Govern it',
+    track: 'Govern',
+    subtitle: 'Organise ownership and control across teams',
+    ownerId: 'sushil',
+    owner: 'Sushil Kumar Jha',
+    ownerInitials: 'SJ',
+    time: '14:30',
+    audience: 'Architects & platform teams',
+    format: 'Organisation + enforcement',
+    accent: ACCENT.govern,
+    spotlight: 'When several teams build and run agents, who owns what, and how do you enforce it?',
+    overview:
+      'Governance starts with people and process. In this session you’ll look at what happens when several teams build and operate agents: centralised versus decentralised control, Foundry and project ownership, responsibilities, access, approved models and shared policies.\n\nThen you’ll see how to enforce those decisions technically, for example with an AI gateway in Azure API Management, with the Citadel blueprint as one example reference.',
+    outcomes: [
+      'Compare centralised and decentralised control of agent development',
+      'Organise Foundry and project ownership, responsibilities and access',
+      'Agree approved models and shared policies across teams',
+      'See how an AI gateway can enforce those decisions',
+    ],
+    tools: ['Ownership & access', 'Approved models', 'Shared policies', 'AI gateway', 'Azure API Management', 'Citadel blueprint'],
+  },
+]
+
+export const SESSION_DATES = [
+  { id: '2026-12-04', label: 'Friday, 4 December 2026', short: '4 Dec', day: '04', month: 'DEC' },
+  { id: '2026-12-11', label: 'Friday, 11 December 2026', short: '11 Dec', day: '11', month: 'DEC' },
+  { id: '2026-12-18', label: 'Friday, 18 December 2026', short: '18 Dec', day: '18', month: 'DEC' },
+  { id: '2027-01-08', label: 'Friday, 8 January 2027', short: '8 Jan', day: '08', month: 'JAN' },
+  { id: '2027-01-15', label: 'Friday, 15 January 2027', short: '15 Jan', day: '15', month: 'JAN' },
+  { id: '2027-01-22', label: 'Friday, 22 January 2027', short: '22 Jan', day: '22', month: 'JAN' },
+]
+
+export const registrationSlotId = (dateId, session) => `${dateId}|${session.time}|${session.id}`
+
+export const PERSONAS = [
+  {
+    id: 'developers', icon: '🧑‍💻', label: 'AI application developers',
+    desc: 'Build, ground and evaluate agents that do real work.',
+    does: 'Go from a simple hosted agent to grounded, evaluated behaviour, using Microsoft Foundry and the languages you already code in.',
+    stack: ['Foundry Agent Service', 'Agent Framework', 'RAG', 'Evaluations'],
+  },
+  {
+    id: 'architects', icon: '🏗️', label: 'Solution & cloud architects',
+    desc: 'Shape how agents are deployed, integrated and governed.',
+    does: 'Design the infrastructure, identity and integration choices that take an agent from a demo to an operable application.',
+    stack: ['Bicep', 'Identity', 'Networking', 'AI gateway'],
+  },
+  {
+    id: 'platform', icon: '⚙️', label: 'Platform & AI engineers',
+    desc: 'Run agents reliably with the right capacity and controls.',
+    does: 'Provision Foundry, keep quota and throughput in view, and observe, diagnose and improve the agents that run on it.',
+    stack: ['Microsoft Foundry', 'Quotas', 'Tracing', 'Policies'],
+  },
+  {
+    id: 'product', icon: '🎯', label: 'Technical product & build teams',
+    desc: 'Connect what agents do to measurable outcomes.',
+    does: 'Define what good looks like, read evaluation evidence and decide when an agent is ready for the people who will use it.',
+    stack: ['Evaluations', 'Feedback', 'Cost', 'Governance'],
   },
 ]
 
 export const TEAM = [
-  { id: 'host', initials: 'NB', name: 'Nathan Brahmbhatt', role: 'Host', focus: 'Bootcamp host and programme coordination' },
-  { id: 'architecture', initials: 'AA', name: '[Agent architecture owner TBC]', role: 'Session owner', focus: 'Agent architecture and models' },
-  { id: 'knowledge', initials: 'KR', name: '[Knowledge and RAG owner TBC]', role: 'Session owner', focus: 'Knowledge, grounding and RAG' },
-  { id: 'tools', initials: 'TO', name: '[Tool orchestration owner TBC]', role: 'Session owner', focus: 'Tools, orchestration and approvals' },
-  { id: 'evaluation', initials: 'EV', name: '[Evaluation owner TBC]', role: 'Session owner', focus: 'Evaluation, safety and responsible AI' },
-  { id: 'production', initials: 'PR', name: '[Production owner TBC]', role: 'Session owner', focus: 'Observability and production deployment' },
+  { id: 'sharanya', name: 'Sharanya Konandur', initials: 'SK', role: 'Session owner', focus: 'Build it — Foundations', accent: ACCENT.build, photo: 'speakers/sharanya.jpg' },
+  { id: 'yash', name: 'Yash Singh', initials: 'YS', role: 'Session owner', focus: 'Build it — Advanced patterns', accent: ACCENT.ground, photo: 'speakers/yash.jpg' },
+  { id: 'garima', name: 'Garima Agrawal', initials: 'GA', role: 'Session owner', focus: 'Evaluate it', accent: ACCENT.evaluate, photo: 'speakers/garima.jpg' },
+  { id: 'youssef', name: 'Youssef Baccouche', initials: 'YB', role: 'Session owner', focus: 'Deploy it', accent: ACCENT.deploy, photo: 'speakers/youssef.jpg' },
+  { id: 'mathieu', name: 'Mathieu Rietman', initials: 'MR', role: 'Session owner', focus: 'Operate and integrate it', accent: ACCENT.operate, photo: 'speakers/mathieu.jpg' },
+  { id: 'sushil', name: 'Sushil Kumar Jha', initials: 'SJ', role: 'Session owner', focus: 'Govern it', accent: ACCENT.govern, photo: 'speakers/sushil.jpg' },
+  { id: 'nathan', name: 'Nathan Brahmbhatt', initials: 'NB', role: 'Host', focus: 'Bootcamp host and programme coordination', accent: ACCENT.host, photo: 'speakers/nathan.jpg' },
 ]
 
-export const FAQ = [
+export const sessionOwner = (session) =>
+  TEAM.find((person) => person.id === session.ownerId) ?? { name: session.owner, initials: session.ownerInitials }
+
+export const PILLARS = [
   {
-    q: 'Who is this for?',
-    a: 'AI application developers, solution and cloud architects, platform engineers, AI/ML engineers, and technical product or build teams.',
+    id: 'lifecycle',
+    icon: '🧭',
+    title: 'The whole agent lifecycle',
+    desc: 'Go from a working agent to grounding, evaluation, deployment, operations and governance in Microsoft Foundry.',
   },
   {
-    q: 'What are the session topics?',
-    a: 'The programme will contain six sessions. Topics, hands-on activities and prerequisites are still being confirmed.',
+    id: 'standalone',
+    icon: '🧩',
+    title: 'Every session stands alone',
+    desc: 'One shared IT Service Desk use case, and every session brings its own starting state. Join one or all six.',
   },
   {
-    q: 'When does it start?',
-    a: 'The public schedule currently uses six Friday placeholder dates and times so registration can be tested end to end. Every date and time remains TBC until confirmed.',
+    id: 'handson',
+    icon: '🛠️',
+    title: 'Concept first, then hands-on',
+    desc: 'Learn the concept, see how Microsoft Foundry implements it, then follow along with prepared steps.',
+  },
+]
+
+export const INVITATION = {
+  mark: '✉',
+  eyebrow: 'Formal invitation',
+  description: 'You will receive a formal invitation with more details closer to the date of the bootcamp.',
+}
+
+export const TERMINAL_SCRIPTS = [
+  {
+    workspace: '~/service-desk-agent',
+    prompt: 'Create a hosted agent that triages IT service desk tickets, with one tool to look up ticket status',
+    lines: [
+      { kind: 'info', text: 'Reading agent spec', meta: 'specs/triage-agent.md' },
+      { kind: 'ok', text: 'model connected', meta: 'smallest suitable' },
+      { kind: 'ok', text: 'tool registered', meta: 'get_ticket_status' },
+      { kind: 'ok', text: 'test run traced', meta: '1 tool call' },
+      { kind: 'done', text: 'Hosted agent running in Foundry' },
+    ],
   },
   {
-    q: 'Will the sessions be hands-on?',
-    a: 'The final format will be published with each session. Expect application-first examples rather than product-only presentations.',
+    workspace: '~/knowledge',
+    prompt: 'Ground the triage agent in our IT knowledge base with Azure AI Search and Foundry IQ',
+    lines: [
+      { kind: 'info', text: 'Ingesting articles', meta: '1,240 docs' },
+      { kind: 'ok', text: 'chunked and indexed', meta: '18,600 chunks' },
+      { kind: 'ok', text: 'retrieval filters', meta: 'product · region' },
+      { kind: 'ok', text: 'Foundry IQ', meta: 'connected to agent' },
+      { kind: 'done', text: 'Answers grounded with citations' },
+    ],
   },
   {
-    q: 'What is included with the event GitHub environment?',
-    a: 'You receive access to the event GitHub organization and $100 worth of AI credits to use with GitHub Copilot.',
+    workspace: '~/evaluation',
+    prompt: 'Evaluate the triage agent on 50 service desk tickets before we ship the new instructions',
+    lines: [
+      { kind: 'info', text: 'Loading dataset', meta: '50 tickets' },
+      { kind: 'ok', text: 'task completion', meta: '46 / 50' },
+      { kind: 'ok', text: 'groundedness', meta: 'above threshold' },
+      { kind: 'ok', text: 'regressions', meta: '2 to review' },
+      { kind: 'done', text: 'Evaluation report ready' },
+    ],
   },
   {
-    q: 'How do I access the GitHub organization?',
-    a: 'A few days before the event starts, your event invitation will include the link used to join the organization.',
+    workspace: '~/deploy',
+    prompt: 'Deploy the Foundry infrastructure with Bicep, then roll out version 2 of the agent',
+    lines: [
+      { kind: 'info', text: 'Validating templates', meta: 'infra/main.bicep' },
+      { kind: 'ok', text: 'Foundry project', meta: 'identity + network' },
+      { kind: 'ok', text: 'quota check', meta: 'within throughput' },
+      { kind: 'ok', text: 'agent version 2', meta: 'deployed' },
+      { kind: 'done', text: 'Deployment complete' },
+    ],
   },
   {
-    q: 'How do I register?',
-    a: 'Provide and confirm your company email, choose your sessions and select your development environment. No GitHub sign-in is required on this website.',
+    workspace: '~/operations',
+    prompt: 'Find out why the agent closed tickets without solving them, then fix it',
+    lines: [
+      { kind: 'info', text: 'Reading traces', meta: 'last 24 hours' },
+      { kind: 'ok', text: 'failure pattern', meta: 'stale tool result' },
+      { kind: 'ok', text: 'task failures', meta: '12 runs' },
+      { kind: 'ok', text: 'fix proposed', meta: 'refresh first' },
+      { kind: 'done', text: 'Improvement ready to evaluate' },
+    ],
   },
+  {
+    workspace: '~/governance',
+    prompt: 'Onboard a second team’s agent with approved models only and token limits at the AI gateway',
+    lines: [
+      { kind: 'info', text: 'Reading policy', meta: 'platform team' },
+      { kind: 'ok', text: 'project ownership', meta: 'team B' },
+      { kind: 'ok', text: 'approved models', meta: 'policy applied' },
+      { kind: 'ok', text: 'AI gateway', meta: 'token limits set' },
+      { kind: 'done', text: 'Second team onboarded' },
+    ],
+  },
+]
+
+// Prerequisites, by PREREQUISITES_STATE in api/site-state.json.
+export const PREREQUISITES = {
+  soon: {
+    title: 'Pre-flight checks',
+    subtitle: 'Everything you need to get ready for the hands-on sessions will be published here.',
+    mark: '⏳',
+    label: 'Coming soon',
+    heading: 'This information will be shared soon.',
+    body: 'We will publish the prerequisites and setup steps for every session here, and include them in your formal invitation closer to the date.',
+  },
+  microhack: {
+    title: 'Pre-flight checks',
+    subtitle: 'The hands-on labs run in MicroHack environments. Tick off these checks before your session; progress stays in this browser only.',
+  },
+}
+
+// MicroHack preparation (deck slide 13). Used when prerequisites is "microhack".
+export const MICROHACK_ACCESS = [
+  {
+    id: 'azure',
+    title: 'Azure access by email',
+    desc: 'Before your session, you receive temporary Azure credentials by email for that session’s lab.',
+  },
+  {
+    id: 'labs',
+    title: 'One lab repository per session',
+    desc: 'Every session has its own GitHub repository, forked from MicroHack, with a standalone entry point.',
+  },
+  {
+    id: 'github',
+    title: 'GitHub only if needed',
+    desc: 'You only need GitHub access if your session uses it. Your invitation will tell you.',
+  },
+]
+
+export const PREP = [
+  { id: 'azure', icon: '☁️', title: 'Azure knowledge', desc: 'You know your way around the Azure portal, subscriptions and resource groups.' },
+  { id: 'git', icon: '🌿', title: 'Git basics', desc: 'You can clone a repository and follow its README. Every lab lives in its own repository.' },
+  { id: 'email', icon: '✉️', title: 'An email address you can reach', desc: 'Azure access uses temporary credentials sent to you by email before the session.' },
+  { id: 'github', icon: '🐙', title: 'A GitHub account, if needed', desc: 'Only when your session uses GitHub. Your invitation will tell you.' },
+  { id: 'entry', icon: '🧭', title: 'Your session’s entry point', desc: 'Session owners share any extra prerequisites and a standalone entry point for their lab.' },
+  { id: 'data', icon: '🔒', title: 'Sample data only', desc: 'No customer, personal or production data. Labs use sample or non-sensitive data.' },
+]
+
+export const MICROHACK_RESOURCES = [
+  { id: 'azure', label: 'Azure fundamentals', detail: 'Cloud concepts on Microsoft Learn', href: 'https://learn.microsoft.com/training/paths/microsoft-azure-fundamentals-describe-cloud-concepts/' },
+  { id: 'git', label: 'Introduction to Git', detail: 'Git basics on Microsoft Learn', href: 'https://learn.microsoft.com/training/modules/intro-to-git/' },
+  { id: 'foundry', label: 'What is Microsoft Foundry?', detail: 'Product overview on Microsoft Learn', href: 'https://learn.microsoft.com/azure/foundry/what-is-foundry' },
+  { id: 'microhack', label: 'MicroHack', detail: 'The repository the session labs are forked from', href: 'https://github.com/microsoft/MicroHack' },
 ]
 
 export const REGISTER_STEPS = [
   'Enter and confirm your company email address',
-  'Choose placeholder date, time and session combinations plus the development environment you need',
-  'Receive the GitHub organization invitation link a few days before the event',
+  'Choose the dates, session times and development environment you need',
+  'Receive a formal invitation with more details closer to the date',
 ]
 
 export const REGISTRATION = {
   eyebrow: 'Registration',
   title: 'Join the Foundry Agentic Development Winter Bootcamp.',
-  subtitle: 'Confirm your company email, choose placeholder date and session combinations, and provide the details needed for event access.',
+  subtitle: 'Confirm your company email, choose the dates and session times you want to attend, and tell us which development environment you need.',
+  slotLead: 'Pick as many sessions as you like, on as many dates as you like.',
+  slotHelp: 'Every date runs the same six sessions, so you can mix and match, for example Foundations on 4 December and Evaluate it on 11 December. Switch dates with the tabs below; sessions you have ticked on other dates stay selected.',
   environments: [
     {
       id: 'local',
-      label: 'I will use a local development environment',
-      desc: 'Choose this if your readiness checks already pass or you will use the foundations and guided setup path.',
+      label: 'I will use my own machine',
+      desc: 'Choose this if you can install tools locally. Setup details follow with the prerequisites.',
     },
     {
       id: 'cloud',
       label: 'I need a cloud development environment',
-      desc: 'Cloud access is subject to confirmed workshop capacity and Foundry quotas; selecting this records your need but does not guarantee allocation.',
+      desc: 'Places are limited. Selecting this records your request but does not guarantee a place.',
     },
   ],
-  slotHelp: 'Every placeholder Friday runs the same six-session agenda. Choose the specific date and session times that work for you.',
   consent:
-    'I consent to Microsoft using my company, company email, session choices and environment preference to administer the bootcamp, send the GitHub organization invitation, provision access, communicate with me and improve the programme. Registration data is deleted after the administration period.',
+    'I consent to Microsoft using my company, company email, session choices and environment preference to administer the bootcamp, send the event invitation, provision access, communicate with me and improve the programme. Registration data is deleted after the administration period.',
+  success: 'Thank you for registering! You will receive a formal invitation with more details closer to the date of the bootcamp.',
 }
+
+// Shown everywhere registration appears while registration is 2 in api/site-state.json.
+export const REGISTRATION_SOON = {
+  eyebrow: 'Registration',
+  title: 'Registration will open soon.',
+  subtitle: 'We are putting the finishing touches on the programme. Check back soon to choose your dates and sessions.',
+  badge: 'Opening soon',
+  heading: 'Registration will open soon',
+  body: 'All six sessions run on every date, so once registration opens you can pick as many sessions as you like, on as many dates as you like.',
+  cta: 'Registration opens soon',
+}
+
+export const FAQ = [
+  {
+    q: 'What are the session topics?',
+    a: 'Build it — Foundations, Build it — Advanced patterns, Evaluate it, Deploy it, Operate and integrate it, and Govern it: the agent lifecycle in Microsoft Foundry, from a working agent to deployment, operations and organisational governance.',
+  },
+  {
+    q: 'When does it start?',
+    a: `The complete six-session programme runs on Friday 4, 11 and 18 December 2026, followed by Friday 8, 15 and 22 January 2027. Sessions start at 09:00, 10:00, 11:00, 12:30, 13:30 and 14:30.${DATES_NOTE ? ` ${DATES_NOTE}` : ''}`,
+  },
+  {
+    q: 'Who is it for?',
+    a: 'AI application developers, solution and cloud architects, platform and AI engineers, and technical product and build teams.',
+  },
+  {
+    q: 'Do I need to attend every session?',
+    a: 'No. Every session stands on its own and provides its own starting state. Join one session, a few, or all six on the same Friday, or spread them over several dates.',
+  },
+  {
+    q: 'Is it hands-on?',
+    a: 'Each one-hour session is a 10-minute introduction, a 40-minute follow-along demonstration with prepared steps, and a 10-minute recap. If you can’t build along, follow the presenter live.',
+  },
+  {
+    q: 'What do I need to prepare?',
+    a: PREREQUISITES_STATE === 'microhack'
+      ? 'Basic Azure knowledge, Git basics and an email address you can reach: Azure access uses temporary credentials sent by email before the session. You only need GitHub if your session uses it.'
+      : 'The prerequisites and setup steps will be shared soon, here and in your formal invitation.',
+  },
+  {
+    q: 'What does it cost?',
+    a: 'The bootcamp is free to attend.',
+  },
+  {
+    q: 'How do I register?',
+    a: REGISTRATION_OPEN
+      ? 'Provide and confirm your company email, choose the dates and session times you plan to attend, and select your development environment. You will receive a formal invitation with more details closer to the date.'
+      : 'Registration will open soon. When it does, you confirm your company email, choose the dates and session times you plan to attend, and select your development environment.',
+  },
+]

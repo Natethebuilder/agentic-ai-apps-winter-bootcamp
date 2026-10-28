@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { SCHEDULE, TERMINAL_SCRIPTS } from '../content.js'
+import { useEffect, useState } from 'react'
+import { DATES_NOTE, SESSION_DATES, SESSIONS, TERMINAL_SCRIPTS } from '../content.js'
+import { REGISTRATION_OPEN } from '../siteState.js'
 import d from './Data.module.css'
 
-/* ── Countdown to the first session, styled as a scheduled pipeline run ── */
-export function Countdown({ target, date, dateLabel, className = '' }) {
+/* ── Countdown to the first session, styled as the agent's next scheduled run ── */
+export function Countdown({ target, date, dateLabel, preliminary = false, className = '' }) {
   const t = target ? new Date(target).getTime() : null
   const dateOnly = !t && date ? new Date(`${date}T12:00:00`) : null
   const [now, setNow] = useState(() => Date.now())
@@ -30,8 +31,11 @@ export function Countdown({ target, date, dateLabel, className = '' }) {
         ]
       : ['--', '--', '--', '--']
   const labels = dateOnly ? ['day', 'month', 'year', 'starts'] : ['days', 'hrs', 'min', 'sec']
-  const status = t == null ? (dateOnly ? 'dates confirmed' : 'awaiting schedule') : diff > 0 ? 'scheduled' : 'live now'
-  const statusClass = t == null ? (dateOnly ? d.statusOk : d.statusWait) : diff > 0 ? d.statusOk : d.statusLive
+  const dateStatus = preliminary ? 'preliminary dates' : 'dates confirmed'
+  const status = t == null ? (dateOnly ? dateStatus : 'awaiting schedule') : diff > 0 ? 'scheduled' : 'live now'
+  const statusClass = t == null
+    ? (dateOnly && !preliminary ? d.statusOk : d.statusWait)
+    : diff > 0 ? d.statusOk : d.statusLive
 
   return (
     <div className={`${d.countdown} ${className}`} role={t ? 'timer' : 'group'} aria-live="off">
@@ -50,14 +54,13 @@ export function Countdown({ target, date, dateLabel, className = '' }) {
       {(t != null || dateLabel) && (
         <p className={d.cdFoot}>
           First session: {t != null ? new Date(t).toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'short' }) : dateLabel}
-          {t != null && dateLabel ? ` · ${dateLabel}` : ''}
         </p>
       )}
     </div>
   )
 }
 
-/* ── Copilot CLI terminal that rotates through the agent build loop ── */
+/* ── Copilot CLI terminal that types an agent development request ── */
 export function AgentTerminal({ className = '', children }) {
   const [scriptIndex, setScriptIndex] = useState(0)
   const { workspace, prompt, lines } = TERMINAL_SCRIPTS[scriptIndex]
@@ -114,49 +117,45 @@ export function AgentTerminal({ className = '', children }) {
   )
 }
 
-/* ── Six placeholder dates sharing one six-session agenda ── */
+/* ── Six repeated event dates and the shared full-day agenda ── */
 export function ScheduleBoard() {
-  const [activeDate, setActiveDate] = useState(SCHEDULE[0].dateIso)
-  const active = SCHEDULE.find((date) => date.dateIso === activeDate) || SCHEDULE[0]
   return (
     <div className={d.scheduleBoard}>
-      <div className={d.dateRail} role="tablist" aria-label="Placeholder programme dates">
-        {SCHEDULE.map((date) => (
-          <button
-            key={date.id}
-            type="button"
-            role="tab"
-            aria-selected={date.dateIso === activeDate}
-            className={date.dateIso === activeDate ? d.dateCardOn : ''}
-            onClick={() => setActiveDate(date.dateIso)}
-          >
-            <span>{date.number}</span>
-            <strong>{date.date}</strong>
-            <small>Placeholder · TBC</small>
-          </button>
+      <div className={d.dateRail} aria-label="Bootcamp dates">
+        {SESSION_DATES.map((date) => (
+          <article key={date.id} className={d.dateCard}>
+            <span>{date.month}</span>
+            <strong>{date.day}</strong>
+            <small>Full programme</small>
+          </article>
         ))}
       </div>
-      <div className={d.agenda} role="tabpanel">
-        <header>
+      <div className={d.agenda}>
+        <div className={d.agendaHead}>
           <div>
-            <span>Selected placeholder date</span>
-            <h3>{active.date}</h3>
+            <span>Every event date</span>
+            <strong>Six-session daily agenda</strong>
           </div>
-          <strong>Same six-session agenda · TBC</strong>
-        </header>
+          <p>
+            {REGISTRATION_OPEN
+              ? 'Select any combination of dates and session times during registration.'
+              : 'Once registration opens, you can select any combination of dates and session times.'}
+            {DATES_NOTE && <> {DATES_NOTE}</>}
+          </p>
+        </div>
         <div className={d.agendaGrid}>
-          {active.sessions.map((session) => (
-            <article key={session.selection} className={d.agendaSlot}>
-              <time>{session.time}</time>
+          {SESSIONS.map((session) => (
+            <article key={session.id} className={d.agendaSlot} style={{ '--slot-accent': session.accent }}>
+              <time dateTime={session.time}>{session.time}</time>
               <div>
-                <strong>Session {session.number} · {session.track}</strong>
-                <small>{session.ownerRole} · {session.ownerInitials}</small>
+                <span>{session.number} · {session.track}</span>
+                <strong>{session.shortTitle}</strong>
+                <small>Owner · {session.owner}</small>
               </div>
             </article>
           ))}
         </div>
       </div>
-      <p className={d.scheduleFoot}>All six Fridays repeat this agenda. Dates, topics and owners remain placeholder/TBC.</p>
     </div>
   )
 }
