@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
-import { AgentTerminal, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
+import { AgentRunConsole, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
+import PillarMark from '../agentic/PillarMark.jsx'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import SpeakerAvatar from '../speakers/SpeakerAvatar.jsx'
 import {
-  BOOTCAMP, DATES_NOTE, FAQ, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTRATION, REGISTRATION_SOON,
-  SESSIONS, sessionOwner,
+  BOOTCAMP, DATES_NOTE, FAQ, LINEUP, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTRATION,
+  REGISTRATION_SOON, SESSIONS, sessionOwner,
 } from '../content.js'
 import { PREREQUISITES_STATE, REGISTRATION_OPEN } from '../siteState.js'
 import s from './Site.module.css'
@@ -111,36 +113,126 @@ function PersonaPicker() {
   )
 }
 
+// The programme agent hands off to one session per lifecycle stage, then reveals the session list.
+const BUS_GRADIENT = `linear-gradient(90deg, ${SESSIONS.map((session) => session.accent).join(', ')})`
+
 function ProgrammeReveal() {
-  const [open, setOpen] = useState(false)
+  const reduced = usePrefersReducedMotion()
+  const [phase, setPhase] = useState('idle')
+  const [lit, setLit] = useState(0)
+  const runRef = useRef(null)
+  const firstNodeRef = useRef(null)
+  const moveFocus = useRef(false)
+
+  useEffect(() => {
+    if (phase !== 'running') return undefined
+    const id = lit < SESSIONS.length
+      ? setTimeout(() => setLit((n) => n + 1), lit === 0 ? 560 : 260)
+      : setTimeout(() => setPhase('done'), 450)
+    return () => clearTimeout(id)
+  }, [phase, lit])
+
+  // The run button disappears when the handoffs finish, so keep keyboard focus on the first stage.
+  useEffect(() => {
+    if (phase === 'done' && moveFocus.current) {
+      moveFocus.current = false
+      firstNodeRef.current?.focus({ preventScroll: true })
+    }
+  }, [phase])
+
+  const run = () => {
+    if (phase !== 'idle') return
+    moveFocus.current = document.activeElement === runRef.current
+    if (reduced) {
+      setLit(SESSIONS.length)
+      setPhase('done')
+    } else {
+      setPhase('running')
+    }
+  }
+
+  const jumpTo = (id) =>
+    document.getElementById(`session-${id}`)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' })
+
+  const status = phase === 'idle' ? 'ready' : phase === 'running' ? `handoff ${lit}/${SESSIONS.length}` : 'complete'
 
   return (
     <div className={s.programmeReveal}>
-      <button
-        type="button"
-        className={`${s.programmeGift} ${open ? s.programmeGiftOpen : ''}`}
-        aria-expanded={open}
-        aria-controls="programme-sessions"
-        aria-label="Unwrap the programme"
-        disabled={open}
-        onClick={() => setOpen(true)}
-      >
-        <span className={s.programmeGiftPaper} aria-hidden="true" />
-        <span className={s.programmeRibbonV} aria-hidden="true" />
-        <span className={s.programmeRibbonH} aria-hidden="true" />
-        <span className={s.programmeBurst} aria-hidden="true">
-          {Array.from({ length: 10 }, (_, index) => <i key={index} style={{ '--i': index }} />)}
-        </span>
-        <span className={s.programmeGiftLid} aria-hidden="true">
-          <span className={s.programmeBow}>◆</span>
-        </span>
-      </button>
+      <div className={`${s.orch} ${phase !== 'idle' ? s.orchActive : ''} ${phase === 'done' ? s.orchDone : ''}`}>
+        <div className={s.orchHead}>
+          <span className={s.orchName}><i aria-hidden="true" />{LINEUP.agent}</span>
+          <span className={s.orchStatus}><i aria-hidden="true" />{status}</span>
+        </div>
 
-      {open && (
+        <div className={s.orchCore}>
+          <span className={s.orchCoreMark}><FoundryMark /></span>
+          <span className={s.orchCoreText}>
+            <strong>{LINEUP.coreTitle}</strong>
+            <small>{LINEUP.coreDetail}</small>
+          </span>
+        </div>
+        <span className={s.orchTrunk} aria-hidden="true" />
+        <span className={s.orchBus} style={{ '--bus': BUS_GRADIENT }} aria-hidden="true" />
+
+        <ol className={s.orchNodes} aria-label="Programme stages">
+          {SESSIONS.map((session, index) => {
+            const label = (
+              <>
+                <span className={s.orchNodeNum}>{session.number}</span>
+                <span className={s.orchNodeTrack}>{session.track}</span>
+                <span className={s.orchNodeTime}>{session.time}</span>
+              </>
+            )
+            return (
+              <li
+                key={session.id}
+                className={index < lit ? s.orchNodeOn : ''}
+                style={{ '--node-accent': session.accent, '--i': index }}
+              >
+                <i className={s.orchPacket} aria-hidden="true" />
+                {phase === 'done' ? (
+                  <button
+                    type="button"
+                    ref={index === 0 ? firstNodeRef : undefined}
+                    className={s.orchNode}
+                    onClick={() => jumpTo(session.id)}
+                    aria-label={`Go to session ${session.number}: ${session.title}`}
+                  >
+                    {label}
+                  </button>
+                ) : (
+                  <span className={s.orchNode}>{label}</span>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+
+        {phase === 'done' ? (
+          <p className={s.orchHint}>{LINEUP.done}</p>
+        ) : (
+          <button
+            ref={runRef}
+            type="button"
+            className={`${s.btnPrimary} ${s.orchRun}`}
+            onClick={run}
+            aria-disabled={phase === 'running'}
+            aria-controls="programme-sessions"
+            aria-expanded="false"
+          >
+            <span className={phase === 'running' ? s.orchSpinner : s.orchPlay} aria-hidden="true" />
+            {phase === 'running' ? LINEUP.running : LINEUP.run}
+          </button>
+        )}
+        <span className={s.srOnly} role="status">{phase === 'done' ? LINEUP.done : ''}</span>
+      </div>
+
+      {phase === 'done' && (
         <div id="programme-sessions" className={s.sessionList}>
           {SESSIONS.map((session, index) => (
             <article
               key={session.id}
+              id={`session-${session.id}`}
               className={`${s.sessionRow} ${s.sessionRowOpen}`}
               style={{ '--i': index, '--session-accent': session.accent }}
             >
@@ -312,9 +404,9 @@ export default function Site() {
             />
           </div>
           <div className={s.heroArt}>
-            <AgentTerminal className={s.terminal}>
+            <AgentRunConsole className={s.heroConsole}>
               <Mascot className={s.perched} />
-            </AgentTerminal>
+            </AgentRunConsole>
             <Logos size="md" className={s.heroLogos} />
           </div>
           </div>
@@ -333,7 +425,7 @@ export default function Site() {
           <div className={`${s.grid} ${s.g3}`}>
             {PILLARS.map((p) => (
               <article key={p.id} className={s.card}>
-                <span className={s.icon}>{p.icon}</span>
+                <PillarMark id={p.id} tag={p.tag} />
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
               </article>
@@ -347,8 +439,8 @@ export default function Site() {
           id="lineup"
           idx="02"
           eyebrow="The lineup"
-          title="Unwrap the programme."
-          subtitle="Open the gift, then explore each session, its owner and what you will learn."
+          title={LINEUP.title}
+          subtitle={LINEUP.subtitle}
           className={s.lineupPanel}
         >
           <ProgrammeReveal />

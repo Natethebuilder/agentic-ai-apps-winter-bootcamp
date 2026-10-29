@@ -145,7 +145,7 @@
   pointer-events: none;
 }
 .heroArt { position: relative; display: flex; flex-direction: column; align-items: center; gap: 30px; }
-.terminal { margin-top: 40px; }
+.heroConsole { margin-top: 40px; }
 .perched {
   position: absolute;
   width: 96px;
@@ -241,7 +241,6 @@ main { position: relative; z-index: 2; }
 }
 .card h3 { font-size: 19px; font-weight: 700; }
 .card p { font-size: 15px; line-height: 1.6; color: var(--muted-foreground); }
-.icon { font-size: 30px; }
 .num { font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; color: var(--holly); }
 .kicker { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--ice); }
 /* ── "Opening soon" notices (registration state 2, prerequisites "soon") ── */
@@ -332,128 +331,210 @@ main { position: relative; z-index: 2; }
 }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } }
 
-.programmeReveal { display: flex; flex-direction: column; align-items: center; gap: 36px; }
-.programmeReveal:has(.programmeGiftOpen) { gap: 0; }
-.programmeGift {
-  --gift-height: 210px;
-  appearance: none;
+/* ── Lineup: the programme agent hands off to one session per lifecycle stage ── */
+.programmeReveal { display: flex; flex-direction: column; align-items: stretch; gap: 44px; }
+.orch {
   position: relative;
-  width: min(460px, 100%);
-  height: var(--gift-height);
-  border: 0;
+  width: min(900px, 100%);
+  margin: 10px auto 0;
+  padding: 16px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 22px;
-  padding: 0;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-  text-align: center;
-  -webkit-tap-highlight-color: transparent;
-}
-.programmeGift:not(.programmeGiftOpen) { margin-top: 24px; }
-.programmeGift:focus-visible { outline: 2px solid var(--ice); outline-offset: 8px; }
-.programmeGiftOpen {
-  cursor: default;
-  pointer-events: none;
-  animation: programmeGiftCollapse 1.25s ease forwards;
-}
-.programmeGiftPaper {
-  position: absolute;
-  inset: 8px;
-  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ice) 22%, var(--border));
   background:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.07) 0 9px, transparent 9px 22px),
-    linear-gradient(135deg, #8a6bff, #3d2bb8);
-  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.38), inset 0 0 0 1px rgba(255, 255, 255, 0.09);
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) 0.25s, opacity 0.35s ease 0.45s;
+    radial-gradient(620px 240px at 50% 0%, color-mix(in srgb, var(--holly) 17%, transparent), transparent 72%),
+    color-mix(in srgb, var(--card) 90%, transparent);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.38);
 }
-.programmeRibbonV, .programmeRibbonH {
-  position: absolute;
-  z-index: 2;
-  background: linear-gradient(180deg, #ffe39a, var(--gold));
-  box-shadow: 0 0 14px rgba(255, 198, 92, 0.38);
-  transition: transform 0.35s ease 0.25s, opacity 0.3s ease 0.3s;
+.orchHead {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  font: 600 12px/1.2 ui-monospace, 'Cascadia Code', Consolas, monospace;
+  color: var(--muted-foreground);
 }
-.programmeRibbonV { top: 8px; bottom: 8px; left: 50%; width: 18px; transform: translateX(-50%); transform-origin: bottom; }
-.programmeRibbonH { left: 8px; right: 8px; top: 57%; height: 18px; }
-.programmeBurst { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-.programmeBurst i {
-  --x: 0px;
-  --y: -120px;
-  position: absolute;
-  left: calc(50% - 4px);
-  top: calc(45% - 4px);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  opacity: 0;
-  background: var(--ice);
-  box-shadow: 0 0 14px currentColor;
+.orchName { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+.orchName i { width: 8px; height: 8px; border-radius: 50%; background: var(--ice); box-shadow: 0 0 10px var(--ice); }
+.orchStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  color: var(--ice);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
-.programmeBurst i:nth-child(2n) { background: var(--gold); }
-.programmeBurst i:nth-child(3n) { background: var(--pine); }
-.programmeBurst i:nth-child(1) { --x: -190px; --y: -80px; }
-.programmeBurst i:nth-child(2) { --x: -145px; --y: -145px; }
-.programmeBurst i:nth-child(3) { --x: -70px; --y: -175px; }
-.programmeBurst i:nth-child(4) { --x: 10px; --y: -185px; }
-.programmeBurst i:nth-child(5) { --x: 95px; --y: -165px; }
-.programmeBurst i:nth-child(6) { --x: 175px; --y: -105px; }
-.programmeBurst i:nth-child(7) { --x: -165px; --y: 15px; }
-.programmeBurst i:nth-child(8) { --x: -90px; --y: 65px; }
-.programmeBurst i:nth-child(9) { --x: 105px; --y: 55px; }
-.programmeBurst i:nth-child(10) { --x: 185px; --y: 5px; }
-.programmeGiftLid {
-  position: absolute;
-  z-index: 3;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 66px;
-  border-radius: 18px 18px 12px 12px;
-  background: linear-gradient(135deg, #9a7dff, #4a33c9);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.36), inset 0 -2px rgba(0, 0, 0, 0.16);
-  transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.3, 1) 0.2s, opacity 0.3s ease 0.5s;
+.orchStatus i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.orchActive .orchStatus { color: var(--gold); }
+.orchActive .orchStatus i { animation: soonPulse 1.2s ease-in-out infinite; }
+.orchDone .orchStatus { color: var(--green); }
+.orchDone .orchStatus i { animation: none; }
+
+.orchCore {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 18px 9px 9px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--holly) 60%, transparent);
+  background: color-mix(in srgb, var(--holly) 15%, var(--night));
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--holly) 8%, transparent), 0 12px 30px rgba(0, 0, 0, 0.35);
 }
-.programmeGiftLid::after {
+.orchActive .orchCore { animation: orchCorePulse 1.8s ease-in-out infinite; }
+.orchDone .orchCore { animation: none; }
+@keyframes orchCorePulse {
+  50% { box-shadow: 0 0 0 9px color-mix(in srgb, var(--holly) 14%, transparent), 0 12px 30px rgba(0, 0, 0, 0.35); }
+}
+.orchCoreMark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--night) 70%, var(--card));
+  border: 1px solid color-mix(in srgb, var(--ice) 30%, transparent);
+}
+.orchCoreMark img { width: 26px; height: 26px; }
+.orchCoreText strong { display: block; color: var(--frost); font-size: 16px; line-height: 1.2; }
+.orchCoreText small { display: block; margin-top: 2px; color: var(--muted-foreground); font: 600 11px/1.3 ui-monospace, monospace; }
+
+/* Wires: core → trunk → bus → one drop per session */
+.orchTrunk, .orchBus { position: relative; display: block; overflow: hidden; background: color-mix(in srgb, var(--ice) 20%, transparent); }
+.orchTrunk { width: 2px; height: 26px; }
+.orchBus { width: calc(100% * 5 / 6); height: 2px; }
+.orchTrunk::after, .orchBus::after { content: ''; position: absolute; inset: 0; background: var(--ice); }
+.orchTrunk::after { transform: scaleY(0); transform-origin: top; transition: transform 0.28s ease; }
+.orchBus::after {
+  background: var(--bus, var(--ice));
+  transform: scaleX(0);
+  transition: transform 0.4s ease 0.22s;
+}
+.orchActive .orchTrunk::after { transform: scaleY(1); }
+.orchActive .orchBus::after { transform: scaleX(1); }
+
+.orchNodes { list-style: none; width: 100%; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.orchNodes li { position: relative; display: flex; justify-content: center; padding-top: 26px; min-width: 0; }
+.orchNodes li::before, .orchNodes li::after {
   content: '';
   position: absolute;
   top: 0;
-  bottom: 0;
   left: 50%;
-  width: 18px;
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, #ffe39a, var(--gold));
+  width: 2px;
+  height: 26px;
+  margin-left: -1px;
 }
-.programmeBow {
+.orchNodes li::before { background: color-mix(in srgb, var(--ice) 20%, transparent); }
+.orchNodes li::after { background: var(--node-accent); transform: scaleY(0); transform-origin: top; transition: transform 0.24s ease; }
+.orchNodes .orchNodeOn::after { transform: scaleY(1); }
+.orchPacket {
   position: absolute;
+  top: -3px;
   left: 50%;
-  top: -27px;
-  z-index: 2;
-  width: 64px;
+  z-index: 1;
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: var(--node-accent);
+  box-shadow: 0 0 8px var(--node-accent);
+  opacity: 0;
+}
+.orchDone .orchPacket { animation: orchPacket 2.6s ease-in infinite; animation-delay: calc(var(--i) * 0.38s); }
+@keyframes orchPacket {
+  0% { opacity: 0; transform: translateY(0); }
+  15% { opacity: 1; }
+  70% { opacity: 1; transform: translateY(20px); }
+  85%, 100% { opacity: 0; transform: translateY(24px); }
+}
+.orchNode {
+  appearance: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+}
+button.orchNode { cursor: pointer; border-radius: 14px; }
+button.orchNode:focus-visible { outline: 2px solid var(--ice); outline-offset: 5px; }
+.orchNodeNum {
+  width: 48px;
   height: 48px;
-  transform: translateX(-50%) rotate(45deg);
   display: grid;
   place-items: center;
-  border-radius: 18px 4px 18px 4px;
-  background: var(--gold);
-  color: #fff4c9;
-  font-size: 22px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--node-accent) 30%, var(--border));
+  background: var(--night);
+  color: color-mix(in srgb, var(--node-accent) 50%, var(--muted-foreground));
+  font: 800 14px/1 ui-monospace, monospace;
+  transition: border-color 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s, transform 0.2s;
 }
-.programmeGift:hover:not(.programmeGiftOpen) .programmeGiftPaper,
-.programmeGift:hover:not(.programmeGiftOpen) .programmeGiftLid { transform: translateY(-4px) rotate(-1deg); }
-.programmeGiftOpen .programmeGiftPaper { opacity: 0; transform: translateY(42px) scale(1.08) rotate(4deg); }
-.programmeGiftOpen .programmeRibbonV { opacity: 0; transform: translateX(-50%) scaleY(0); }
-.programmeGiftOpen .programmeRibbonH { opacity: 0; transform: scaleX(0); }
-.programmeGiftOpen .programmeGiftLid { opacity: 0; transform: translate(26%, -105%) rotate(18deg); }
-.programmeGiftOpen .programmeBurst i { animation: unwrapSpark 0.8s ease-out calc(0.12s + var(--i, 0) * 25ms) forwards; }
-@keyframes unwrapSpark {
-  0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
-  25% { opacity: 1; }
-  100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.4); }
+.orchNodeOn .orchNodeNum {
+  border-color: var(--node-accent);
+  background: color-mix(in srgb, var(--node-accent) 20%, var(--night));
+  color: var(--node-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--node-accent) 13%, transparent), 0 0 24px color-mix(in srgb, var(--node-accent) 32%, transparent);
+  animation: orchHandoff 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3);
 }
-@keyframes programmeGiftCollapse {
-  0%, 72% { height: var(--gift-height); opacity: 1; }
-  100% { height: 0; opacity: 0; }
+button.orchNode:hover .orchNodeNum { transform: translateY(-3px); }
+@keyframes orchHandoff { from { transform: scale(0.82); } }
+.orchNodeTrack { color: var(--muted-foreground); font-size: 13px; font-weight: 700; transition: color 0.3s; }
+.orchNodeOn .orchNodeTrack { color: var(--frost); }
+.orchNodeTime { color: var(--muted-foreground); font: 600 11px/1 ui-monospace, monospace; }
+
+.orchRun { margin-top: 26px; }
+.orchRun[aria-disabled='true'] { cursor: progress; transform: none; }
+.orchPlay {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+}
+.orchSpinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  animation: orchSpin 0.8s linear infinite;
+}
+@keyframes orchSpin { to { transform: rotate(360deg); } }
+.orchHint {
+  margin-top: 24px;
+  color: var(--muted-foreground);
+  font-size: 14px;
+  text-align: center;
+  animation: fadeUp 0.4s ease both;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .orchActive .orchCore, .orchActive .orchStatus i, .orchDone .orchPacket, .orchNodeOn .orchNodeNum, .orchSpinner { animation: none; }
+  .orchTrunk::after, .orchBus::after, .orchNodes li::after { transition: none; }
 }
 
 .sessionList { width: 100%; display: flex; flex-direction: column; gap: 112px; }
@@ -467,7 +548,8 @@ main { position: relative; z-index: 2; }
     linear-gradient(180deg, color-mix(in srgb, var(--card) 94%, var(--session-accent) 6%), var(--card));
   background-color: var(--card);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
-  animation: programmeRowIn 0.65s cubic-bezier(0.2, 0.9, 0.3, 1) calc(0.65s + var(--i) * 80ms) backwards;
+  animation: programmeRowIn 0.65s cubic-bezier(0.2, 0.9, 0.3, 1) calc(0.1s + var(--i) * 80ms) backwards;
+  scroll-margin-top: 12px;
   transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 .sessionRow::before {
@@ -756,7 +838,7 @@ main { position: relative; z-index: 2; }
   .heroLead { font-size: 16px; }
   .ctaRow { gap: 10px; }
   .ctaRow > * { flex: 1 1 auto; justify-content: center; padding: 11px 16px; }
-  .terminal { margin-top: 44px; }
+  .heroConsole { margin-top: 44px; }
 
   .section { padding: 56px 20px; }
   .section h2, .register h2 { font-size: 30px; letter-spacing: -0.9px; }
@@ -785,10 +867,22 @@ main { position: relative; z-index: 2; }
   .lineupPanel .section { padding-top: 34px; padding-bottom: 36px; }
   .lineupPanel .sectionHead { margin-bottom: 18px; }
   .sessionList { gap: 78px; }
-  .programmeGift { --gift-height: 190px; }
-  .programmeGift:not(.programmeGiftOpen) { margin-top: 18px; }
-  .programmeGiftOpen .programmeGiftPaper { transform: translateY(34px) scale(0.98); }
-  .programmeGiftOpen .programmeGiftLid { transform: translateY(-105%); }
+  .orch { padding: 14px 12px 20px; border-radius: 18px; }
+  .orchHead { margin-bottom: 16px; font-size: 11px; }
+  .orchStatus { padding: 3px 8px; font-size: 9.5px; letter-spacing: 0.7px; }
+  .orchCore { padding: 7px 14px 7px 7px; gap: 10px; border-radius: 14px; }
+  .orchCoreMark { width: 36px; height: 36px; border-radius: 10px; }
+  .orchCoreMark img { width: 22px; height: 22px; }
+  .orchCoreText strong { font-size: 15px; }
+  .orchCoreText small { font-size: 10.5px; }
+  .orchTrunk { height: 20px; }
+  .orchNodes li { padding-top: 20px; }
+  .orchNodes li::before, .orchNodes li::after { height: 20px; }
+  .orchNodeNum { width: 40px; height: 40px; border-radius: 12px; font-size: 13px; }
+  .orchNodeTrack { font-size: 11px; }
+  .orchNodeTime { display: none; }
+  .orchRun { margin-top: 22px; width: 100%; justify-content: center; }
+  .orchHint { margin-top: 18px; font-size: 13.5px; }
   .sessionRow { border-radius: 17px; }
   .sessionSummary {
     grid-template-columns: auto minmax(0, 1fr);
@@ -848,7 +942,8 @@ main { position: relative; z-index: 2; }
   .pill { font-size: 11px; padding: 5px 10px; border-radius: 12px; }
   .section { padding-left: 16px; padding-right: 16px; }
   .section h2, .register h2 { font-size: 27px; }
-  .programmeGift { --gift-height: 178px; }
+  .orchNodeTrack { display: none; }
+  .orchNodeNum { width: 36px; height: 36px; font-size: 12px; }
   .sessionSummary, .sessionDetails { padding: 15px; }
   .sessionHeading > strong { font-size: 19px; }
   .register { margin-left: 12px; margin-right: 12px; }

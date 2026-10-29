@@ -34,8 +34,8 @@ export const SESSIONS = [
   {
     id: 'foundations',
     number: '01',
-    title: 'Build it — Foundations',
-    shortTitle: 'Build it — Foundations',
+    title: 'Build it - Foundations',
+    shortTitle: 'Build it - Foundations',
     track: 'Build',
     subtitle: 'Run a simple hosted agent with a model and one tool',
     ownerId: 'sharanya',
@@ -59,8 +59,8 @@ export const SESSIONS = [
   {
     id: 'advanced-patterns',
     number: '02',
-    title: 'Build it — Advanced patterns',
-    shortTitle: 'Build it — Advanced patterns',
+    title: 'Build it - Advanced patterns',
+    shortTitle: 'Build it - Advanced patterns',
     track: 'Ground',
     subtitle: 'Ground the agent with retrieval (RAG)',
     ownerId: 'yash',
@@ -98,7 +98,7 @@ export const SESSIONS = [
     accent: ACCENT.evaluate,
     spotlight: 'An agent that runs is not the same as an agent that works. How do you tell the difference?',
     overview:
-      'In this session you’ll use Microsoft Foundry’s evaluation capabilities on the shared IT Service Desk use case to assess how well an agent does its task, and learn to read what the results do and don’t tell you.\n\nThe application and dataset are provided, ready to evaluate, so you can join without attending the Build it sessions first.',
+      'In this session you’ll use Microsoft Foundry’s evaluation capabilities to assess how well an agent does its task, and learn to read what the results do and don’t tell you.\n\nThe application and dataset are provided, ready to evaluate, so you can join without attending the Build it sessions first.',
     outcomes: [
       'Understand why model and prompt changes need evaluation',
       'Use Foundry evaluation capabilities on a provided agent and dataset',
@@ -224,8 +224,8 @@ export const PERSONAS = [
 ]
 
 export const TEAM = [
-  { id: 'sharanya', name: 'Sharanya Konandur', initials: 'SK', role: 'Session owner', focus: 'Build it — Foundations', accent: ACCENT.build, photo: 'speakers/sharanya.jpg' },
-  { id: 'yash', name: 'Yash Singh', initials: 'YS', role: 'Session owner', focus: 'Build it — Advanced patterns', accent: ACCENT.ground, photo: 'speakers/yash.jpg' },
+  { id: 'sharanya', name: 'Sharanya Konandur', initials: 'SK', role: 'Session owner', focus: 'Build it - Foundations', accent: ACCENT.build, photo: 'speakers/sharanya.jpg' },
+  { id: 'yash', name: 'Yash Singh', initials: 'YS', role: 'Session owner', focus: 'Build it - Advanced patterns', accent: ACCENT.ground, photo: 'speakers/yash.jpg' },
   { id: 'garima', name: 'Garima Agrawal', initials: 'GA', role: 'Session owner', focus: 'Evaluate it', accent: ACCENT.evaluate, photo: 'speakers/garima.jpg' },
   { id: 'youssef', name: 'Youssef Baccouche', initials: 'YB', role: 'Session owner', focus: 'Deploy it', accent: ACCENT.deploy, photo: 'speakers/youssef.jpg' },
   { id: 'mathieu', name: 'Mathieu Rietman', initials: 'MR', role: 'Session owner', focus: 'Operate and integrate it', accent: ACCENT.operate, photo: 'speakers/mathieu.jpg' },
@@ -235,22 +235,35 @@ export const TEAM = [
 export const sessionOwner = (session) =>
   TEAM.find((person) => person.id === session.ownerId) ?? { name: session.owner, initials: session.ownerInitials }
 
+// The lineup reveal: a programme agent hands off to one session per lifecycle stage.
+export const LINEUP = {
+  title: 'Run the programme.',
+  subtitle: 'Start the programme agent, then explore each session, its owner and what you will learn.',
+  agent: 'programme-agent',
+  coreTitle: 'Programme agent',
+  coreDetail: 'orchestrator · 6 handoffs',
+  run: 'Run the programme agent',
+  running: 'Handing off to six sessions…',
+  done: 'All six sessions are ready. Select a stage to jump to its session.',
+}
+
+// Each pillar's `id` selects its animated glyph in src/agentic/PillarMark.jsx.
 export const PILLARS = [
   {
     id: 'lifecycle',
-    icon: '🧭',
+    tag: '6 stages · 1 loop',
     title: 'The whole agent lifecycle',
     desc: 'Go from a working agent to grounding, evaluation, deployment, operations and governance in Microsoft Foundry.',
   },
   {
     id: 'standalone',
-    icon: '🧩',
+    tag: 'Standalone, connected',
     title: 'Every session stands alone',
-    desc: 'One shared IT Service Desk use case, and every session brings its own starting state. Join one or all six.',
+    desc: 'Every session brings its own starting state, so you can join one or all six. Follow them in order and each session builds on the last.',
   },
   {
     id: 'handson',
-    icon: '🛠️',
+    tag: 'Learn → see → build',
     title: 'Concept first, then hands-on',
     desc: 'Learn the concept, see how Microsoft Foundry implements it, then follow along with prepared steps.',
   },
@@ -262,72 +275,87 @@ export const INVITATION = {
   description: 'You will receive a formal invitation with more details closer to the date of the bootcamp.',
 }
 
-export const TERMINAL_SCRIPTS = [
+// Hero console: one example agent at every stage of the lifecycle, shown the way Microsoft Foundry traces it.
+// `session` links each run to SESSIONS for its number, track and accent colour. The first span is the root of
+// the trace and the rest are its children.
+export const AGENT_RUNS = [
   {
-    workspace: '~/service-desk-agent',
-    prompt: 'Create a hosted agent that triages IT service desk tickets, with one tool to look up ticket status',
-    lines: [
-      { kind: 'info', text: 'Reading agent spec', meta: 'specs/triage-agent.md' },
-      { kind: 'ok', text: 'model connected', meta: 'smallest suitable' },
-      { kind: 'ok', text: 'tool registered', meta: 'get_ticket_status' },
-      { kind: 'ok', text: 'test run traced', meta: '1 tool call' },
-      { kind: 'done', text: 'Hosted agent running in Foundry' },
+    session: 'foundations',
+    area: 'Agents',
+    actor: 'user',
+    input: 'Should I take an umbrella to Amsterdam tomorrow?',
+    spans: [
+      { op: 'invoke_agent', name: 'my-agent', meta: '1.9 s' },
+      { op: 'chat', name: 'plan the next step', meta: '0.4 s' },
+      { op: 'execute_tool', name: 'get_forecast', meta: 'rain · 80%' },
+      { op: 'chat', name: 'reply to the user', meta: '0.8 s' },
     ],
+    result: 'Hosted agent run traced in Foundry',
   },
   {
-    workspace: '~/knowledge',
-    prompt: 'Ground the triage agent in our IT knowledge base with Azure AI Search and Foundry IQ',
-    lines: [
-      { kind: 'info', text: 'Ingesting articles', meta: '1,240 docs' },
-      { kind: 'ok', text: 'chunked and indexed', meta: '18,600 chunks' },
-      { kind: 'ok', text: 'retrieval filters', meta: 'product · region' },
-      { kind: 'ok', text: 'Foundry IQ', meta: 'connected to agent' },
-      { kind: 'done', text: 'Answers grounded with citations' },
+    session: 'advanced-patterns',
+    area: 'Knowledge',
+    actor: 'user',
+    input: 'Summarise the latest release notes and cite your sources',
+    spans: [
+      { op: 'invoke_agent', name: 'my-agent', meta: '2.4 s' },
+      { op: 'execute_tool', name: 'search_knowledge', meta: 'Foundry IQ' },
+      { op: 'retrieval', name: 'filter: release notes', meta: '3 sources' },
+      { op: 'chat', name: 'answer with citations', meta: '1.1 s' },
     ],
+    result: 'Grounded answer with 3 citations',
   },
   {
-    workspace: '~/evaluation',
-    prompt: 'Evaluate the triage agent on 50 service desk tickets before we ship the new instructions',
-    lines: [
-      { kind: 'info', text: 'Loading dataset', meta: '50 tickets' },
-      { kind: 'ok', text: 'task completion', meta: '46 / 50' },
-      { kind: 'ok', text: 'groundedness', meta: 'above threshold' },
-      { kind: 'ok', text: 'regressions', meta: '2 to review' },
-      { kind: 'done', text: 'Evaluation report ready' },
+    session: 'evaluate',
+    area: 'Evaluations',
+    actor: 'dev',
+    input: 'Evaluate v2 on 50 test conversations before we ship it',
+    spans: [
+      { op: 'evaluation', name: 'my-agent v2', meta: '50 conversations' },
+      { op: 'evaluator', name: 'task_adherence', meta: '46 / 50' },
+      { op: 'evaluator', name: 'tool_call_accuracy', meta: '4.6 / 5' },
+      { op: 'compare', name: 'v1 → v2', meta: '2 regressions' },
     ],
+    result: 'Evaluation report ready to review',
   },
   {
-    workspace: '~/deploy',
-    prompt: 'Deploy the Foundry infrastructure with Bicep, then roll out version 2 of the agent',
-    lines: [
-      { kind: 'info', text: 'Validating templates', meta: 'infra/main.bicep' },
-      { kind: 'ok', text: 'Foundry project', meta: 'identity + network' },
-      { kind: 'ok', text: 'quota check', meta: 'within throughput' },
-      { kind: 'ok', text: 'agent version 2', meta: 'deployed' },
-      { kind: 'done', text: 'Deployment complete' },
+    session: 'deploy',
+    area: 'Deployments',
+    actor: 'dev',
+    input: 'Deploy the Foundry infrastructure with Bicep, then roll out agent v2',
+    spans: [
+      { op: 'deployment', name: 'infra/main.bicep', meta: 'succeeded' },
+      { op: 'identity', name: 'managed identity + RBAC', meta: 'assigned' },
+      { op: 'quota', name: 'model throughput', meta: 'within limits' },
+      { op: 'publish', name: 'my-agent v2', meta: 'live' },
     ],
+    result: 'Agent v2 deployed on your infrastructure',
   },
   {
-    workspace: '~/operations',
-    prompt: 'Find out why the agent closed tickets without solving them, then fix it',
-    lines: [
-      { kind: 'info', text: 'Reading traces', meta: 'last 24 hours' },
-      { kind: 'ok', text: 'failure pattern', meta: 'stale tool result' },
-      { kind: 'ok', text: 'task failures', meta: '12 runs' },
-      { kind: 'ok', text: 'fix proposed', meta: 'refresh first' },
-      { kind: 'done', text: 'Improvement ready to evaluate' },
+    session: 'operate',
+    area: 'Tracing',
+    actor: 'ops',
+    input: 'Why do some runs finish without completing the task?',
+    spans: [
+      { op: 'traces', name: 'last 24 hours', meta: '12 failed tasks' },
+      { op: 'execute_tool', name: 'get_forecast', meta: 'timed out' },
+      { op: 'feedback', name: 'user ratings', meta: '8 negative' },
+      { op: 'fix', name: 'retry the tool before answering', meta: 'proposed' },
     ],
+    result: 'Fix ready to evaluate before release',
   },
   {
-    workspace: '~/governance',
-    prompt: 'Onboard a second team’s agent with approved models only and token limits at the AI gateway',
-    lines: [
-      { kind: 'info', text: 'Reading policy', meta: 'platform team' },
-      { kind: 'ok', text: 'project ownership', meta: 'team B' },
-      { kind: 'ok', text: 'approved models', meta: 'policy applied' },
-      { kind: 'ok', text: 'AI gateway', meta: 'token limits set' },
-      { kind: 'done', text: 'Second team onboarded' },
+    session: 'govern',
+    area: 'Governance',
+    actor: 'admin',
+    input: 'Onboard team B’s agent with approved models and token limits',
+    spans: [
+      { op: 'project', name: 'team-b', meta: 'owner assigned' },
+      { op: 'policy', name: 'approved models only', meta: 'applied' },
+      { op: 'ai_gateway', name: 'token limits per team', meta: 'enforced' },
+      { op: 'audit', name: 'access and usage', meta: 'logged' },
     ],
+    result: 'Team B onboarded with guardrails',
   },
 ]
 
@@ -425,7 +453,7 @@ export const REGISTRATION_SOON = {
 export const FAQ = [
   {
     q: 'What are the session topics?',
-    a: 'Build it — Foundations, Build it — Advanced patterns, Evaluate it, Deploy it, Operate and integrate it, and Govern it: the agent lifecycle in Microsoft Foundry, from a working agent to deployment, operations and organisational governance.',
+    a: 'Build it - Foundations, Build it - Advanced patterns, Evaluate it, Deploy it, Operate and integrate it, and Govern it: the agent lifecycle in Microsoft Foundry, from a working agent to deployment, operations and organisational governance.',
   },
   {
     q: 'When does it start?',

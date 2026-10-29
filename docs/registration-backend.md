@@ -92,8 +92,8 @@ Session times are fixed by session ID:
 
 | Session ID | Time | Session | Replaces placeholder |
 | --- | --- | --- | --- |
-| `foundations` | `09:00` | Build it — Foundations | `09:30|session-01` |
-| `advanced-patterns` | `10:00` | Build it — Advanced patterns | `10:30|session-02` |
+| `foundations` | `09:00` | Build it - Foundations | `09:30|session-01` |
+| `advanced-patterns` | `10:00` | Build it - Advanced patterns | `10:30|session-02` |
 | `evaluate` | `11:00` | Evaluate it | `11:30|session-03` |
 | `deploy` | `12:30` | Deploy it | `13:00|session-04` |
 | `operate` | `13:30` | Operate and integrate it | `14:00|session-05` |

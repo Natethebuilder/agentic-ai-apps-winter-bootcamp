@@ -65,7 +65,6 @@
 .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .grid6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.audienceGrid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
 .card {
   position: relative;
@@ -713,7 +712,7 @@
   .thanksCopilot { width: 96px; }
 }
 @media (max-width: 760px) {
-  .grid2, .grid3, .grid4, .audienceGrid { grid-template-columns: 1fr; }
+  .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
   .grid6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 /* Landscape phones: keep the cover CTA on one compact row so the logos stay above the fold */

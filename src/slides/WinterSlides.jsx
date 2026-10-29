@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { BottomBar, Editable, Slide, useSlides } from '@deckio/deck-engine'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
 import SpeakerAvatar from '../speakers/SpeakerAvatar.jsx'
+import PillarMark from '../agentic/PillarMark.jsx'
 import { ChristmasLights, Logos, Mascot } from '../winter/Decor.jsx'
 import {
   BOOTCAMP, DATES_NOTE, INVITATION, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTER_STEPS,
@@ -165,10 +166,10 @@ export function OfferingSlide({ index }) {
           Practical, follow-along learning across the agent lifecycle in Microsoft Foundry, from a working agent to deployment, operations and organisational governance.
         </Editable>
       </div>
-      <div className={`${s.grid} ${s.audienceGrid}`}>
+      <div className={`${s.grid} ${s.grid3}`}>
         {PILLARS.map((p) => (
           <div key={p.id} className={s.card}>
-            <span className={s.icon}>{p.icon}</span>
+            <PillarMark id={p.id} size="sm" tag={<Editable as="span" id={`offering.${p.id}.tag`}>{p.tag}</Editable>} />
             <Editable as="h3" id={`offering.${p.id}.title`}>{p.title}</Editable>
             <Editable as="p" id={`offering.${p.id}.desc`}>{p.desc}</Editable>
           </div>

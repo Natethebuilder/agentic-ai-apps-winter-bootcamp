@@ -1,18 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
-  )
-  useEffect(() => {
-    const query = window.matchMedia?.('(prefers-reduced-motion: reduce)')
-    if (!query) return undefined
-    const onChange = () => setReduced(query.matches)
-    query.addEventListener('change', onChange)
-    return () => query.removeEventListener('change', onChange)
-  }, [])
-  return reduced
-}
+import { useEffect, useRef } from 'react'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
 
 export default function Snowfall({ enabled = true, density = 1 }) {
   const canvasRef = useRef(null)

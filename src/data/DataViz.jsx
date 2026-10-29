@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { DATES_NOTE, SESSION_DATES, SESSIONS, TERMINAL_SCRIPTS } from '../content.js'
+import { AGENT_RUNS, DATES_NOTE, SESSION_DATES, SESSIONS } from '../content.js'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
 import { REGISTRATION_OPEN } from '../siteState.js'
 import d from './Data.module.css'
 
@@ -60,58 +61,90 @@ export function Countdown({ target, date, dateLabel, preliminary = false, classN
   )
 }
 
-/* ── Copilot CLI terminal that types an agent development request ── */
-export function AgentTerminal({ className = '', children }) {
-  const [scriptIndex, setScriptIndex] = useState(0)
-  const { workspace, prompt, lines } = TERMINAL_SCRIPTS[scriptIndex]
+/* ── Microsoft Foundry console: one example agent at each lifecycle stage, as trace spans ── */
+const OP_TONE = { chat: 'model', execute_tool: 'tool', retrieval: 'tool', evaluator: 'eval', compare: 'eval' }
+
+export function AgentRunConsole({ className = '', children }) {
+  const reduced = usePrefersReducedMotion()
+  const [runIndex, setRunIndex] = useState(0)
   const [chars, setChars] = useState(0)
   const [shown, setShown] = useState(0)
+  const run = AGENT_RUNS[runIndex]
+  const stageIndex = Math.max(0, SESSIONS.findIndex((session) => session.id === run.session))
+  const stage = SESSIONS[stageIndex]
+  const steps = run.spans.length + 1
 
   useEffect(() => {
-    let id
-    if (chars < prompt.length) id = setTimeout(() => setChars((c) => c + 1), 24)
-    else if (shown < lines.length) id = setTimeout(() => setShown((n) => n + 1), shown === 0 ? 700 : 520)
-    else {
-      id = setTimeout(() => {
-        setChars(0)
-        setShown(0)
-        setScriptIndex((current) => (current + 1) % TERMINAL_SCRIPTS.length)
-      }, 4200)
+    const next = () => {
+      setChars(0)
+      setShown(0)
+      setRunIndex((current) => (current + 1) % AGENT_RUNS.length)
     }
+    let id
+    if (reduced) id = setTimeout(next, 7000)
+    else if (chars < run.input.length) id = setTimeout(() => setChars((c) => c + 1), 22)
+    else if (shown < steps) id = setTimeout(() => setShown((n) => n + 1), shown === 0 ? 550 : 460)
+    else id = setTimeout(next, 3800)
     return () => clearTimeout(id)
-  }, [chars, shown, prompt.length, lines.length, scriptIndex])
+  }, [reduced, chars, shown, steps, run.input.length, runIndex])
 
-  const typing = chars < prompt.length
-  const working = !typing && shown < lines.length
+  // Reduced motion shows each run complete instead of typing it out.
+  const typed = reduced ? run.input.length : chars
+  const visible = reduced ? steps : shown
+  const typing = typed < run.input.length
+  const complete = visible >= steps
+  const spans = run.spans.slice(0, Math.min(visible, run.spans.length))
 
   return (
-    <div className={`${d.terminal} ${className}`}>
+    <div className={`${d.console} ${className}`} style={{ '--stage-accent': stage.accent }}>
       {children}
-      <div className={d.termBar}>
+      <div className={d.consoleBar}>
         <span className={d.dots}><i /><i /><i /></span>
-        <span className={d.termTitle}>copilot · {workspace}</span>
+        <span className={d.consoleTitle}><span className={d.brandWord}>Microsoft </span>Foundry <b>›</b> {run.area}</span>
+        <span className={`${d.runState} ${complete ? d.runDone : ''}`}><i />{complete ? 'completed' : 'running'}</span>
       </div>
-      <div className={d.termBody} aria-label={`Example: ${prompt}`}>
-        <p className={d.termDim}>$ copilot</p>
-        <p className={d.termPrompt}>
-          <span className={d.termUser}>›</span> {prompt.slice(0, chars)}
+      <div className={d.stageStrip} aria-hidden="true">
+        <span className={d.stageName}>Stage {stage.number}/{String(SESSIONS.length).padStart(2, '0')} · {stage.track}</span>
+        <span className={d.stageBars}>
+          {SESSIONS.map((session, i) => (
+            <i
+              key={session.id}
+              className={i < stageIndex ? d.stagePast : i === stageIndex ? d.stageNow : ''}
+              style={{ '--bar': session.accent }}
+            />
+          ))}
+        </span>
+      </div>
+      <div
+        className={d.consoleBody}
+        role="img"
+        aria-label="Animated example: an agent at each stage of its lifecycle in Microsoft Foundry"
+      >
+        <p className={d.consoleInput}>
+          <span className={d.actor}>{run.actor} ›</span> {run.input.slice(0, typed)}
           {typing && <span className={d.caret} />}
         </p>
-        <ul className={d.termLines}>
-          {lines.slice(0, shown).map((l) => (
-            <li key={l.text} className={d[`line_${l.kind}`]}>
-              <span className={d.lineIcon}>{l.kind === 'ok' ? '✓' : l.kind === 'done' ? '★' : '●'}</span>
-              <span className={d.lineText}>{l.text}</span>
-              {l.meta && <span className={d.lineMeta}>{l.meta}</span>}
+        <ol className={d.trace}>
+          {spans.map((span, i) => (
+            <li
+              key={`${runIndex}-${i}`}
+              className={i === 0 ? d.spanRoot : d.spanChild}
+              data-tone={i === 0 ? 'root' : OP_TONE[span.op] ?? 'step'}
+            >
+              {i > 0 && <span className={d.branch}>{i === run.spans.length - 1 ? '└' : '├'}</span>}
+              <span className={d.op}>{span.op}</span>
+              <span className={d.spanName}>{span.name}</span>
+              <span className={d.spanMeta}>{span.meta}</span>
             </li>
           ))}
-          {working && (
-            <li className={d.line_info}>
+          {!typing && visible < run.spans.length && (
+            <li className={d.spanPending}>
               <span className={d.spinner} />
-              <span className={d.termDim}>working…</span>
+              {visible === 0 ? 'starting run…' : 'running…'}
             </li>
           )}
-        </ul>
+        </ol>
+        {complete && <p className={d.consoleResult}><span>✓</span>{run.result}</p>}
       </div>
     </div>
   )
