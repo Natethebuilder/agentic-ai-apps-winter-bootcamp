@@ -28,7 +28,6 @@ const ACCENT = {
   deploy: '#ff8fcf',
   operate: '#6fe0c0',
   govern: '#d7b8ff',
-  host: '#8b6cff',
 }
 
 export const SESSIONS = [
@@ -231,7 +230,6 @@ export const TEAM = [
   { id: 'youssef', name: 'Youssef Baccouche', initials: 'YB', role: 'Session owner', focus: 'Deploy it', accent: ACCENT.deploy, photo: 'speakers/youssef.jpg' },
   { id: 'mathieu', name: 'Mathieu Rietman', initials: 'MR', role: 'Session owner', focus: 'Operate and integrate it', accent: ACCENT.operate, photo: 'speakers/mathieu.jpg' },
   { id: 'sushil', name: 'Sushil Kumar Jha', initials: 'SJ', role: 'Session owner', focus: 'Govern it', accent: ACCENT.govern, photo: 'speakers/sushil.jpg' },
-  { id: 'nathan', name: 'Nathan Brahmbhatt', initials: 'NB', role: 'Host', focus: 'Bootcamp host and programme coordination', accent: ACCENT.host, photo: 'speakers/nathan.jpg' },
 ]
 
 export const sessionOwner = (session) =>

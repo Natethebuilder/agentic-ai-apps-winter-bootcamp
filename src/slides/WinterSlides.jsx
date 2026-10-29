@@ -496,9 +496,9 @@ export function TeamSlide({ index }) {
         id="team"
         eyebrow="Brought to you by"
         title="Your Team"
-        subtitle="Your session owners and host from the Microsoft AI apps and agents community."
+        subtitle="Your session owners from the Microsoft AI apps and agents community."
       />
-      <div className={`${s.grid} ${s.grid7}`}>
+      <div className={`${s.grid} ${s.grid6}`}>
         {TEAM.map((person) => (
           <div key={person.id} className={`${s.card} ${s.helper}`}>
             <SpeakerAvatar person={person} className={s.helperAvatar} style={{ '--avatar-accent': person.accent }} />
