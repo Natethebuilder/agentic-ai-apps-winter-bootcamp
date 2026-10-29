@@ -235,8 +235,9 @@ export const TEAM = [
 export const sessionOwner = (session) =>
   TEAM.find((person) => person.id === session.ownerId) ?? { name: session.owner, initials: session.ownerInitials }
 
-// Session owners and their headshots are hidden for now. Set to true to show them again on the website
-// (lineup, schedule and registration) and in the deck (session slides and the team slide).
+// Session owners and their headshots are hidden for now, and the headshots are not published. To show them
+// again, restore the headshots (git checkout f33f10f -- public/speakers) and set this to true: they reappear on
+// the website (lineup, schedule and registration) and in the deck (session slides and the team slide).
 export const SHOW_SESSION_OWNERS = false
 
 // The lineup reveal: a programme agent hands off to one session per lifecycle stage.
