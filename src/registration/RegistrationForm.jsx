@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PLACEHOLDER_DATES, REGISTRATION, REGISTRATION_CHOICES } from '../content.js'
+import { INVITATION, REGISTRATION, SESSION_DATES, SESSIONS, registrationSlotId } from '../content.js'
 import s from './RegistrationForm.module.css'
 
 const TOKEN_KEY = 'foundry-agentic-development-winter-bootcamp:registration-token'
@@ -13,8 +13,8 @@ function saveRegistrationToken(token) {
 }
 
 export default function RegistrationForm() {
-  const [sessions, setSessions] = useState([])
-  const [activeDate, setActiveDate] = useState(PLACEHOLDER_DATES[0].iso)
+  const [slots, setSlots] = useState([])
+  const [activeDate, setActiveDate] = useState(SESSION_DATES[0].id)
   const [company, setCompany] = useState('')
   const [email, setEmail] = useState('')
   const [emailConfirmation, setEmailConfirmation] = useState('')
@@ -28,14 +28,12 @@ export default function RegistrationForm() {
   const normalizedConfirmation = emailConfirmation.trim().toLowerCase()
   const emailsMatch = Boolean(normalizedEmail) && normalizedEmail === normalizedConfirmation
   const emailMismatch = Boolean(emailConfirmation) && !emailsMatch
-  const valid = sessions.length > 0 && company.trim() && emailsMatch && consent
+  const valid = slots.length > 0 && company.trim() && emailsMatch && consent
+  const selectedDateCount = new Set(slots.map((slot) => slot.split('|')[0])).size
 
-  const toggleSession = (selection) => setSessions((current) => (
-    current.includes(selection) ? current.filter((item) => item !== selection) : [...current, selection]
+  const toggleSlot = (id) => setSlots((current) => (
+    current.includes(id) ? current.filter((item) => item !== id) : [...current, id]
   ))
-  const activeChoices = REGISTRATION_CHOICES.filter((choice) => choice.dateIso === activeDate)
-  const selectedDates = new Set(sessions.map((selection) => selection.split('|')[0])).size
-  const selectedForDate = (dateIso) => sessions.filter((selection) => selection.startsWith(`${dateIso}|`)).length
 
   const submit = async (event) => {
     event.preventDefault()
@@ -56,7 +54,7 @@ export default function RegistrationForm() {
             email: normalizedEmail,
             emailConfirmation: normalizedConfirmation,
             registrationToken,
-            sessions,
+            sessions: slots,
             environment,
             consent,
           }),
@@ -69,7 +67,7 @@ export default function RegistrationForm() {
         setRegistrationToken(result.registrationToken)
       }
       setStatus('success')
-      setMessage('Thanks. Your registration is saved. GitHub organization access details will be sent a few days before the event.')
+      setMessage(REGISTRATION.success)
     } catch (error) {
       setStatus('error')
       setMessage(error.message)
@@ -79,10 +77,10 @@ export default function RegistrationForm() {
   return (
     <form className={s.form} onSubmit={submit}>
       <div className={s.ticketNotice}>
-        <span aria-hidden="true">GH</span>
+        <span aria-hidden="true">{INVITATION.mark}</span>
         <div>
-          <strong>GitHub organization access</strong>
-          <p>A few days before the event, your invitation will include the link to join the event GitHub organization. The environment includes $100 of GitHub Copilot AI credits.</p>
+          <strong>{INVITATION.eyebrow}</strong>
+          <p>{INVITATION.description}</p>
         </div>
       </div>
 
@@ -110,52 +108,44 @@ export default function RegistrationForm() {
       </div>
 
       <fieldset className={s.sessionField}>
-        <legend>Which placeholder dates and sessions are you interested in?</legend>
-        <p className={s.scheduleNotice}>{REGISTRATION.slotHelp} All dates and times remain placeholder/TBC.</p>
-        <div className={s.dateTabs} role="tablist" aria-label="Placeholder event dates">
-          {PLACEHOLDER_DATES.map((date) => {
-            const selected = selectedForDate(date.iso)
+        <legend>Choose your dates and session times</legend>
+        <p className={s.sessionHint}><strong>{REGISTRATION.slotLead}</strong> {REGISTRATION.slotHelp}</p>
+        <div className={s.dateTabs} role="tablist" aria-label="Choose a bootcamp date">
+          {SESSION_DATES.map((date) => {
+            const count = slots.filter((slot) => slot.startsWith(`${date.id}|`)).length
             return (
               <button
-                key={date.iso}
+                key={date.id}
                 type="button"
                 role="tab"
-                aria-selected={activeDate === date.iso}
-                className={activeDate === date.iso ? s.dateTabOn : ''}
-                onClick={() => setActiveDate(date.iso)}
+                aria-selected={date.id === activeDate}
+                className={date.id === activeDate ? s.dateTabOn : ''}
+                onClick={() => setActiveDate(date.id)}
               >
-                <strong>{date.label}</strong>
-                <small>{selected ? `${selected} selected` : 'TBC'}</small>
+                <span>{date.short}</span>
+                <small>{count ? `${count} selected` : 'Choose sessions'}</small>
               </button>
             )
           })}
         </div>
-        <div className={s.dateGroup} role="tabpanel">
-          <header>
-            <span>{PLACEHOLDER_DATES.find((date) => date.iso === activeDate)?.label}</span>
-            <small>Placeholder · TBC</small>
-          </header>
-          <div className={s.sessionGrid}>
-            {activeChoices.map((choice) => (
-              <label key={choice.value} className={sessions.includes(choice.value) ? s.sessionOn : ''}>
-                <input
-                  type="checkbox"
-                  checked={sessions.includes(choice.value)}
-                  onChange={() => toggleSession(choice.value)}
-                />
-                <span>
-                  <strong>{choice.time} · Session {choice.number}</strong>
-                  <small>{choice.title}</small>
-                </span>
-                <i>{sessions.includes(choice.value) ? '✓' : '+'}</i>
+        <div className={s.sessionGrid} role="tabpanel">
+          {SESSIONS.map((session) => {
+            const id = registrationSlotId(activeDate, session)
+            const selected = slots.includes(id)
+            return (
+              <label key={session.id} className={selected ? s.sessionOn : ''}>
+                <input type="checkbox" checked={selected} onChange={() => toggleSlot(id)} />
+                <time dateTime={session.time}>{session.time}</time>
+                <span><strong>{session.number} · {session.title}</strong><small>Owner · {session.owner}</small></span>
+                <i aria-hidden="true">{selected ? '✓' : '+'}</i>
               </label>
-            ))}
-          </div>
+            )
+          })}
         </div>
         <p className={s.selectionSummary}>
-          {sessions.length
-            ? `${sessions.length} session ${sessions.length === 1 ? 'time' : 'times'} selected across ${selectedDates} ${selectedDates === 1 ? 'date' : 'dates'}.`
-            : 'No date and session times selected yet.'}
+          {slots.length
+            ? `${slots.length} session time${slots.length === 1 ? '' : 's'} selected across ${selectedDateCount} date${selectedDateCount === 1 ? '' : 's'}`
+            : 'No date or session time selected yet'}
         </p>
       </fieldset>
 
@@ -164,7 +154,7 @@ export default function RegistrationForm() {
         {REGISTRATION.environments.map((option) => (
           <label key={option.id}>
             <input type="radio" name="environment" value={option.id} checked={environment === option.id} onChange={(e) => setEnvironment(e.target.value)} />
-            <span><strong>{option.label}</strong>{option.desc && <small>{option.desc}</small>}</span>
+            <span><strong>{option.label}</strong><small>{option.desc}</small></span>
           </label>
         ))}
       </fieldset>
@@ -178,7 +168,7 @@ export default function RegistrationForm() {
         <button type="submit" disabled={!valid || status === 'submitting' || status === 'success'}>
           {status === 'submitting' ? 'Saving…' : status === 'success' ? 'Registered ✓' : 'Submit registration'}
         </button>
-        <small>No GitHub sign-in is required. The organization invitation is sent to your confirmed company email.</small>
+        <small>No sign-in is required. Your formal invitation is sent to your confirmed company email.</small>
       </div>
       {message && <p className={`${s.message} ${status === 'error' ? s.error : ''}`} role="status">{message}</p>}
     </form>

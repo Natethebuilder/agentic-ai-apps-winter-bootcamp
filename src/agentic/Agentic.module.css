@@ -1,0 +1,123 @@
+/* ── Pillar marks: animated Foundry-style glyphs for the three "Why join" pillars ── */
+.mark { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+.tile {
+  position: relative;
+  flex: 0 0 auto;
+  width: 66px;
+  height: 66px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--ice) 30%, var(--border));
+  background:
+    radial-gradient(circle at 30% 22%, color-mix(in srgb, var(--holly) 32%, transparent), transparent 64%),
+    color-mix(in srgb, var(--night) 80%, var(--card));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 4px color-mix(in srgb, var(--holly) 7%, transparent),
+    0 10px 26px rgba(0, 0, 0, 0.35);
+}
+.svg { width: 52px; height: 52px; overflow: visible; }
+.tag {
+  min-width: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ice) 26%, transparent);
+  background: color-mix(in srgb, var(--ice) 7%, transparent);
+  color: var(--ice);
+  font: 700 10.5px/1.2 ui-monospace, 'Cascadia Code', Consolas, monospace;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+.sm { gap: 12px; margin-bottom: 4px; }
+.sm .tile { width: 58px; height: 58px; border-radius: 16px; }
+.sm .svg { width: 46px; height: 46px; }
+.sm .tag { padding: 4px 9px; font-size: 10px; }
+
+/* Lifecycle: an agent orbits six stages, lighting each one in turn */
+.track { fill: none; stroke: color-mix(in srgb, var(--ice) 26%, transparent); stroke-width: 1.4; }
+.orbit { transform-origin: 32px 32px; animation: orbit 6s linear infinite; }
+.trail { fill: none; stroke-width: 2.6; stroke-linecap: round; }
+.trailFrom { stop-color: var(--gold); stop-opacity: 0; }
+.trailTo { stop-color: var(--gold); stop-opacity: 0.95; }
+.head { fill: var(--gold); }
+.stage {
+  fill: var(--night);
+  stroke: var(--node);
+  stroke-width: 1.6;
+  animation: stageLit 6s linear infinite;
+  animation-delay: calc((var(--k) - 6) * 1s);
+}
+.core { fill: color-mix(in srgb, var(--holly) 34%, var(--night)); stroke: var(--ice); stroke-width: 1.4; stroke-linejoin: round; }
+.coreDot { fill: var(--frost); animation: corePulse 2s ease-in-out infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes stageLit {
+  0%, 4% { fill: var(--node); }
+  22%, 100% { fill: var(--night); }
+}
+@keyframes corePulse { 50% { opacity: 0.35; } }
+
+/* Standalone, connected: six session cells light up in order and stay lit, then reset */
+.cell {
+  fill: var(--night);
+  stroke: color-mix(in srgb, var(--node) 62%, transparent);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  animation: cellChain 6s ease-in-out infinite;
+  animation-delay: calc((var(--k) - 12) * 0.5s);
+}
+.hub { fill: color-mix(in srgb, var(--holly) 52%, var(--night)); stroke: var(--ice); stroke-width: 1.4; stroke-linejoin: round; }
+.hubCore { fill: var(--frost); }
+@keyframes cellChain {
+  0%, 84%, 100% { fill: var(--night); stroke: color-mix(in srgb, var(--node) 62%, transparent); }
+  6%, 72% { fill: color-mix(in srgb, var(--node) 52%, var(--night)); stroke: var(--node); }
+}
+
+/* Hands-on: concept, then Foundry, then your own build */
+.link { fill: none; stroke: color-mix(in srgb, var(--ice) 48%, transparent); stroke-width: 1.4; stroke-dasharray: 2 2.4; animation: flow 1s linear infinite; }
+.packet { fill: var(--gold); animation: packet 3.6s ease-in-out infinite; }
+.step { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); stroke-width: 1.4; stroke-linejoin: round; }
+.stepDot { fill: var(--ice); }
+.stepLearn { animation: stepLearn 3.6s ease-in-out infinite; }
+.stepSee { animation: stepSee 3.6s ease-in-out infinite; }
+.stepBuild { animation: stepBuild 3.6s ease-in-out infinite; }
+.prompt { fill: none; stroke: var(--frost); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.cursor { fill: var(--gold); animation: blink 1s steps(1) infinite; }
+@keyframes flow { to { stroke-dashoffset: -8.8; } }
+@keyframes packet {
+  0%, 12% { transform: translate(0, 0); }
+  38%, 52% { transform: translate(19px, -15px); }
+  78%, 100% { transform: translate(38px, -30px); }
+}
+@keyframes stepLearn {
+  0%, 14% { fill: color-mix(in srgb, var(--ice) 30%, var(--night)); stroke: var(--ice); }
+  30%, 100% { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); }
+}
+@keyframes stepSee {
+  0%, 30% { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); }
+  40%, 54% { fill: color-mix(in srgb, var(--holly) 52%, var(--night)); stroke: var(--ice); }
+  68%, 100% { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); }
+}
+@keyframes stepBuild {
+  0%, 70% { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); }
+  80%, 96% { fill: color-mix(in srgb, var(--gold) 30%, var(--night)); stroke: var(--gold); }
+  100% { fill: var(--night); stroke: color-mix(in srgb, var(--ice) 58%, transparent); }
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (max-width: 700px) {
+  .tile { width: 58px; height: 58px; border-radius: 16px; }
+  .svg { width: 46px; height: 46px; }
+}
+@media (max-width: 380px) {
+  .mark { gap: 12px; }
+  .tag { padding: 4px 8px; font-size: 9.5px; letter-spacing: 0.8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit, .stage, .coreDot, .cell, .link, .packet, .stepLearn, .stepSee, .stepBuild, .cursor { animation: none; }
+  .stage { fill: color-mix(in srgb, var(--node) 45%, var(--night)); }
+  .cell { fill: color-mix(in srgb, var(--node) 24%, var(--night)); stroke: var(--node); }
+  .packet { opacity: 0; }
+  .stepSee { fill: color-mix(in srgb, var(--holly) 52%, var(--night)); stroke: var(--ice); }
+}

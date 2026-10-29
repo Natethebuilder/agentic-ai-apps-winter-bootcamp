@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
-import { SCHEDULE, TERMINAL_SCRIPTS } from '../content.js'
+import { useEffect, useState } from 'react'
+import { AGENT_RUNS, DATES_NOTE, SESSION_DATES, SESSIONS } from '../content.js'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
+import { REGISTRATION_OPEN } from '../siteState.js'
 import d from './Data.module.css'
 
-/* ── Countdown to the first session, styled as a scheduled pipeline run ── */
-export function Countdown({ target, date, dateLabel, className = '' }) {
+/* ── Countdown to the first session, styled as the agent's next scheduled run ── */
+export function Countdown({ target, date, dateLabel, preliminary = false, className = '' }) {
   const t = target ? new Date(target).getTime() : null
   const dateOnly = !t && date ? new Date(`${date}T12:00:00`) : null
   const [now, setNow] = useState(() => Date.now())
@@ -30,8 +32,11 @@ export function Countdown({ target, date, dateLabel, className = '' }) {
         ]
       : ['--', '--', '--', '--']
   const labels = dateOnly ? ['day', 'month', 'year', 'starts'] : ['days', 'hrs', 'min', 'sec']
-  const status = t == null ? (dateOnly ? 'dates confirmed' : 'awaiting schedule') : diff > 0 ? 'scheduled' : 'live now'
-  const statusClass = t == null ? (dateOnly ? d.statusOk : d.statusWait) : diff > 0 ? d.statusOk : d.statusLive
+  const dateStatus = preliminary ? 'preliminary dates' : 'dates confirmed'
+  const status = t == null ? (dateOnly ? dateStatus : 'awaiting schedule') : diff > 0 ? 'scheduled' : 'live now'
+  const statusClass = t == null
+    ? (dateOnly && !preliminary ? d.statusOk : d.statusWait)
+    : diff > 0 ? d.statusOk : d.statusLive
 
   return (
     <div className={`${d.countdown} ${className}`} role={t ? 'timer' : 'group'} aria-live="off">
@@ -50,113 +55,140 @@ export function Countdown({ target, date, dateLabel, className = '' }) {
       {(t != null || dateLabel) && (
         <p className={d.cdFoot}>
           First session: {t != null ? new Date(t).toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'short' }) : dateLabel}
-          {t != null && dateLabel ? ` · ${dateLabel}` : ''}
         </p>
       )}
     </div>
   )
 }
 
-/* ── Copilot CLI terminal that rotates through the agent build loop ── */
-export function AgentTerminal({ className = '', children }) {
-  const [scriptIndex, setScriptIndex] = useState(0)
-  const { workspace, prompt, lines } = TERMINAL_SCRIPTS[scriptIndex]
+/* ── Microsoft Foundry console: one example agent at each lifecycle stage, as trace spans ── */
+const OP_TONE = { chat: 'model', execute_tool: 'tool', retrieval: 'tool', evaluator: 'eval', compare: 'eval' }
+
+export function AgentRunConsole({ className = '', children }) {
+  const reduced = usePrefersReducedMotion()
+  const [runIndex, setRunIndex] = useState(0)
   const [chars, setChars] = useState(0)
   const [shown, setShown] = useState(0)
+  const run = AGENT_RUNS[runIndex]
+  const stageIndex = Math.max(0, SESSIONS.findIndex((session) => session.id === run.session))
+  const stage = SESSIONS[stageIndex]
+  const steps = run.spans.length + 1
 
   useEffect(() => {
-    let id
-    if (chars < prompt.length) id = setTimeout(() => setChars((c) => c + 1), 24)
-    else if (shown < lines.length) id = setTimeout(() => setShown((n) => n + 1), shown === 0 ? 700 : 520)
-    else {
-      id = setTimeout(() => {
-        setChars(0)
-        setShown(0)
-        setScriptIndex((current) => (current + 1) % TERMINAL_SCRIPTS.length)
-      }, 4200)
+    const next = () => {
+      setChars(0)
+      setShown(0)
+      setRunIndex((current) => (current + 1) % AGENT_RUNS.length)
     }
+    let id
+    if (reduced) id = setTimeout(next, 7000)
+    else if (chars < run.input.length) id = setTimeout(() => setChars((c) => c + 1), 22)
+    else if (shown < steps) id = setTimeout(() => setShown((n) => n + 1), shown === 0 ? 550 : 460)
+    else id = setTimeout(next, 3800)
     return () => clearTimeout(id)
-  }, [chars, shown, prompt.length, lines.length, scriptIndex])
+  }, [reduced, chars, shown, steps, run.input.length, runIndex])
 
-  const typing = chars < prompt.length
-  const working = !typing && shown < lines.length
+  // Reduced motion shows each run complete instead of typing it out.
+  const typed = reduced ? run.input.length : chars
+  const visible = reduced ? steps : shown
+  const typing = typed < run.input.length
+  const complete = visible >= steps
+  const spans = run.spans.slice(0, Math.min(visible, run.spans.length))
 
   return (
-    <div className={`${d.terminal} ${className}`}>
+    <div className={`${d.console} ${className}`} style={{ '--stage-accent': stage.accent }}>
       {children}
-      <div className={d.termBar}>
+      <div className={d.consoleBar}>
         <span className={d.dots}><i /><i /><i /></span>
-        <span className={d.termTitle}>copilot · {workspace}</span>
+        <span className={d.consoleTitle}><span className={d.brandWord}>Microsoft </span>Foundry <b>›</b> {run.area}</span>
+        <span className={`${d.runState} ${complete ? d.runDone : ''}`}><i />{complete ? 'completed' : 'running'}</span>
       </div>
-      <div className={d.termBody} aria-label={`Example: ${prompt}`}>
-        <p className={d.termDim}>$ copilot</p>
-        <p className={d.termPrompt}>
-          <span className={d.termUser}>›</span> {prompt.slice(0, chars)}
+      <div className={d.stageStrip} aria-hidden="true">
+        <span className={d.stageName}>Stage {stage.number}/{String(SESSIONS.length).padStart(2, '0')} · {stage.track}</span>
+        <span className={d.stageBars}>
+          {SESSIONS.map((session, i) => (
+            <i
+              key={session.id}
+              className={i < stageIndex ? d.stagePast : i === stageIndex ? d.stageNow : ''}
+              style={{ '--bar': session.accent }}
+            />
+          ))}
+        </span>
+      </div>
+      <div
+        className={d.consoleBody}
+        role="img"
+        aria-label="Animated example: an agent at each stage of its lifecycle in Microsoft Foundry"
+      >
+        <p className={d.consoleInput}>
+          <span className={d.actor}>{run.actor} ›</span> {run.input.slice(0, typed)}
           {typing && <span className={d.caret} />}
         </p>
-        <ul className={d.termLines}>
-          {lines.slice(0, shown).map((l) => (
-            <li key={l.text} className={d[`line_${l.kind}`]}>
-              <span className={d.lineIcon}>{l.kind === 'ok' ? '✓' : l.kind === 'done' ? '★' : '●'}</span>
-              <span className={d.lineText}>{l.text}</span>
-              {l.meta && <span className={d.lineMeta}>{l.meta}</span>}
+        <ol className={d.trace}>
+          {spans.map((span, i) => (
+            <li
+              key={`${runIndex}-${i}`}
+              className={i === 0 ? d.spanRoot : d.spanChild}
+              data-tone={i === 0 ? 'root' : OP_TONE[span.op] ?? 'step'}
+            >
+              {i > 0 && <span className={d.branch}>{i === run.spans.length - 1 ? '└' : '├'}</span>}
+              <span className={d.op}>{span.op}</span>
+              <span className={d.spanName}>{span.name}</span>
+              <span className={d.spanMeta}>{span.meta}</span>
             </li>
           ))}
-          {working && (
-            <li className={d.line_info}>
+          {!typing && visible < run.spans.length && (
+            <li className={d.spanPending}>
               <span className={d.spinner} />
-              <span className={d.termDim}>working…</span>
+              {visible === 0 ? 'starting run…' : 'running…'}
             </li>
           )}
-        </ul>
+        </ol>
+        {complete && <p className={d.consoleResult}><span>✓</span>{run.result}</p>}
       </div>
     </div>
   )
 }
 
-/* ── Six placeholder dates sharing one six-session agenda ── */
+/* ── Six repeated event dates and the shared full-day agenda ── */
 export function ScheduleBoard() {
-  const [activeDate, setActiveDate] = useState(SCHEDULE[0].dateIso)
-  const active = SCHEDULE.find((date) => date.dateIso === activeDate) || SCHEDULE[0]
   return (
     <div className={d.scheduleBoard}>
-      <div className={d.dateRail} role="tablist" aria-label="Placeholder programme dates">
-        {SCHEDULE.map((date) => (
-          <button
-            key={date.id}
-            type="button"
-            role="tab"
-            aria-selected={date.dateIso === activeDate}
-            className={date.dateIso === activeDate ? d.dateCardOn : ''}
-            onClick={() => setActiveDate(date.dateIso)}
-          >
-            <span>{date.number}</span>
-            <strong>{date.date}</strong>
-            <small>Placeholder · TBC</small>
-          </button>
+      <div className={d.dateRail} aria-label="Bootcamp dates">
+        {SESSION_DATES.map((date) => (
+          <article key={date.id} className={d.dateCard}>
+            <span>{date.month}</span>
+            <strong>{date.day}</strong>
+            <small>Full programme</small>
+          </article>
         ))}
       </div>
-      <div className={d.agenda} role="tabpanel">
-        <header>
+      <div className={d.agenda}>
+        <div className={d.agendaHead}>
           <div>
-            <span>Selected placeholder date</span>
-            <h3>{active.date}</h3>
+            <span>Every event date</span>
+            <strong>Six-session daily agenda</strong>
           </div>
-          <strong>Same six-session agenda · TBC</strong>
-        </header>
+          <p>
+            {REGISTRATION_OPEN
+              ? 'Select any combination of dates and session times during registration.'
+              : 'Once registration opens, you can select any combination of dates and session times.'}
+            {DATES_NOTE && <> {DATES_NOTE}</>}
+          </p>
+        </div>
         <div className={d.agendaGrid}>
-          {active.sessions.map((session) => (
-            <article key={session.selection} className={d.agendaSlot}>
-              <time>{session.time}</time>
+          {SESSIONS.map((session) => (
+            <article key={session.id} className={d.agendaSlot} style={{ '--slot-accent': session.accent }}>
+              <time dateTime={session.time}>{session.time}</time>
               <div>
-                <strong>Session {session.number} · {session.track}</strong>
-                <small>{session.ownerRole} · {session.ownerInitials}</small>
+                <span>{session.number} · {session.track}</span>
+                <strong>{session.shortTitle}</strong>
+                <small>Owner · {session.owner}</small>
               </div>
             </article>
           ))}
         </div>
       </div>
-      <p className={d.scheduleFoot}>All six Fridays repeat this agenda. Dates, topics and owners remain placeholder/TBC.</p>
     </div>
   )
 }

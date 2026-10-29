@@ -1,54 +1,63 @@
 @import '@deckio/deck-engine/styles/global.css';
 @import '@deckio/deck-engine/themes/dark.css';
 
-/* ── Foundry aurora palette (overrides DECKIO dark theme) ────────────── */
+/* ── Foundry violet winter palette (overrides DECKIO dark theme) ────────
+   Same variable names as the Agentic Data site so the two stay in sync:
+   --ice is the lavender highlight, --holly the Foundry violet call to action,
+   --pine the festive magenta, --gold the warm accent and --night the indigo sky. */
 :root {
-  --background: #040712;
-  --foreground: #f2f5ff;
-  --card: #0a1022;
-  --secondary: #111a32;
-  --muted: #182440;
-  --muted-foreground: #9caaca;
-  --border: #29385f;
-  --accent: #8ef5e5;
-  --primary: #8ef5e5;
-  --ring: rgba(142, 245, 229, 0.42);
+  --background: #07061a;
+  --foreground: #f1f0ff;
+  --card: #0f0c29;
+  --secondary: #151236;
+  --muted: #1d1945;
+  --muted-foreground: #a7a3cd;
+  --border: #29255a;
+  --accent: #b6b1ff;
+  --primary: #b6b1ff;
+  --ring: rgba(182, 177, 255, 0.42);
 
-  --purple: #a7a0ff;
-  --purple-deep: #5748bd;
-  --cyan: #63d9ff;
-  --green: #69f2c1;
-  --pink: #d29cff;
+  --purple: #cbb8ff;
+  --purple-deep: #302ec9;
+  --cyan: #c9c6ff;
+  --green: #5fdcae;
+  --pink: #ff79c6;
 
-  --holly: #a7a0ff;
-  --pine: #238d88;
-  --gold: #63d9ff;
-  --frost: #f4f7ff;
-  --ice: #8ef5e5;
-  --night: #040712;
+  --holly: #8b6cff;
+  --holly-deep: #4f37d6;
+  --pine: #ff6fbf;
+  --gold: #ffc65c;
+  --frost: #f6f5ff;
+  --ice: #b6b1ff;
+  --night: #07061a;
+  --danger: #ff7a93;
 
-  --glow-accent: rgba(142, 245, 229, 0.13);
-  --glow-purple: rgba(167, 160, 255, 0.13);
-  --glow-cyan: rgba(99, 217, 255, 0.11);
+  --glow-accent: rgba(182, 177, 255, 0.12);
+  --glow-purple: rgba(203, 184, 255, 0.10);
+  --glow-cyan: rgba(201, 198, 255, 0.10);
 }
 
 body {
   background:
-    radial-gradient(1200px 700px at 85% -10%, rgba(87, 72, 189, 0.34), transparent 60%),
-    radial-gradient(900px 600px at -10% 110%, rgba(35, 141, 136, 0.22), transparent 60%),
+    radial-gradient(1200px 700px at 85% -10%, rgba(64, 46, 201, 0.42), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(214, 74, 168, 0.14), transparent 60%),
     var(--night);
 }
 
-/* Foundry-flow accent bar on every slide */
+/* Candy-cane accent bar on every slide, in Foundry violet */
 .accent-bar {
-  background: linear-gradient(to bottom, var(--purple), var(--ice), var(--cyan));
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--holly) 0 14px,
+    var(--frost) 14px 28px
+  );
   opacity: 0.85;
-  box-shadow: 0 0 18px rgba(142, 245, 229, 0.35);
+  box-shadow: 0 0 18px rgba(139, 108, 255, 0.4);
 }
 
 .deck-ty-watermark { display: none; }
 
-/* ── Foundry signal field ─────────────────────────────────────────────── */
+/* ── Snow ─────────────────────────────────────────────────────────────── */
 .snowfall {
   position: fixed;
   inset: 0;
@@ -56,72 +65,106 @@ body {
   z-index: 150;
 }
 
+/* ── Christmas lights ─────────────────────────────────────────────────── */
+.xmas-lights {
+  position: relative;
+  height: 30px;
+  width: 100%;
+  pointer-events: none;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.xmas-wire {
+  position: absolute;
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: 16px;
+}
+.xmas-wire path { fill: none; stroke: #2c2760; stroke-width: 0.6; }
+.xmas-lights ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1.5%;
+}
+.bulb {
+  width: 10px;
+  height: 16px;
+  margin-top: 6px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  position: relative;
+  background: var(--c);
+  box-shadow: 0 0 10px 2px var(--c);
+  animation: bulb-glow 1.8s ease-in-out infinite;
+}
+.bulb::before {
+  content: '';
+  position: absolute;
+  top: -4px; left: 2px;
+  width: 6px; height: 5px;
+  border-radius: 2px;
+  background: #322c66;
+}
+.bulb:nth-child(odd) { margin-top: 9px; }
+.bulb-0 { --c: var(--holly); animation-delay: 0s; }
+.bulb-1 { --c: var(--gold); animation-delay: 0.45s; }
+.bulb-2 { --c: var(--pine); animation-delay: 0.9s; }
+.bulb-3 { --c: var(--ice); animation-delay: 1.35s; }
+
+@keyframes bulb-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; box-shadow: 0 0 2px 0 var(--c); }
+}
+
+.slide-lights { position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: none; }
+.deck-lights { position: fixed; top: 0; left: 0; right: 0; z-index: 60; }
+html[data-export-mode="capture"] .slide-lights { display: block; }
+html[data-export-mode="capture"] .deck-lights { display: none; }
+
+/* Deck progress: dark bulbs ahead, new bulbs flicker on as the slide arrives */
+.bulb { transition: background .4s ease, box-shadow .4s ease, opacity .4s ease; }
+.bulb-off {
+  background: color-mix(in srgb, var(--c) 22%, #120f2c);
+  box-shadow: 0 0 6px -1px color-mix(in srgb, var(--c) 25%, transparent);
+  animation: none;
+}
+.deck-lights .bulb-new {
+  animation:
+    bulb-on 0.6s ease-out calc(var(--k) * 0.08s) both,
+    bulb-glow 1.8s ease-in-out calc(0.6s + var(--k) * 0.08s) infinite;
+}
+@keyframes bulb-on {
+  from { background: color-mix(in srgb, var(--c) 22%, #120f2c); box-shadow: 0 0 6px -1px color-mix(in srgb, var(--c) 25%, transparent); }
+  to { background: var(--c); box-shadow: 0 0 10px 2px var(--c); }
+}
+.deck-lights.lights-complete .bulb {
+  animation: bulb-chase 1.6s ease-in-out calc(0.9s + var(--n) * 0.05s) infinite;
+}
+@keyframes bulb-chase {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 10px 2px var(--c); }
+  15% { opacity: 1; transform: scale(1.4); box-shadow: 0 0 20px 7px var(--c); }
+  50% { opacity: 0.4; box-shadow: 0 0 2px 0 var(--c); }
+}
+html[data-export-mode="capture"] .bulb,
+html[data-export-mode="capture"] .slide .bulb-new { animation: none !important; }
 .deck ~ * [class*="progressTrack"], [class*="navWrapper"] > [class*="progressTrack"] { display: none; }
 
-/* ── Delivery-loop progress ───────────────────────────────────────────── */
-.deck-delivery-progress,
-.slide-delivery-progress {
-  height: 14px;
-  pointer-events: none;
-  background: color-mix(in srgb, var(--night) 88%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--ice) 18%, transparent);
-}
-.deck-delivery-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 60;
-}
-.slide-delivery-progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  display: none;
-}
-.deck-delivery-progress > span,
-.slide-delivery-progress > span {
-  position: absolute;
-  inset: auto auto 0 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--purple-deep), var(--purple), var(--ice), var(--cyan));
-  box-shadow: 0 0 14px color-mix(in srgb, var(--ice) 70%, transparent);
-  transition: width 0.45s ease;
-}
-.deck-delivery-progress i,
-.slide-delivery-progress i {
-  position: absolute;
-  top: 4px;
-  width: 6px;
-  height: 6px;
-  transform: translateX(-50%);
-  border-radius: 2px;
-  border: 1px solid color-mix(in srgb, var(--ice) 28%, transparent);
-  background: var(--night);
-}
-.deck-delivery-progress i:nth-of-type(1), .slide-delivery-progress i:nth-of-type(1) { left: 16.666%; }
-.deck-delivery-progress i:nth-of-type(2), .slide-delivery-progress i:nth-of-type(2) { left: 33.333%; }
-.deck-delivery-progress i:nth-of-type(3), .slide-delivery-progress i:nth-of-type(3) { left: 50%; }
-.deck-delivery-progress i:nth-of-type(4), .slide-delivery-progress i:nth-of-type(4) { left: 66.666%; }
-.deck-delivery-progress i:nth-of-type(5), .slide-delivery-progress i:nth-of-type(5) { left: 83.333%; }
-.deck-delivery-progress i:nth-of-type(6), .slide-delivery-progress i:nth-of-type(6) { left: 100%; }
-.deck-delivery-progress i.is-complete,
-.slide-delivery-progress i.is-complete {
-  background: var(--ice);
-  box-shadow: 0 0 9px color-mix(in srgb, var(--ice) 80%, transparent);
-}
-html[data-export-mode="capture"] .slide-delivery-progress { display: block; }
-html[data-export-mode="capture"] .deck-delivery-progress { display: none; }
-
-/* ── Mascots ──────────────────────────────────────────────────────────── */
+/* ── Mascots with Santa hats ──────────────────────────────────────────── */
 .mascot {
   position: relative;
   display: inline-block;
   line-height: 0;
 }
 .mascot-img { width: 100%; height: auto; display: block; }
+.mascot-hat {
+  position: absolute;
+  width: 62%;
+  top: -22%;
+  left: 12%;
+  transform: rotate(-14deg);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+.mascot-duck .mascot-hat { width: 58%; top: -16%; left: 18%; transform: rotate(-8deg); }
 
 .floating-copilot {
   position: fixed;

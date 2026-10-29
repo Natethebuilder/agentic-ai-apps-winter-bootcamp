@@ -1,9 +1,10 @@
-.mono, .terminal, .query, .cdNum, .cdLabel, .status {
+.mono, .console, .cdNum, .cdLabel, .status,
+.dateCard, .agendaSlot time, .agendaSlot span {
   font-family: ui-monospace, 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
 }
 
 /* ── Shared glass panel ── */
-.countdown, .terminal, .query {
+.countdown, .console, .scheduleBoard {
   border: 1px solid color-mix(in srgb, var(--ice) 22%, var(--border));
   background: color-mix(in srgb, var(--card) 88%, transparent);
   backdrop-filter: blur(8px);
@@ -38,9 +39,9 @@
 .cdLabel { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted-foreground); }
 .cdFoot { font-size: 13px; color: var(--muted-foreground); line-height: 1.5; }
 
-/* ── Terminal ── */
-.terminal { position: relative; border-radius: 18px; width: 100%; max-width: 540px; font-size: 13.5px; }
-.termBar {
+/* ── Foundry agent console (hero) ── */
+.console { position: relative; border-radius: 18px; width: 100%; max-width: 540px; font-size: 13px; }
+.consoleBar {
   display: flex; align-items: center; gap: 12px;
   padding: 11px 14px; border-bottom: 1px solid var(--border);
   background: color-mix(in srgb, var(--night) 60%, transparent);
@@ -50,27 +51,69 @@
 .dots i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
 .dots i:nth-child(2) { background: #febc2e; }
 .dots i:nth-child(3) { background: #28c840; }
-.termTitle { font-size: 12px; color: var(--muted-foreground); }
-.termBody { padding: 16px 18px 18px; min-height: 290px; line-height: 1.6; }
-.termDim { color: var(--muted-foreground); }
-.termPrompt { color: var(--frost); margin: 6px 0 10px; }
-.termUser { color: var(--holly); font-weight: 700; }
+.consoleTitle {
+  flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--muted-foreground); font-size: 12px;
+}
+.consoleTitle b { margin: 0 3px; color: var(--ice); }
+.runState {
+  display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0;
+  padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor;
+  color: var(--gold); font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  transition: color 0.3s;
+}
+.runState i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 1.2s ease-in-out infinite; }
+.runDone { color: var(--green); }
+.runDone i { animation: none; }
+.stageStrip {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 9px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+.stageName { color: var(--stage-accent); font-size: 11px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; transition: color 0.4s; }
+.stageBars { display: grid; grid-template-columns: repeat(6, 22px); gap: 5px; }
+.stageBars i { height: 4px; border-radius: 4px; background: color-mix(in srgb, var(--bar) 18%, transparent); transition: background 0.4s, box-shadow 0.4s; }
+.stageBars .stagePast { background: color-mix(in srgb, var(--bar) 55%, transparent); }
+.stageBars .stageNow { background: var(--bar); box-shadow: 0 0 10px var(--bar); }
+.consoleBody { padding: 14px 16px 16px; min-height: 246px; line-height: 1.55; }
+.consoleInput { margin-bottom: 12px; color: var(--frost); }
+.actor { color: var(--holly); font-weight: 700; }
 .caret {
   display: inline-block; width: 8px; height: 1.05em; margin-left: 2px;
   vertical-align: text-bottom; background: var(--ice);
   animation: blink 1s steps(1) infinite;
 }
 @keyframes blink { 50% { opacity: 0; } }
-.termLines { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-.termLines li { display: flex; align-items: baseline; gap: 10px; animation: lineIn 0.35s ease both; }
+.trace { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.spanRoot, .spanChild { display: grid; align-items: baseline; column-gap: 9px; animation: lineIn 0.35s ease both; }
+.spanRoot { grid-template-columns: auto minmax(0, 1fr) auto; }
+.spanChild { grid-template-columns: 12px auto minmax(0, 1fr) auto; padding-left: 7px; }
 @keyframes lineIn { from { opacity: 0; transform: translateX(-6px); } }
-.lineIcon { width: 14px; flex-shrink: 0; text-align: center; }
-.lineText { flex: 0 1 auto; }
-.lineMeta { margin-left: auto; color: var(--muted-foreground); font-size: 12px; white-space: nowrap; }
-.line_info .lineIcon { color: var(--ice); }
-.line_ok .lineIcon { color: var(--green, #3fb950); }
-.line_ok .lineText { color: var(--frost); }
-.line_done { margin-top: 6px; color: var(--gold); font-weight: 700; }
+.branch { color: color-mix(in srgb, var(--ice) 45%, transparent); }
+.op {
+  --tone: var(--pine);
+  padding: 1px 7px; border-radius: 6px;
+  border: 1px solid color-mix(in srgb, var(--tone) 36%, transparent);
+  background: color-mix(in srgb, var(--tone) 12%, transparent);
+  color: var(--tone); font-size: 10.5px; font-weight: 700; white-space: nowrap;
+}
+[data-tone='root'] .op { --tone: var(--stage-accent); }
+[data-tone='model'] .op { --tone: var(--ice); }
+[data-tone='tool'] .op { --tone: var(--gold); }
+[data-tone='eval'] .op { --tone: var(--green); }
+.spanName { min-width: 0; color: var(--frost); overflow-wrap: anywhere; }
+.spanRoot .spanName { font-weight: 700; }
+.spanMeta { color: var(--muted-foreground); font-size: 12px; white-space: nowrap; text-align: right; }
+.spanPending { display: flex; align-items: center; gap: 10px; padding-left: 7px; color: var(--muted-foreground); animation: lineIn 0.35s ease both; }
+.consoleResult {
+  display: flex; align-items: baseline; gap: 9px;
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  color: var(--gold); font-weight: 700;
+  animation: lineIn 0.35s ease both;
+}
+.consoleResult span { color: var(--green); }
 .spinner {
   width: 12px; height: 12px; border-radius: 50%;
   border: 2px solid color-mix(in srgb, var(--ice) 30%, transparent);
@@ -80,78 +123,60 @@
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Query + result grid ── */
-.query { border-radius: 18px; overflow: hidden; }
-.qBar {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 8px 10px 8px 14px; border-bottom: 1px solid var(--border);
-  background: color-mix(in srgb, var(--night) 60%, transparent);
+/* ── Repeated-date programme ── */
+.scheduleBoard { border-radius: 18px; overflow: hidden; }
+.dateRail {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
 }
-.qTab { font-size: 12px; color: var(--frost); padding: 4px 10px; border-radius: 8px; background: color-mix(in srgb, var(--ice) 10%, transparent); }
-.qRun {
-  appearance: none; border: 0; cursor: pointer;
-  font: inherit; font-size: 12px; font-weight: 700;
-  padding: 6px 14px; border-radius: 8px;
-  color: var(--night); background: var(--ice);
-  transition: transform 0.15s, opacity 0.2s;
+.dateCard {
+  min-width: 0;
+  padding: 15px 10px;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  background: color-mix(in srgb, var(--night) 70%, var(--card));
+  text-align: center;
 }
-.qRun:hover { transform: translateY(-1px); }
-.qRun:disabled { opacity: 0.6; cursor: progress; }
-.qRun:focus-visible { outline: 2px solid var(--frost); outline-offset: 2px; }
-.qCode { margin: 0; padding: 16px 18px; font-size: 14px; line-height: 1.7; color: var(--frost); white-space: pre-wrap; }
-.kw { color: var(--holly); font-weight: 700; }
-.tbl { color: var(--ice); }
-.qProgress { height: 2px; background: transparent; position: relative; overflow: hidden; }
-.qProgressOn::after {
-  content: ''; position: absolute; inset: 0; width: 40%;
-  background: linear-gradient(90deg, transparent, var(--ice), transparent);
-  animation: scan 0.7s linear infinite;
+.dateCard span { color: var(--ice); font-size: 10px; letter-spacing: 1.4px; }
+.dateCard strong { color: var(--frost); font-size: 28px; line-height: 1; }
+.dateCard small { color: var(--muted-foreground); font-size: 10px; }
+.agenda { padding: 20px; }
+.agendaHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 16px;
 }
-@keyframes scan { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
-.qGridWrap { overflow-x: auto; border-top: 1px solid var(--border); }
-.qGrid { width: 100%; border-collapse: collapse; font-size: 14px; }
-.qGrid th, .qGrid td { padding: 10px 18px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
-.qGrid th { font-size: 12px; font-weight: 600; color: var(--muted-foreground); background: color-mix(in srgb, var(--night) 40%, transparent); }
-.qGrid tbody tr { animation: rowIn 0.4s ease both; transition: background 0.2s; }
-.qGrid tbody tr:hover { background: color-mix(in srgb, var(--ice) 7%, transparent); }
-@keyframes rowIn { from { opacity: 0; transform: translateY(6px); } }
-.qGrid .num { font-variant-numeric: tabular-nums; }
-.qGrid tbody tr td:first-child { color: var(--frost); font-weight: 700; }
-.null { color: var(--muted-foreground); font-style: italic; opacity: 0.8; }
-.pending { color: var(--gold); padding: 2px 8px; border-radius: 6px; background: color-mix(in srgb, var(--gold) 12%, transparent); font-size: 12px; }
-.qFoot { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 10px 18px; font-size: 12px; color: var(--muted-foreground); }
-
-.scheduleBoard { display: grid; gap: 14px; }
-.dateRail { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
-.dateRail button {
-  min-width: 0; padding: 13px 11px; text-align: left; cursor: pointer;
-  border: 1px solid var(--border); border-radius: 14px;
-  color: var(--muted-foreground); background: color-mix(in srgb, var(--card) 82%, transparent);
+.agendaHead div { display: flex; flex-direction: column; gap: 3px; }
+.agendaHead span { color: var(--ice); font: 700 11px/1.2 ui-monospace, monospace; letter-spacing: 1.3px; text-transform: uppercase; }
+.agendaHead strong { font-size: 21px; }
+.agendaHead p { max-width: 430px; color: var(--muted-foreground); font-size: 13px; line-height: 1.45; text-align: right; }
+.agendaGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.agendaSlot {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 13px;
+  padding: 13px 14px;
+  border-radius: 13px;
+  border: 1px solid color-mix(in srgb, var(--slot-accent) 36%, var(--border));
+  background: color-mix(in srgb, var(--card) 90%, var(--slot-accent) 10%);
 }
-.dateRail button > * { display: block; }
-.dateRail button > span { color: var(--ice); font: 800 11px/1 ui-monospace, monospace; }
-.dateRail button strong { margin-top: 8px; color: var(--frost); font-size: 13px; line-height: 1.25; }
-.dateRail button small { margin-top: 6px; color: var(--muted-foreground); font: 700 9px/1.3 ui-monospace, monospace; text-transform: uppercase; }
-.dateRail .dateCardOn { border-color: var(--green); background: color-mix(in srgb, var(--pine) 16%, var(--card)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--green) 28%, transparent); }
-.agenda { padding: 18px; border: 1px solid var(--border); border-radius: 18px; background: color-mix(in srgb, var(--card) 88%, transparent); }
-.agenda > header { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
-.agenda > header span { color: var(--ice); font: 700 10px/1.2 ui-monospace, monospace; text-transform: uppercase; letter-spacing: 1px; }
-.agenda > header h3 { margin-top: 5px; color: var(--frost); font-size: 22px; }
-.agenda > header > strong { color: var(--gold); font-size: 12px; }
-.agendaGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 14px; }
-.agendaSlot { min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 11px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: color-mix(in srgb, var(--night) 50%, transparent); }
-.agendaSlot time { color: var(--green); font: 800 13px/1 ui-monospace, monospace; }
+.agendaSlot time { color: var(--slot-accent); font-size: 17px; font-weight: 800; }
 .agendaSlot div { min-width: 0; }
-.agendaSlot strong, .agendaSlot small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.agendaSlot strong { color: var(--frost); font-size: 13px; }
-.agendaSlot small { margin-top: 4px; color: var(--muted-foreground); font-size: 11px; }
-.scheduleFoot { color: var(--muted-foreground); font-size: 12px; }
+.agendaSlot span { display: block; color: var(--slot-accent); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+.agendaSlot strong { display: block; margin-top: 3px; font-size: 14px; line-height: 1.25; }
+.agendaSlot small { display: block; margin-top: 3px; color: var(--muted-foreground); font-size: 11px; }
 
 @media (max-width: 800px) {
-  .cdNum { font-size: 24px; }
-  .dateRail { display: flex; overflow-x: auto; padding-bottom: 4px; }
-  .dateRail button { flex: 0 0 150px; }
   .agendaGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cdNum { font-size: 24px; }
 }
 @media (max-width: 600px) {
   .countdown { padding: 14px 14px 12px; }
@@ -159,14 +184,25 @@
   .status { white-space: nowrap; font-size: 10px; letter-spacing: 0.6px; padding: 3px 8px; }
   .cdDigits { gap: 6px; }
   .cdNum { font-size: 22px; }
-  .terminal { font-size: 12px; }
-  .termBody { min-height: 250px; padding: 14px 14px 16px; }
-  .qCode { font-size: 12.5px; padding: 14px; }
-  .qGrid { font-size: 13px; }
-  .qGrid th, .qGrid td { padding: 9px 12px; }
-  .qGrid th:nth-child(4), .qGrid td:nth-child(4) { display: none; }
-  .qFoot { padding: 10px 14px; }
+  .console { font-size: 12px; }
+  .consoleBar .dots, .brandWord { display: none; }
+  .stageStrip { padding: 8px 13px; gap: 10px; }
+  .stageName { font-size: 10px; letter-spacing: 0.8px; }
+  .stageBars { grid-template-columns: repeat(6, 14px); gap: 4px; }
+  .consoleBody { min-height: 286px; padding: 12px 13px 14px; }
+  .spanRoot { grid-template-columns: auto minmax(0, 1fr); row-gap: 1px; }
+  .spanChild { grid-template-columns: 12px auto minmax(0, 1fr); row-gap: 1px; }
+  .spanRoot .spanMeta { grid-column: 2; }
+  .spanChild .spanMeta { grid-column: 3; }
+  .spanMeta { font-size: 11px; text-align: left; white-space: normal; }
+  .dateRail { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .dateCard { padding: 12px 8px; }
   .agenda { padding: 14px; }
-  .agenda > header { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .agendaHead { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .agendaHead p { text-align: left; }
   .agendaGrid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spanRoot, .spanChild, .spanPending, .consoleResult, .runState i, .caret { animation: none; }
 }

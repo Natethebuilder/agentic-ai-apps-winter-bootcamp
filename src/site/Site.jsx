@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import { FoundryMark, Logos, Mascot } from '../winter/Decor.jsx'
-import { AgentTerminal, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
+import { AgentRunConsole, Countdown, ScheduleBoard } from '../data/DataViz.jsx'
+import PillarMark from '../agentic/PillarMark.jsx'
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
 import SetupWizard from '../setup/SetupWizard.jsx'
 import RegistrationForm from '../registration/RegistrationForm.jsx'
+import SpeakerAvatar from '../speakers/SpeakerAvatar.jsx'
 import {
-  BOOTCAMP, FAQ, PERSONAS, PILLARS, PIPELINE, PREP, READINESS_PATHS, REGISTRATION, SESSIONS,
+  BOOTCAMP, DATES_NOTE, FAQ, LINEUP, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTRATION,
+  REGISTRATION_SOON, SESSIONS, sessionOwner,
 } from '../content.js'
+import { PREREQUISITES_STATE, REGISTRATION_OPEN } from '../siteState.js'
 import s from './Site.module.css'
 
 const NAV = [
@@ -32,7 +37,7 @@ function useReveal(rootRef) {
     els.forEach((el) => io.observe(el))
 
     // Items pop in as they scroll into view; long single-column phone sections otherwise feel static
-    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}`)
+    const items = root.querySelectorAll(`.${s.grid} > *, .${s.checkItem}, .${s.faqItem}, .${s.personaBox}, .${s.flow}`)
     const itemIo = new IntersectionObserver((entries) => {
       entries.filter((e) => e.isIntersecting).forEach((e, k) => {
         e.target.style.setProperty('--i', k)
@@ -108,64 +113,138 @@ function PersonaPicker() {
   )
 }
 
-function AgentFlow() {
-  return (
-    <div className={s.agentFlow} aria-label="Foundry agent development flow">
-      <header>
-        <span>Agent runtime path</span>
-        <strong>Intent → evidence</strong>
-      </header>
-      <div>
-        {PIPELINE.map((stage, index) => (
-          <article key={stage.id} style={{ '--flow-accent': stage.color }}>
-            <span>{String(index + 1).padStart(2, '0')}</span>
-            <strong>{stage.label}</strong>
-            <small>{stage.gate}</small>
-          </article>
-        ))}
-      </div>
-    </div>
-  )
-}
+// The programme agent hands off to one session per lifecycle stage, then reveals the session list.
+const BUS_GRADIENT = `linear-gradient(90deg, ${SESSIONS.map((session) => session.accent).join(', ')})`
 
 function ProgrammeReveal() {
-  const [open, setOpen] = useState(false)
+  const reduced = usePrefersReducedMotion()
+  const [phase, setPhase] = useState('idle')
+  const [lit, setLit] = useState(0)
+  const runRef = useRef(null)
+  const firstNodeRef = useRef(null)
+  const moveFocus = useRef(false)
+
+  useEffect(() => {
+    if (phase !== 'running') return undefined
+    const id = lit < SESSIONS.length
+      ? setTimeout(() => setLit((n) => n + 1), lit === 0 ? 560 : 260)
+      : setTimeout(() => setPhase('done'), 450)
+    return () => clearTimeout(id)
+  }, [phase, lit])
+
+  // The run button disappears when the handoffs finish, so keep keyboard focus on the first stage.
+  useEffect(() => {
+    if (phase === 'done' && moveFocus.current) {
+      moveFocus.current = false
+      firstNodeRef.current?.focus({ preventScroll: true })
+    }
+  }, [phase])
+
+  const run = () => {
+    if (phase !== 'idle') return
+    moveFocus.current = document.activeElement === runRef.current
+    if (reduced) {
+      setLit(SESSIONS.length)
+      setPhase('done')
+    } else {
+      setPhase('running')
+    }
+  }
+
+  const jumpTo = (id) =>
+    document.getElementById(`session-${id}`)?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' })
+
+  const status = phase === 'idle' ? 'ready' : phase === 'running' ? `handoff ${lit}/${SESSIONS.length}` : 'complete'
 
   return (
     <div className={s.programmeReveal}>
-      <button
-        type="button"
-        className={`${s.programmeMerge} ${open ? s.programmeMergeOpen : ''}`}
-        aria-expanded={open}
-        aria-controls="programme-sessions"
-        aria-label="Merge the programme"
-        disabled={open}
-        onClick={() => setOpen(true)}
-      >
-        <span className={s.mergeTop}><i />foundry project · agentic development</span>
-        <span className={s.mergeBranches}><strong>foundry/programme-tbc</strong><i>→</i><strong>bootcamp</strong></span>
-        <span className={s.mergeSummary}>6 session placeholders · ready for review</span>
-        <span className={s.mergeAction}>{open ? 'Deployed' : 'Deploy programme'}</span>
-        <span className={s.mergePackets} aria-hidden="true"><i /><i /><i /><i /></span>
-      </button>
+      <div className={`${s.orch} ${phase !== 'idle' ? s.orchActive : ''} ${phase === 'done' ? s.orchDone : ''}`}>
+        <div className={s.orchHead}>
+          <span className={s.orchName}><i aria-hidden="true" />{LINEUP.agent}</span>
+          <span className={s.orchStatus}><i aria-hidden="true" />{status}</span>
+        </div>
 
-      {open && (
+        <div className={s.orchCore}>
+          <span className={s.orchCoreMark}><FoundryMark /></span>
+          <span className={s.orchCoreText}>
+            <strong>{LINEUP.coreTitle}</strong>
+            <small>{LINEUP.coreDetail}</small>
+          </span>
+        </div>
+        <span className={s.orchTrunk} aria-hidden="true" />
+        <span className={s.orchBus} style={{ '--bus': BUS_GRADIENT }} aria-hidden="true" />
+
+        <ol className={s.orchNodes} aria-label="Programme stages">
+          {SESSIONS.map((session, index) => {
+            const label = (
+              <>
+                <span className={s.orchNodeNum}>{session.number}</span>
+                <span className={s.orchNodeTrack}>{session.track}</span>
+                <span className={s.orchNodeTime}>{session.time}</span>
+              </>
+            )
+            return (
+              <li
+                key={session.id}
+                className={index < lit ? s.orchNodeOn : ''}
+                style={{ '--node-accent': session.accent, '--i': index }}
+              >
+                <i className={s.orchPacket} aria-hidden="true" />
+                {phase === 'done' ? (
+                  <button
+                    type="button"
+                    ref={index === 0 ? firstNodeRef : undefined}
+                    className={s.orchNode}
+                    onClick={() => jumpTo(session.id)}
+                    aria-label={`Go to session ${session.number}: ${session.title}`}
+                  >
+                    {label}
+                  </button>
+                ) : (
+                  <span className={s.orchNode}>{label}</span>
+                )}
+              </li>
+            )
+          })}
+        </ol>
+
+        {phase === 'done' ? (
+          <p className={s.orchHint}>{LINEUP.done}</p>
+        ) : (
+          <button
+            ref={runRef}
+            type="button"
+            className={`${s.btnPrimary} ${s.orchRun}`}
+            onClick={run}
+            aria-disabled={phase === 'running'}
+            aria-controls="programme-sessions"
+            aria-expanded="false"
+          >
+            <span className={phase === 'running' ? s.orchSpinner : s.orchPlay} aria-hidden="true" />
+            {phase === 'running' ? LINEUP.running : LINEUP.run}
+          </button>
+        )}
+        <span className={s.srOnly} role="status">{phase === 'done' ? LINEUP.done : ''}</span>
+      </div>
+
+      {phase === 'done' && (
         <div id="programme-sessions" className={s.sessionList}>
           {SESSIONS.map((session, index) => (
             <article
               key={session.id}
+              id={`session-${session.id}`}
               className={`${s.sessionRow} ${s.sessionRowOpen}`}
               style={{ '--i': index, '--session-accent': session.accent }}
             >
               <div className={s.sessionSummary}>
                 <span className={s.sessionNumber}>{session.number}</span>
                 <span className={s.sessionHeading}>
-                  <span className={s.sessionAudience}>{session.audience}</span>
+                  <span className={s.sessionAudience}>{session.time} · {session.audience}</span>
                   <strong>{session.title}</strong>
                   <small>{session.subtitle}</small>
                 </span>
                 <span className={s.sessionLead}>
-                  <span className={s.sessionOwnerInitials} aria-hidden="true">{session.ownerInitials}</span>
+                  <SpeakerAvatar person={sessionOwner(session)} className={s.sessionHeadshot} />
                   <span className={s.sessionLeadCopy}>
                     <small>Session owner</small>
                     <strong>{session.owner}</strong>
@@ -247,6 +326,21 @@ function PrepChecklist() {
   )
 }
 
+// Stands in for a section's interactive content while that part of the programme is not open yet.
+function SoonPanel({ mark, label, heading, body, children }) {
+  return (
+    <div className={s.soonPanel} role="status">
+      <span className={s.soonMark} aria-hidden="true">{mark}</span>
+      <div>
+        <small><i aria-hidden="true" />{label}</small>
+        <h3>{heading}</h3>
+        <p>{body}</p>
+      </div>
+      {children && <div className={s.soonActions}>{children}</div>}
+    </div>
+  )
+}
+
 export default function Site() {
   const rootRef = useRef(null)
   const [scrolled, setScrolled] = useState(false)
@@ -287,7 +381,7 @@ export default function Site() {
         <section id="top" className={`${s.panel} ${s.heroPanel}`} data-panel>
           <div className={s.hero}>
           <div className={s.heroText}>
-            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · $100 AI credits included</span>
+            <span className={s.pill}>{BOOTCAMP.season} · Online · Free · Six one-hour sessions</span>
             <h1>
               Foundry Agentic Development <span className={s.highlight}>Winter Bootcamp</span>
             </h1>
@@ -297,19 +391,22 @@ export default function Site() {
             <div className={s.ctaRow}>
               <button type="button" className={s.btnGhost} onClick={() => go('why')}>More info</button>
               <button type="button" className={s.btnGhost} onClick={() => go('lineup')}>See the lineup</button>
-              <button type="button" className={s.btnPrimary} onClick={() => go('join')}>Register now</button>
+              <button type="button" className={s.btnPrimary} onClick={() => go('join')}>
+                {REGISTRATION_OPEN ? 'Register now' : REGISTRATION_SOON.cta}
+              </button>
             </div>
             <Countdown
               target={BOOTCAMP.kickoff}
               date={BOOTCAMP.kickoffDate}
               dateLabel={BOOTCAMP.kickoffLabel}
+              preliminary={!BOOTCAMP.datesConfirmed}
               className={s.countdown}
             />
           </div>
           <div className={s.heroArt}>
-            <AgentTerminal className={s.terminal}>
+            <AgentRunConsole className={s.heroConsole}>
               <Mascot className={s.perched} />
-            </AgentTerminal>
+            </AgentRunConsole>
             <Logos size="md" className={s.heroLogos} />
           </div>
           </div>
@@ -322,19 +419,18 @@ export default function Site() {
           id="why"
           idx="01"
           eyebrow="Why join"
-          title="From Foundry project to dependable agent application."
-          subtitle="A hands-on programme for AI application developers, solution and cloud architects, platform and AI/ML engineers, and technical product teams."
+          title="From a working agent to an operable, governed application."
+          subtitle="A hands-on programme for AI application developers, solution and cloud architects, platform and AI engineers, and technical product teams."
         >
           <div className={`${s.grid} ${s.g3}`}>
             {PILLARS.map((p) => (
               <article key={p.id} className={s.card}>
-                <span className={s.icon}>{p.icon}</span>
+                <PillarMark id={p.id} tag={p.tag} />
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
               </article>
             ))}
           </div>
-          <AgentFlow />
           <PersonaPicker />
         </Section>
 
@@ -343,8 +439,8 @@ export default function Site() {
           id="lineup"
           idx="02"
           eyebrow="The lineup"
-          title="Assemble the programme."
-          subtitle="Deploy the placeholder programme to inspect all six reserved sessions."
+          title={LINEUP.title}
+          subtitle={LINEUP.subtitle}
           className={s.lineupPanel}
         >
           <ProgrammeReveal />
@@ -354,8 +450,8 @@ export default function Site() {
           id="schedule"
           idx="03"
           eyebrow="Schedule"
-          title="Six placeholder Fridays. Six sessions available each day."
-          subtitle="The dates and times below are deliberately marked TBC. They exist so the registration workflow can be exercised before the final programme is confirmed."
+          title="Six dates. The same complete programme."
+          subtitle={`All six sessions run on every date. ${REGISTRATION_OPEN ? 'When you register' : 'Once registration opens'}, pick as many sessions as you like, on as many dates as you like.${DATES_NOTE ? ` ${DATES_NOTE}` : ''}`}
         >
           <ScheduleBoard />
         </Section>
@@ -364,38 +460,60 @@ export default function Site() {
           id="prepare"
           idx="04"
           eyebrow="Get ready"
-          title="Pre-flight checks"
-          subtitle="Prepare the core AI application tools, connect the required accounts, then tick off the checks. Progress stays in this browser only."
+          title={PREREQUISITES[PREREQUISITES_STATE].title}
+          subtitle={PREREQUISITES[PREREQUISITES_STATE].subtitle}
           className={s.preflightPanel}
         >
-          <div className={s.readinessPaths}>
-            {READINESS_PATHS.map((path) => (
-              <article key={path.id}>
-                <span>{path.number}</span>
-                <div><strong>{path.title}</strong><p>{path.desc}</p></div>
-              </article>
-            ))}
-          </div>
-          <div className={s.setupStack}>
-            <div className={s.preflightBlock}>
-              <div className={s.preflightLabel}><span>01</span><strong>Readiness checklist</strong></div>
-              <PrepChecklist />
+          {PREREQUISITES_STATE === 'microhack' ? (
+            <div className={s.setupStack}>
+              <div className={s.readinessPaths}>
+                {MICROHACK_ACCESS.map((path, index) => (
+                  <article key={path.id}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <strong>{path.title}</strong>
+                      <p>{path.desc}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className={s.preflightBlock}>
+                <div className={s.preflightLabel}><span>01</span><strong>Readiness checklist</strong></div>
+                <PrepChecklist />
+              </div>
+              <div className={s.preflightBlock}>
+                <div className={s.preflightLabel}><span>02</span><strong>Guided setup</strong></div>
+                <SetupWizard />
+              </div>
             </div>
-            <div className={s.preflightBlock}>
-              <div className={s.preflightLabel}><span>02</span><strong>Guided setup</strong></div>
-              <SetupWizard />
-            </div>
-          </div>
+          ) : (
+            <SoonPanel
+              mark={PREREQUISITES.soon.mark}
+              label={PREREQUISITES.soon.label}
+              heading={PREREQUISITES.soon.heading}
+              body={PREREQUISITES.soon.body}
+            />
+          )}
         </Section>
 
         <Section
           id="join"
           idx="05"
-          eyebrow={REGISTRATION.eyebrow}
-          title={REGISTRATION.title}
-          subtitle={REGISTRATION.subtitle}
+          eyebrow={REGISTRATION_OPEN ? REGISTRATION.eyebrow : REGISTRATION_SOON.eyebrow}
+          title={REGISTRATION_OPEN ? REGISTRATION.title : REGISTRATION_SOON.title}
+          subtitle={REGISTRATION_OPEN ? REGISTRATION.subtitle : REGISTRATION_SOON.subtitle}
         >
-          <RegistrationForm />
+          {REGISTRATION_OPEN ? <RegistrationForm /> : (
+            <SoonPanel
+              mark="📅"
+              label={REGISTRATION_SOON.badge}
+              heading={REGISTRATION_SOON.heading}
+              body={REGISTRATION_SOON.body}
+            >
+              <button type="button" className={s.btnGhost} onClick={() => go('lineup')}>See the lineup</button>
+              <button type="button" className={s.btnGhost} onClick={() => go('schedule')}>View the schedule</button>
+            </SoonPanel>
+          )}
         </Section>
 
         <Section id="faq" idx="06" eyebrow="FAQ" title="Frequently asked questions">
@@ -413,7 +531,7 @@ export default function Site() {
           <Logos size="sm" />
           <p>
             Educational workshop series delivered by Microsoft. Not a consulting engagement. Use sample or
-            sample or non-sensitive data and repositories only. Workshop outputs are learning artifacts.
+            non-sensitive data, code and repositories only. Workshop outputs are learning artifacts.
           </p>
           <p className={s.footerSmall}>Built with DECKIO</p>
         </footer>

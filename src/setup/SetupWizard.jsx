@@ -1,90 +1,73 @@
 import { useState } from 'react'
-import { SETUP_RESOURCES } from '../content.js'
+import { MICROHACK_RESOURCES } from '../content.js'
 import s from './SetupWizard.module.css'
 
-const COPILOT_COMMANDS = [
-  'gh auth status',
-  'copilot',
-  '/skills',
-  '/mcp',
+const ACCESS = [
+  ['Azure', 'Temporary Azure credentials for your session’s lab arrive by email before the session.'],
+  ['GitHub', 'Only needed if your session uses it. Your invitation will tell you.'],
+  ['Data', 'Labs use sample or non-sensitive data. Never bring production credentials or customer data.'],
 ]
 
-function CopyButton({ text }) {
-  const [copied, setCopied] = useState(false)
-  const copy = async () => {
-    await navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1400)
-  }
-  return <button type="button" className={s.copy} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
-}
+const RHYTHM = [
+  ['10 min', 'Introduction: what you will build and why'],
+  ['40 min', 'Follow along in your lab with prepared copy/paste steps'],
+  ['10 min', 'Recap, questions and what to try next'],
+]
 
 export default function SetupWizard() {
-  const [tab, setTab] = useState('machine')
+  const [tab, setTab] = useState('before')
 
   return (
     <div className={s.wizard}>
-      <div className={s.tabs} role="tablist" aria-label="AI application setup">
-        <button type="button" role="tab" aria-selected={tab === 'machine'} onClick={() => setTab('machine')}>1 · Core tools</button>
-        <button type="button" role="tab" aria-selected={tab === 'agent'} onClick={() => setTab('agent')}>2 · Agent tools</button>
-        <button type="button" role="tab" aria-selected={tab === 'signin'} onClick={() => setTab('signin')}>3 · Sign in</button>
+      <div className={s.tabs} role="tablist" aria-label="MicroHack lab preparation">
+        <button type="button" role="tab" aria-selected={tab === 'before'} onClick={() => setTab('before')}>1 · Before</button>
+        <button type="button" role="tab" aria-selected={tab === 'access'} onClick={() => setTab('access')}>2 · Access</button>
+        <button type="button" role="tab" aria-selected={tab === 'session'} onClick={() => setTab('session')}>3 · Session</button>
       </div>
 
-      {tab === 'machine' && (
+      {tab === 'before' && (
         <div className={s.panel} role="tabpanel">
-          <div className={s.intro}>
-            <div>
-              <span className={s.kicker}>Foundry-ready prerequisites</span>
-              <h3>Prepare the core AI application environment.</h3>
-              <p>Install the tools needed for GitHub authentication, the sample application and any confirmed model or evaluation exercises.</p>
-            </div>
-          </div>
+          <span className={s.kicker}>Prerequisites</span>
+          <h3>Bring Azure and Git basics.</h3>
+          <p className={s.panelLead}>The labs assume you know your way around Azure and can work with a Git repository. Brush up with these if you need to.</p>
           <div className={s.resourceGrid}>
-            {SETUP_RESOURCES.slice(0, 4).map((item) => (
+            {MICROHACK_RESOURCES.map((item) => (
               <a key={item.id} className={s.resource} href={item.href} target="_blank" rel="noreferrer">
                 <strong>{item.label}</strong>
-                <span>Check: {item.check}</span>
-                <i>Official guidance ↗</i>
+                <span>{item.detail}</span>
+                <i>Open ↗</i>
               </a>
             ))}
           </div>
         </div>
       )}
 
-      {tab === 'agent' && (
+      {tab === 'access' && (
         <div className={s.panel} role="tabpanel">
-          <span className={s.kicker}>Inside GitHub Copilot CLI</span>
-          <h3>Verify agent tools and connected services.</h3>
-          <p className={s.panelLead}>Authenticate GitHub, start Copilot CLI, then inspect the skills and MCP tools available for the workshop.</p>
-          <div className={s.commandBlock}>
-            <pre><code>{COPILOT_COMMANDS.join('\n')}</code></pre>
-            <CopyButton text={COPILOT_COMMANDS.join('\n')} />
-          </div>
-          <div className={s.resourceGrid}>
-            {SETUP_RESOURCES.slice(4).map((item) => (
-              <a key={item.id} className={s.resource} href={item.href} target="_blank" rel="noreferrer">
-                <strong>{item.label}</strong>
-                <span>{item.login}</span>
-                <i>Official guidance ↗</i>
-              </a>
+          <span className={s.kicker}>Before your session</span>
+          <h3>Watch your inbox for your Azure login.</h3>
+          <p className={s.panelLead}>Every session has its own MicroHack lab, so keep the email for the session you are joining at hand.</p>
+          <div className={s.rhythm}>
+            {ACCESS.map(([label, text]) => (
+              <article key={label}><strong>{label}</strong><span>{text}</span></article>
             ))}
           </div>
         </div>
       )}
 
-      {tab === 'signin' && (
+      {tab === 'session' && (
         <div className={s.panel} role="tabpanel">
-          <span className={s.kicker}>Use the workshop accounts</span>
-          <h3>Authenticate GitHub and confirmed Foundry resources.</h3>
-          <div className={s.signins}>
-            {SETUP_RESOURCES.slice(0, 4).map((item) => (
-              <article key={item.id}>
-                <div><strong>{item.label}</strong><a href={item.href} target="_blank" rel="noreferrer">docs ↗</a></div>
-                <code>{item.login}</code>
-              </article>
+          <span className={s.kicker}>10 · 40 · 10</span>
+          <h3>Follow along in your lab.</h3>
+          <p className={s.panelLead}>Every one-hour session follows the same rhythm.</p>
+          <div className={s.rhythm}>
+            {RHYTHM.map(([label, text]) => (
+              <article key={label + text}><strong>{label}</strong><span>{text}</span></article>
             ))}
           </div>
-          <div className={s.note}>Use a personal GitHub.com account for workshop access. Foundry project or model access will be supplied only if a confirmed session requires it.</div>
+          <div className={s.note}>
+            Each session stands on its own: open that session’s lab repository and start from its entry point.
+          </div>
         </div>
       )}
     </div>
