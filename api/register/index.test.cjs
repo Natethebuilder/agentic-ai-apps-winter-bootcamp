@@ -4,6 +4,10 @@ const test = require('node:test')
 const register = require('./index.js')
 const siteState = require('../site-state.json')
 
+// Run against open registration whatever api/site-state.json is committed as, so switching the live
+// site to state 2 never blocks a deploy. The state 2 test switches it explicitly.
+siteState.registration = 1
+
 const registrationToken = '123e4567-e89b-42d3-a456-426614174000'
 const DATES = ['2026-12-04', '2026-12-11', '2026-12-18', '2027-01-08', '2027-01-15', '2027-01-22']
 const SESSIONS = [
