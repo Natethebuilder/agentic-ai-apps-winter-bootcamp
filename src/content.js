@@ -410,7 +410,7 @@ export const REGISTRATION = {
   ],
   consent:
     'I consent to Microsoft using my company, company email, session choices and environment preference to administer the bootcamp, send the event invitation, provision access, communicate with me and improve the programme. Registration data is deleted after the administration period.',
-  success: 'Thank you for registering! You will receive a formal invitation with more details closer to the date of the bootcamp.',
+  success: 'Thank you for registering! Your registration has been confirmed. You will receive a formal invitation by email closer to the date of the bootcamp.',
 }
 
 // Shown everywhere registration appears while registration is 2 in api/site-state.json.

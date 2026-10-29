@@ -116,7 +116,9 @@ The same file sets `prerequisites` to `"soon"` (prerequisites will be shared soo
 
 ## Confirmation email
 
-In state 1, the flow should send each new registrant a confirmation email from the bootcamp's shared mailbox: "Thank you for registering, you will receive a formal invitation with more details closer to the date of the bootcamp." Send it only when a row is created, never on updates or on the existing-email path. Steps and the template are in [registration-confirmation-email.md](registration-confirmation-email.md).
+**Not enabled yet.** The email waits for send access to the bootcamp's shared mailbox. Until then, the website's success message tells registrants that their registration is confirmed and that a formal invitation will follow by email.
+
+Once enabled, in state 1 the flow sends each new registrant a confirmation email from the shared mailbox: "Thank you for registering, you will receive a formal invitation with more details closer to the date of the bootcamp." Send it only when a row is created, never on updates or on the existing-email path. Steps and the template are in [registration-confirmation-email.md](registration-confirmation-email.md).
 
 ## Shared flow behavior
 

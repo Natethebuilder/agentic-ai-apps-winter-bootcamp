@@ -1,21 +1,27 @@
 # Registration confirmation email
 
+**Status: not enabled yet.** The email needs send access to the bootcamp's shared mailbox. Until it is enabled, the website's success message tells registrants that their registration is confirmed and that a formal invitation will follow by email.
+
 When registration is open (`"registration": 1` in `api/site-state.json`), every new registrant should receive a short confirmation email. In state 2 the API refuses submissions, so no email is sent.
 
 The email is sent by the shared Power Automate flow `Agentic Winter Bootcamps Registration Upsert`, not by the website. The flow already receives the confirmed company email and has a Microsoft 365 connection, so no new secrets, app registrations or mail services are needed, and the API-to-flow contract does not change.
 
+## Before you start
+
+Ask the owner of the bootcamp mailbox, or an Exchange admin, to grant you **Send As** permission on it. If the bootcamp address is a Microsoft 365 group rather than a shared mailbox, ask for Send As on the group. Do not send from a personal mailbox.
+
 ## Add it to the flow
 
-In the Foundry branch of the flow (`eventId` equals `foundry-agentic-development-winter-bootcamp`):
+In the Foundry branch of the flow (the **Route foundry** condition, where `eventId` equals `foundry-agentic-development-winter-bootcamp`):
 
-1. Find the **create** path: the step that creates a new item in `Foundry Agentic Development Bootcamp Registrations`.
-2. Directly after that step, add **Office 365 Outlook → Send an email from a shared mailbox (V2)**. Use the bootcamp mailbox as the sender, not a personal mailbox.
-3. Set **To** to the `companyEmail` value from the trigger body.
-4. Set **Subject** and **Body** from the template below. Switch the body editor to code view (`</>`) before pasting the HTML.
-5. Set **Importance** to `Normal`. Leave CC and BCC empty.
-6. Configure the email step to run only after the create step succeeds, so a failed SharePoint write never sends a confirmation.
-7. Turn on **Secure inputs** and **Secure outputs** for the new step, like the other steps that handle registration data.
-8. Keep the flow's HTTP `202` response after the email step. If the email action fails, the registration is still saved; consider a parallel branch or "configure run after → has failed" so an email outage does not change the response.
+1. Directly under **Foundry response**, add a **Condition** and rename it `New foundry registration`. Because it comes after the response, an email failure can never change the `202` the API receives.
+2. Set the condition to the expression `actions('Create_foundry_registration')?['status']` **is equal to** `Succeeded`. This is only true when a new row was created, because the create step is skipped on the update path. If the create step has a different name, use that name with spaces replaced by underscores.
+3. In the condition's **True** branch, add **Office 365 Outlook → Send an email from a shared mailbox (V2)**. Set **Original Mailbox Address** to the bootcamp mailbox.
+4. Set **To** to the `companyEmail` value from the trigger body (expression `triggerBody()?['companyEmail']`).
+5. Set **Subject** and **Body** from the template below. Switch the body editor to code view (`</>`) before pasting the HTML.
+6. Set **Importance** to `Normal`. Leave CC and BCC empty.
+7. In the email step's **Settings**, turn on **Secure inputs** and **Secure outputs**, like the other steps that handle registration data.
+8. Save. Then reload the designer page and check that `New foundry registration` and the email step are still under **Foundry response** before you test.
 
 Do **not** add the email to the update path or the "existing event/email" path:
 

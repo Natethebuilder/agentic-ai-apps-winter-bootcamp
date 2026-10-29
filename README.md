@@ -62,7 +62,7 @@ Azure Static Web Apps hosts the website, deck and registration API on one origin
 4. sends `eventId: foundry-agentic-development-winter-bootcamp` to the shared registration flow;
 5. lets that flow route the submission into the dedicated Foundry Agentic Development SharePoint List and initialize its operational statuses.
 
-Registrants see a thank-you message and receive a formal invitation with more details closer to the date. The flow can also send an automatic confirmation email; see [docs/registration-confirmation-email.md](docs/registration-confirmation-email.md).
+After submitting, registrants see a message that their registration has been confirmed and that a formal invitation will follow by email closer to the date. The automatic confirmation email is not enabled yet because it needs send access to the bootcamp's shared mailbox. The steps to add it are in [docs/registration-confirmation-email.md](docs/registration-confirmation-email.md).
 
 | Setting | Purpose |
 | --- | --- |
