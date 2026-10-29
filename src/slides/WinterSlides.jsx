@@ -7,7 +7,7 @@ import PillarMark from '../agentic/PillarMark.jsx'
 import { ChristmasLights, Logos, Mascot } from '../winter/Decor.jsx'
 import {
   BOOTCAMP, DATES_NOTE, INVITATION, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTER_STEPS,
-  REGISTRATION_SOON, SESSION_DATES, SESSIONS, TEAM, sessionOwner,
+  REGISTRATION_SOON, SESSION_DATES, SESSIONS, SHOW_SESSION_OWNERS, TEAM, sessionOwner,
 } from '../content.js'
 import { PREREQUISITES_STATE, REGISTRATION_OPEN } from '../siteState.js'
 import s from './Slides.module.css'
@@ -390,18 +390,22 @@ function SessionDetailSlide({ index, session }) {
               <span className={s.detailLabel}>Session focus</span>
               <p>{session.spotlight}</p>
             </div>
-            <div className={`${s.detailPanel} ${s.detailToolbox}`}>
-              <div className={s.detailOwner}>
-                <SpeakerAvatar
-                  person={sessionOwner(session)}
-                  className={s.detailOwnerAvatar}
-                  style={{ '--avatar-accent': session.accent }}
-                />
-                <div>
-                  <span className={s.detailLabel}>Session owner</span>
-                  <strong>{session.owner}</strong>
+            <div className={`${s.detailPanel} ${s.detailToolbox} ${SHOW_SESSION_OWNERS ? '' : s.detailToolboxPlain}`}>
+              {SHOW_SESSION_OWNERS ? (
+                <div className={s.detailOwner}>
+                  <SpeakerAvatar
+                    person={sessionOwner(session)}
+                    className={s.detailOwnerAvatar}
+                    style={{ '--avatar-accent': session.accent }}
+                  />
+                  <div>
+                    <span className={s.detailLabel}>Session owner</span>
+                    <strong>{session.owner}</strong>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <span className={s.detailLabel}>Tools and concepts</span>
+              )}
               <div className={s.detailTools}>{session.tools.map((tool) => <span key={tool}>{tool}</span>)}</div>
             </div>
           </div>

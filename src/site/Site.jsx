@@ -8,7 +8,7 @@ import RegistrationForm from '../registration/RegistrationForm.jsx'
 import SpeakerAvatar from '../speakers/SpeakerAvatar.jsx'
 import {
   BOOTCAMP, DATES_NOTE, FAQ, LINEUP, MICROHACK_ACCESS, PERSONAS, PILLARS, PREP, PREREQUISITES, REGISTRATION,
-  REGISTRATION_SOON, SESSIONS, sessionOwner,
+  REGISTRATION_SOON, SESSIONS, SHOW_SESSION_OWNERS, sessionOwner,
 } from '../content.js'
 import { PREREQUISITES_STATE, REGISTRATION_OPEN } from '../siteState.js'
 import s from './Site.module.css'
@@ -243,13 +243,15 @@ function ProgrammeReveal() {
                   <strong>{session.title}</strong>
                   <small>{session.subtitle}</small>
                 </span>
-                <span className={s.sessionLead}>
-                  <SpeakerAvatar person={sessionOwner(session)} className={s.sessionHeadshot} />
-                  <span className={s.sessionLeadCopy}>
-                    <small>Session owner</small>
-                    <strong>{session.owner}</strong>
+                {SHOW_SESSION_OWNERS && (
+                  <span className={s.sessionLead}>
+                    <SpeakerAvatar person={sessionOwner(session)} className={s.sessionHeadshot} />
+                    <span className={s.sessionLeadCopy}>
+                      <small>Session owner</small>
+                      <strong>{session.owner}</strong>
+                    </span>
                   </span>
-                </span>
+                )}
               </div>
 
               <div className={s.sessionDetails}>

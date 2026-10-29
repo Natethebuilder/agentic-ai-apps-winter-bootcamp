@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { INVITATION, REGISTRATION, SESSION_DATES, SESSIONS, registrationSlotId } from '../content.js'
+import { INVITATION, REGISTRATION, SESSION_DATES, SESSIONS, SHOW_SESSION_OWNERS, registrationSlotId } from '../content.js'
 import s from './RegistrationForm.module.css'
 
 const TOKEN_KEY = 'foundry-agentic-development-winter-bootcamp:registration-token'
@@ -136,7 +136,7 @@ export default function RegistrationForm() {
               <label key={session.id} className={selected ? s.sessionOn : ''}>
                 <input type="checkbox" checked={selected} onChange={() => toggleSlot(id)} />
                 <time dateTime={session.time}>{session.time}</time>
-                <span><strong>{session.number} · {session.title}</strong><small>Owner · {session.owner}</small></span>
+                <span><strong>{session.number} · {session.title}</strong>{SHOW_SESSION_OWNERS && <small>Owner · {session.owner}</small>}</span>
                 <i aria-hidden="true">{selected ? '✓' : '+'}</i>
               </label>
             )

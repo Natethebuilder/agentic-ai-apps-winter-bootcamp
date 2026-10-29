@@ -235,10 +235,14 @@ export const TEAM = [
 export const sessionOwner = (session) =>
   TEAM.find((person) => person.id === session.ownerId) ?? { name: session.owner, initials: session.ownerInitials }
 
+// Session owners and their headshots are hidden for now. Set to true to show them again on the website
+// (lineup, schedule and registration) and in the deck (session slides and the team slide).
+export const SHOW_SESSION_OWNERS = false
+
 // The lineup reveal: a programme agent hands off to one session per lifecycle stage.
 export const LINEUP = {
   title: 'Run the programme.',
-  subtitle: 'Start the programme agent, then explore each session, its owner and what you will learn.',
+  subtitle: `Start the programme agent, then explore each session${SHOW_SESSION_OWNERS ? ', its owner' : ''} and what you will learn.`,
   agent: 'programme-agent',
   coreTitle: 'Programme agent',
   coreDetail: 'orchestrator · 6 handoffs',
@@ -399,7 +403,7 @@ export const PREP = [
   { id: 'git', icon: '🌿', title: 'Git basics', desc: 'You can clone a repository and follow its README. Every lab lives in its own repository.' },
   { id: 'email', icon: '✉️', title: 'An email address you can reach', desc: 'Azure access uses temporary credentials sent to you by email before the session.' },
   { id: 'github', icon: '🐙', title: 'A GitHub account, if needed', desc: 'Only when your session uses GitHub. Your invitation will tell you.' },
-  { id: 'entry', icon: '🧭', title: 'Your session’s entry point', desc: 'Session owners share any extra prerequisites and a standalone entry point for their lab.' },
+  { id: 'entry', icon: '🧭', title: 'Your session’s entry point', desc: 'Each session shares any extra prerequisites and a standalone entry point for its lab.' },
   { id: 'data', icon: '🔒', title: 'Sample data only', desc: 'No customer, personal or production data. Labs use sample or non-sensitive data.' },
 ]
 

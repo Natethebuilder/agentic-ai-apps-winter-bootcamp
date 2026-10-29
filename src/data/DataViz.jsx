@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AGENT_RUNS, DATES_NOTE, SESSION_DATES, SESSIONS } from '../content.js'
+import { AGENT_RUNS, DATES_NOTE, SESSION_DATES, SESSIONS, SHOW_SESSION_OWNERS } from '../content.js'
 import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion.js'
 import { REGISTRATION_OPEN } from '../siteState.js'
 import d from './Data.module.css'
@@ -183,7 +183,7 @@ export function ScheduleBoard() {
               <div>
                 <span>{session.number} · {session.track}</span>
                 <strong>{session.shortTitle}</strong>
-                <small>Owner · {session.owner}</small>
+                {SHOW_SESSION_OWNERS && <small>Owner · {session.owner}</small>}
               </div>
             </article>
           ))}

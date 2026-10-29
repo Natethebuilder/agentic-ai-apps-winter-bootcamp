@@ -13,6 +13,7 @@ import {
   DisclaimerSlide,
   ThankYouSlide,
 } from './src/slides/WinterSlides.jsx'
+import { SHOW_SESSION_OWNERS } from './src/content.js'
 
 export default {
   id: 'foundry-agentic-development-winter-bootcamp',
@@ -34,7 +35,7 @@ export default {
     SessionDetailsIntroSlide,
     ...sessionDetailSlides,
     SurveySlide,
-    TeamSlide,
+    ...(SHOW_SESSION_OWNERS ? [TeamSlide] : []),
     DisclaimerSlide,
     RegisterSlide,
     ThankYouSlide,

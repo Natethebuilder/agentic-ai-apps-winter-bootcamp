@@ -48,6 +48,7 @@ npm run build:swa
 ## Content
 
 - Update the shared site and deck content in `src/content.js`. Sessions and owners follow the Foundry Bootcamp deck (v7).
+- Session owners are hidden for now: `SHOW_SESSION_OWNERS` in `src/content.js` is `false`. Set it to `true` to show them again in the lineup, schedule, registration form, deck session slides and team slide.
 - Session-owner headshots live in `public/speakers/` as square JPGs and are referenced by `photo` in `TEAM`. People without a photo show their initials.
 - Update slide composition in `src/slides/WinterSlides.jsx` and ordering in `deck.config.js`.
 - The palette is set in the `:root` variables at the top of `src/index.css`.
